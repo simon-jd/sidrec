@@ -1,0 +1,16 @@
+{
+  "users": 22363,
+  "items": 12101,
+  "interactions": 198502,
+  "seq_len_mean": 8.8764,
+  "seq_len_median": 6.0,
+  "seq_len_min": 5,
+  "seq_len_max": 204,
+  "users_below_k": 0,
+  "items_below_k": 0,
+  "s3rec_check": {
+    "s3rec_lines": 22363,
+    "our_lines": 22363,
+    "identical_lines": 22363
+  }
+}
