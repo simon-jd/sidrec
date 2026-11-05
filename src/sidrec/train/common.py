@@ -50,7 +50,8 @@ def git_state() -> dict:
     def run(*args: str) -> str:
         return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True).stdout.strip()
 
-    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(run("status", "--porcelain", "--untracked-files=no", "--", "src"))}
+    dirty = run("status", "--porcelain", "--untracked-files=no", "--", "src")
+    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(dirty)}
 
 
 def warmup_schedule(warmup: int, decay: str):
