@@ -1,0 +1,31 @@
+{
+  "measured_at": "2026-11-05T22:54:08+00:00",
+  "warehouse": "PORTFOLIO_XS",
+  "size": "XSMALL",
+  "credits_per_hour": 1.0,
+  "window_utc": [
+    "2026-11-05T22:36:23.953000+00:00",
+    "2026-11-05T22:54:02.429000+00:00"
+  ],
+  "our_queries": 49,
+  "our_queries_on_warehouse": 49,
+  "execution_seconds": 130.3,
+  "estimate_execution_only_credits": 0.0362,
+  "estimate_upper_bound_credits": 0.1411,
+  "upper_bound_seconds": 507.8,
+  "cloud_services_credits": 0.004594,
+  "query_attribution_history": {
+    "queries_found": 0,
+    "credits_attributed_compute": 0
+  },
+  "warehouse_metering_history_shared": [
+    {
+      "start_time": "2026-11-05 22:00:00+00:00",
+      "end_time": "2026-11-05 23:00:00+00:00",
+      "credits_used": "0.216475550",
+      "credits_used_compute": "0.208440000",
+      "credits_used_cloud_services": "0.008035550"
+    }
+  ],
+  "note": "PORTFOLIO_XS is shared; metering rows include other jobs and may lag by up to 3 hours."
+}
