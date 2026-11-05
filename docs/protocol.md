@@ -157,4 +157,72 @@ eSASRec reports only @10 metrics, rounded to three decimals.
   - The selected configuration is then trained on the full train split with the 3 seeds.
 
 ## Changes
-None yet.
+
+### 2026-11-05: R2 clarifications, written before any Beauty model was trained
+Nothing above changes. The sections above leave the points below open; R2 fixes them here, and every R2 result
+uses them.
+
+**Training schedule and selection (all models)**
+- **Warm-up length:** "the first 5% of steps" means 5% of the maximum number of steps, 300 epochs times the
+  steps per epoch. Early stopping makes the actual count unknown in advance.
+- **After warm-up:** SASRec and the HSTU-style model keep the learning rate constant, as S3-Rec and
+  generative-recommenders do. TIGER decays it with the inverse square root of the step in every trial, which
+  is its paper's schedule.
+- **AdamW:** weight decay applies to every parameter.
+- **Batch sizes:** SASRec 256 (S3-Rec), HSTU-style 128 (the generative-recommenders Amazon Books config),
+  TIGER 256 (its paper).
+- **Test use:** tuning runs (seed 0) compute no test metrics. The selected trial's saved checkpoint is evaluated
+  on test once and becomes the seed-0 final run. Seeds 1 and 2 are trained from scratch.
+
+**Trial 1, the published configuration**
+- **SASRec:** the S3-Rec defaults. Width 64, 2 layers, 2 heads, dropout 0.5 on hidden states and attention,
+  learning rate 1e-3, no weight decay.
+- **HSTU-style:** the generative-recommenders `configs/amzn-books/hstu-sampled-softmax-n512-final.gin`, the
+  repository's Amazon setting. Width 64, 4 layers, 4 heads of 16, dropout 0.5, learning rate 1e-3, no weight
+  decay.
+- **TIGER:** as stated in section 3. The paper gives no weight decay, so it is 0.
+
+**Item-ID models**
+- **Loss:** full-softmax cross-entropy over all 12,101 items, at every position of the user's training window.
+  For the HSTU-style model this replaces the sampled softmax with 512 negatives of the generative-recommenders
+  config.
+- **Training window:** one per user, the last 50 inputs of the training part, as S3-Rec trains SASRec.
+- **SASRec, fixed:** 2 heads, post-LN blocks, GELU feed-forward of width 4 × width, and the item table shared
+  between input and output.
+- **HSTU-style, fixed:**
+  - 4 heads of width / 4;
+  - L2-normalized states and item table, with temperature 0.05;
+  - a relative attention bias over positions and 128 log-scale time buckets;
+  - attention divided by the window length, 50.
+- **HSTU time bias:** the query time of a position is the timestamp of the item it predicts, the request time,
+  as in generative-recommenders. At evaluation that is the target's review date, which is known at request
+  time; the target item itself is not.
+
+**TIGER**
+- **Item text:** title, price, brand and categories from `meta_Beauty.json.gz`, the fields TIGER section 4
+  lists. The paper gives no template, so ours is `Title: ... Brand: ... Price: ... Categories: ...`, with
+  missing fields left out.
+- **Sentence-T5 size:** the paper does not name one. We use `sentence-t5-xxl`, the largest. Its 4.9B-parameter
+  encoder fits on the 24 GB RTX 4090 at 16-bit precision. It runs in bfloat16, not float16, because T5
+  activations overflow in float16.
+- **RQ-VAE:** as TIGER section 4 describes it.
+  - Encoder 512-256-128 with ReLU, latent 32, 3 levels of 256 codes of size 32, beta 0.25.
+  - Adagrad with learning rate 0.4, batch 1024, 20,000 epochs, k-means initialisation on the first batch.
+  - It is trained once per encoder, with seed 0, on the 12,068 items that occur in some user's training part.
+    It then assigns codes to all 12,101 items; 33 items occur only as validation or test targets.
+  - The fourth code numbers the items that share a three-code prefix 0, 1, 2 and so on.
+- **Training examples:** every position of each user's training part is a target. The input is up to 20
+  preceding items (TIGER Appendix C).
+- **Tokens:**
+  - The input is one user token, the user ID hashed into 2,000 buckets, then the four tokens of each history
+    item, oldest first.
+  - The output is the target's four tokens.
+  - Each code level has its own token range.
+- **Model:** a T5 encoder-decoder (Hugging Face transformers) with 6 heads of 64, feed-forward width 1024 and
+  ReLU. Width, layers and dropout come from the trial.
+- **Gradient clipping:** global norm 1.0. TIGER trained with T5X, whose default Adafactor clips its updates;
+  AdamW gets a gradient clip in its place.
+- **Encoder comparison:** the 12 trials use the Sentence-T5 IDs. The selected configuration is then trained with
+  seeds 0, 1 and 2 on IDs built the same way from Qwen3-Embedding-0.6B and Qwen3-Embedding-4B vectors. Those
+  models use last-token pooling and L2 normalization, with no instruction prefix, as they are meant to be used
+  for documents.
