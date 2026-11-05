@@ -1,0 +1,35 @@
+[project]
+name = "sidrec"
+version = "0.1.0"
+description = "Semantic-ID generative retrieval and sequential ranking on public Amazon review data"
+readme = "README.md"
+authors = [
+    { name = "simon-jd", email = "276495489+simon-jd@users.noreply.github.com" }
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "polars>=2.1.0",
+    "pyarrow>=26.0.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.4",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["data: needs the downloaded datasets under data/ (skipped when they are missing)"]

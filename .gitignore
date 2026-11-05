@@ -1,0 +1,12 @@
+# Datasets, pipeline exports and derived files never go into git.
+/data/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
