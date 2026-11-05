@@ -1,0 +1,20 @@
+{
+  "rule": "int(sha256(user_id)[:8], 16) % 16 == 0",
+  "users": 102587,
+  "items": 219024,
+  "train_items": 184738,
+  "interactions": {
+    "train": 816106,
+    "valid": 72834,
+    "test": 76068
+  },
+  "eval_valid": {
+    "eligible_rows": 71610,
+    "cold_rows": 23262
+  },
+  "eval_test": {
+    "eligible_rows": 75036,
+    "cold_rows": 41983
+  },
+  "item_docs": 219024
+}
