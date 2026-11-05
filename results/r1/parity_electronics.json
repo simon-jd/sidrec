@@ -1,0 +1,76 @@
+{
+  "tables": {
+    "interactions/train": {
+      "rows_snowflake_export": 13096427,
+      "rows_reference": 13096427,
+      "rows_snowflake_count": 13096427,
+      "sha256_snowflake_export": "a38d947da30827794b02161804ff05b666918aeffb13214bad06dbe56a97d8e6",
+      "sha256_reference": "a38d947da30827794b02161804ff05b666918aeffb13214bad06dbe56a97d8e6",
+      "match": true
+    },
+    "interactions/valid": {
+      "rows_snowflake_export": 1161644,
+      "rows_reference": 1161644,
+      "rows_snowflake_count": 1161644,
+      "sha256_snowflake_export": "24d78ff0124e9d1598431484a991d4177dc3d916548c87a3a26392d41a0d77ba",
+      "sha256_reference": "24d78ff0124e9d1598431484a991d4177dc3d916548c87a3a26392d41a0d77ba",
+      "match": true
+    },
+    "interactions/test": {
+      "rows_snowflake_export": 1215465,
+      "rows_reference": 1215465,
+      "rows_snowflake_count": 1215465,
+      "sha256_snowflake_export": "30b75c7e6c6e85123b6e32535684cde2e03b6d1f403d019012a2c9d7e5ddcccf",
+      "sha256_reference": "30b75c7e6c6e85123b6e32535684cde2e03b6d1f403d019012a2c9d7e5ddcccf",
+      "match": true
+    },
+    "train_seq": {
+      "rows_snowflake_export": 1604818,
+      "rows_reference": 1604818,
+      "rows_snowflake_count": 1604818,
+      "sha256_snowflake_export": "ba616b8de421b89b722dc0c168705d43ec0d01741a780f73e463ab4531923bf6",
+      "sha256_reference": "ba616b8de421b89b722dc0c168705d43ec0d01741a780f73e463ab4531923bf6",
+      "match": true
+    },
+    "eval_valid": {
+      "rows_snowflake_export": 1161644,
+      "rows_reference": 1161644,
+      "rows_snowflake_count": 1161644,
+      "sha256_snowflake_export": "5023abde211deb932e2c6697be97d2958938a0d969381834bb2b9c2c0654216d",
+      "sha256_reference": "5023abde211deb932e2c6697be97d2958938a0d969381834bb2b9c2c0654216d",
+      "match": true
+    },
+    "eval_test": {
+      "rows_snowflake_export": 1215465,
+      "rows_reference": 1215465,
+      "rows_snowflake_count": 1215465,
+      "sha256_snowflake_export": "5b3f0961d4aab7c5edefbd6e90e4f46b609588585a0685443a72e5b27880455c",
+      "sha256_reference": "5b3f0961d4aab7c5edefbd6e90e4f46b609588585a0685443a72e5b27880455c",
+      "match": true
+    },
+    "item_docs": {
+      "rows_snowflake_export": 368228,
+      "rows_reference": 368228,
+      "rows_snowflake_count": 368228,
+      "sha256_snowflake_export": "7eadb672ae8e3303557a3a6b063e36f7d7ca8315ee87762a850c490e07861302",
+      "sha256_reference": "7eadb672ae8e3303557a3a6b063e36f7d7ca8315ee87762a850c490e07861302",
+      "match": true
+    }
+  },
+  "official_history": {
+    "valid": {
+      "rows": 1161644,
+      "official_rows": 1161644,
+      "unmatched_rows": 0,
+      "history_equal": 1161644
+    },
+    "test": {
+      "rows": 1215465,
+      "official_rows": 1215465,
+      "unmatched_rows": 0,
+      "history_equal": 1215465
+    }
+  },
+  "all_match": true,
+  "seconds": 19.8
+}
