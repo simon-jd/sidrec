@@ -1,0 +1,297 @@
+{
+  "encoder": "st5-xxl",
+  "embedding_dim": 768,
+  "train_items": 12068,
+  "settings": {
+    "hidden": [
+      512,
+      256,
+      128
+    ],
+    "latent": 32,
+    "levels": 3,
+    "codes": 256,
+    "beta": 0.25,
+    "optimizer": "AdamW, weight decay 0",
+    "lr": 0.001,
+    "batch": 1024,
+    "epochs": 20000,
+    "seed": 0
+  },
+  "final_loss_all_items": {
+    "recon": 0.09923,
+    "quant": 0.12333
+  },
+  "reconstruction_explained_variance": 0.571,
+  "items": 12101,
+  "distinct_3code_ids": 10991,
+  "collision_rate": 0.0917,
+  "items_in_collisions": 2006,
+  "share_of_items_in_collisions": 0.1658,
+  "largest_collision_group": 8,
+  "per_level": [
+    {
+      "codes_used": 38,
+      "usage": 0.1484,
+      "perplexity": 27.3
+    },
+    {
+      "codes_used": 247,
+      "usage": 0.9648,
+      "perplexity": 234.7
+    },
+    {
+      "codes_used": 252,
+      "usage": 0.9844,
+      "perplexity": 240.7
+    }
+  ],
+  "fourth_code_values": 8,
+  "loss_log": [
+    {
+      "epoch": 1000,
+      "recon": 0.10773538798093796,
+      "quant": 0.06572697311639786,
+      "codes_used": [
+        82,
+        255,
+        217
+      ],
+      "distinct_ids": 11530
+    },
+    {
+      "epoch": 2000,
+      "recon": 0.1023416668176651,
+      "quant": 0.08638456463813782,
+      "codes_used": [
+        82,
+        256,
+        252
+      ],
+      "distinct_ids": 11488
+    },
+    {
+      "epoch": 3000,
+      "recon": 0.100404292345047,
+      "quant": 0.09793199598789215,
+      "codes_used": [
+        82,
+        256,
+        255
+      ],
+      "distinct_ids": 11436
+    },
+    {
+      "epoch": 4000,
+      "recon": 0.09908406436443329,
+      "quant": 0.10271620750427246,
+      "codes_used": [
+        82,
+        256,
+        256
+      ],
+      "distinct_ids": 11451
+    },
+    {
+      "epoch": 5000,
+      "recon": 0.09811260551214218,
+      "quant": 0.10483668744564056,
+      "codes_used": [
+        82,
+        256,
+        256
+      ],
+      "distinct_ids": 11454
+    },
+    {
+      "epoch": 6000,
+      "recon": 0.09776964038610458,
+      "quant": 0.10663844645023346,
+      "codes_used": [
+        82,
+        255,
+        256
+      ],
+      "distinct_ids": 11425
+    },
+    {
+      "epoch": 7000,
+      "recon": 0.09739753603935242,
+      "quant": 0.10729482024908066,
+      "codes_used": [
+        82,
+        255,
+        255
+      ],
+      "distinct_ids": 11430
+    },
+    {
+      "epoch": 8000,
+      "recon": 0.0972319170832634,
+      "quant": 0.1077452152967453,
+      "codes_used": [
+        82,
+        253,
+        255
+      ],
+      "distinct_ids": 11424
+    },
+    {
+      "epoch": 9000,
+      "recon": 0.09829391539096832,
+      "quant": 0.10984134674072266,
+      "codes_used": [
+        76,
+        250,
+        251
+      ],
+      "distinct_ids": 11374
+    },
+    {
+      "epoch": 10000,
+      "recon": 0.09783539175987244,
+      "quant": 0.11015095561742783,
+      "codes_used": [
+        76,
+        251,
+        252
+      ],
+      "distinct_ids": 11355
+    },
+    {
+      "epoch": 11000,
+      "recon": 0.09722699970006943,
+      "quant": 0.10984878242015839,
+      "codes_used": [
+        75,
+        250,
+        252
+      ],
+      "distinct_ids": 11354
+    },
+    {
+      "epoch": 12000,
+      "recon": 0.09776833653450012,
+      "quant": 0.11157285422086716,
+      "codes_used": [
+        80,
+        251,
+        251
+      ],
+      "distinct_ids": 11391
+    },
+    {
+      "epoch": 13000,
+      "recon": 0.09770216047763824,
+      "quant": 0.11231058835983276,
+      "codes_used": [
+        81,
+        253,
+        252
+      ],
+      "distinct_ids": 11302
+    },
+    {
+      "epoch": 14000,
+      "recon": 0.09840171039104462,
+      "quant": 0.11494322121143341,
+      "codes_used": [
+        84,
+        253,
+        253
+      ],
+      "distinct_ids": 11405
+    },
+    {
+      "epoch": 15000,
+      "recon": 0.09741111099720001,
+      "quant": 0.11240781843662262,
+      "codes_used": [
+        79,
+        252,
+        251
+      ],
+      "distinct_ids": 11375
+    },
+    {
+      "epoch": 16000,
+      "recon": 0.10107673704624176,
+      "quant": 0.1188463568687439,
+      "codes_used": [
+        69,
+        252,
+        252
+      ],
+      "distinct_ids": 11110
+    },
+    {
+      "epoch": 17000,
+      "recon": 0.10141666978597641,
+      "quant": 0.12169261276721954,
+      "codes_used": [
+        50,
+        248,
+        251
+      ],
+      "distinct_ids": 10878
+    },
+    {
+      "epoch": 18000,
+      "recon": 0.09955047070980072,
+      "quant": 0.12126710265874863,
+      "codes_used": [
+        48,
+        250,
+        254
+      ],
+      "distinct_ids": 10989
+    },
+    {
+      "epoch": 19000,
+      "recon": 0.09991784393787384,
+      "quant": 0.12346604466438293,
+      "codes_used": [
+        38,
+        245,
+        252
+      ],
+      "distinct_ids": 10948
+    },
+    {
+      "epoch": 20000,
+      "recon": 0.09934680908918381,
+      "quant": 0.12399407476186752,
+      "codes_used": [
+        38,
+        247,
+        252
+      ],
+      "distinct_ids": 10962
+    }
+  ],
+  "wall_time_s": 383.1,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T17:07:09-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P8, 2520 MHz, 10251 MHz, 3105 MHz, 45, 20.60 W, 450.00 W, 0 %, 734 MiB, 24564 MiB",
+      "apps": "1510538, .venv/bin/python, 422 MiB"
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T17:13:32-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2790 MHz, 10251 MHz, 3105 MHz, 58, 156.05 W, 450.00 W, 53 %, 1132 MiB, 24564 MiB",
+      "apps": "1510538, .venv/bin/python, 820 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "c0cb79162da7cc2fd4cd8d71c60c85eb2a1ecbaa",
+    "dirty": false
+  }
+}

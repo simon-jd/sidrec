@@ -1,0 +1,48 @@
+{
+  "encoder": "qwen3-emb-0.6b",
+  "repository": "Qwen/Qwen3-Embedding-0.6B",
+  "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+  "dtype": "bfloat16",
+  "parameters": 595776512,
+  "max_seq_length": 32768,
+  "pooling": "Pooling({'embedding_dimension': 1024, 'pooling_mode': 'lasttoken', 'include_prompt': True})",
+  "tokens": 612410,
+  "encode_seconds": 8.62,
+  "items_per_s": 1404.0,
+  "tokens_per_s": 71054.2,
+  "peak_memory_gib": 1.54,
+  "items": 12101,
+  "dim": 1024,
+  "non_finite_values": 0,
+  "norm_min_max": [
+    0.998,
+    1.0038
+  ],
+  "text_chars_mean": 161.3,
+  "example_text": "Title: OPI Nail Lacquer, Simmer and Shimmer, 0.5-Fluid Ounce; Brand: OPI; Price: 12.00; Categories: Beauty, Makeup, Nails, Nail Polish",
+  "wall_time_s": 13.2,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T16:19:09-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P8, 210 MHz, 405 MHz, 3105 MHz, 47, 22.62 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T16:19:23-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2775 MHz, 10251 MHz, 3105 MHz, 60, 433.02 W, 450.00 W, 92 %, 2576 MiB, 24564 MiB",
+      "apps": "1366627, .venv/bin/python, 2264 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "340271b612d59fd0d3e903682eb30ff0a0399049",
+    "dirty": true
+  }
+}
