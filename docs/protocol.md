@@ -290,3 +290,44 @@ The fix above was wrong. Its IDs used every code, but the RQ-VAE behind them had
   | Qwen3-Embedding-4B | 135 of 256 | 55% | 12.9% |
 
   The second and third levels use 247 to 256 codes. The IDs are used as they are.
+
+### 2026-11-05: Electronics item embeddings and semantic IDs, written before any were computed
+Section 2 does not say how Electronics items are embedded and tokenized. R3 fixes that here. It follows the
+Beauty recipe and changes only what the larger catalog requires.
+
+**Item embeddings**
+- **Encoder:** Qwen3-Embedding-0.6B at the revision R2 pinned. R2's encoder comparison chose it
+  (`results/r2/README.md`): its TIGER results tie the 4B model's within one standard deviation, and it encodes
+  5.5 times faster. As on Beauty, it runs in bfloat16 with last-token pooling, L2 normalization and no
+  instruction prefix.
+- **Input:** each item's R1 document (the `doc` column of `REC_ITEM_DOCS`), unchanged and not truncated. The
+  tokenizer appends the end-of-text token that last-token pooling reads.
+- **Item order:** every R3 array has one row per catalog item, all 368,228 of them, in ascending `parent_asin`
+  order.
+- **Two implementations:** vLLM 0.31.0's pooling runner, and the sentence-transformers batch loop R2 used. Both
+  encode the whole catalog on the RTX 4090.
+- **Agreement:** measured on every item, as the cosine of its two vectors and the largest absolute difference
+  of any component.
+- **Which vectors the IDs use:** vLLM's. If any item's two vectors have a cosine below 0.99, the IDs use the
+  sentence-transformers vectors instead, and that is reported.
+
+**Semantic IDs**
+- **Recipe:** Beauty's final RQ-VAE, unchanged: architecture, loss, Adam at 1e-3 without weight decay, batch
+  1,024, k-means initialisation on the first batch, and seed 0.
+- **Training items:** the 329,445 items with a train-split interaction. On Beauty the RQ-VAE trains on the items
+  in some user's training part, and this is the same rule. Validation and test interactions never shape the
+  tokenizer. Codes are then assigned to all 368,228 items.
+- **Training length:** the number of optimizer steps is kept, not the number of epochs.
+  - On Beauty, 20,000 epochs were 240,000 steps of 1,024 items.
+  - On 329,445 items, 20,000 epochs would be 6.4 million steps: about 2.8 hours at the speed of R2's
+    Qwen3-Embedding-0.6B run, 384 s for 240,000 steps.
+  - R3 trains 746 epochs, which is 240,212 steps.
+- **Fourth code:** items that share a three-code prefix are numbered 0, 1, 2 and so on. The train items come
+  first, in item order, then the other items. A train item's ID therefore does not depend on which items occur
+  only in validation or test. On Beauty the numbering followed the item index.
+- **Reported, not tuned:**
+  - reconstruction, as explained variance;
+  - each level's code use;
+  - the collision rate before the fourth code;
+  - the share of cold-start test items whose first two codes occur among the train items' IDs.
+- No recommendation metric is computed in R3.
