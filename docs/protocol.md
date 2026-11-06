@@ -280,3 +280,13 @@ The fix above was wrong. Its IDs used every code, but the RQ-VAE behind them had
 - **What does not change:** the first level uses only part of its codebook, about 100 of 256 codes for
   Sentence-T5 and about 180 for Qwen3-Embedding-4B. The other two levels use all 256. The paper reports at
   least 80% use; this is reported, not tuned away.
+- **Correction, after the full RQ-VAE runs (20,000 epochs):** first-level use fell further than the 40,000-step
+  checks showed. The final runs, in `results/r2/semantic_ids/`, are:
+
+  | Encoder | First-level codes used | Explained variance | Collision rate |
+  |---|---|---|---|
+  | Sentence-T5-XXL | 38 of 256 | 57% | 9.2% |
+  | Qwen3-Embedding-0.6B | 255 of 256 | 56% | 9.3% |
+  | Qwen3-Embedding-4B | 135 of 256 | 55% | 12.9% |
+
+  The second and third levels use 247 to 256 codes. The IDs are used as they are.
