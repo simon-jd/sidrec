@@ -1,0 +1,95 @@
+{
+  "implementation": "vllm",
+  "vllm": "0.31.0",
+  "encoder": "qwen3-emb-0.6b",
+  "repository": "Qwen/Qwen3-Embedding-0.6B",
+  "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+  "dtype": "bfloat16",
+  "engine": {
+    "max_model_len": 32768,
+    "max_num_seqs": 256,
+    "max_num_batched_tokens": 8192,
+    "pooler_config": "PoolerConfig(task=None, pooling_type=None, seq_pooling_type='LAST', tok_pooling_type='ALL', use_activation=True, dimensions=None, enable_chunked_processing=False, max_embed_len=None, logit_mean=None, logit_sigma=None, step_tag_id=None, returned_token_ids=None)",
+    "enforce_eager": false,
+    "gpu_memory_utilization": 0.83
+  },
+  "items": 368228,
+  "sample_seed": null,
+  "item_ids_sha256": "3dacae9d50fec59110d452cde587e91b17aa8812d9c86abce351d782cf863e9f",
+  "tokens": 94219784,
+  "startup_s": 35.6,
+  "encode_seconds": 767.94,
+  "items_per_s": 479.5,
+  "tokens_per_s": 122691.2,
+  "returned_norm_min_max": [
+    1.0,
+    1.0
+  ],
+  "non_finite_values": 0,
+  "wall_time_s": 807.2,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-06T00:13:02-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P8, 210 MHz, 405 MHz, 3105 MHz, 47, 21.24 W, 450.00 W, 0 %, 303 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "during_encode": {
+      "samples": 77,
+      "interval_s": 10.0,
+      "pstates": [
+        "P2"
+      ],
+      "clocks.sm": {
+        "min": 2625.0,
+        "median": 2685.0,
+        "max": 2790.0
+      },
+      "clocks.mem": {
+        "min": 10251.0,
+        "median": 10251.0,
+        "max": 10251.0
+      },
+      "temperature.gpu": {
+        "min": 48.0,
+        "median": 82.0,
+        "max": 84.0
+      },
+      "power.draw": {
+        "min": 73.04,
+        "median": 444.71,
+        "max": 448.38
+      },
+      "utilization.gpu": {
+        "min": 0.0,
+        "median": 92.0,
+        "max": 96.0
+      },
+      "memory.used": {
+        "min": 20362.0,
+        "median": 20716.0,
+        "max": 20716.0
+      }
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-06T00:26:30-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P3, 720 MHz, 5001 MHz, 3105 MHz, 66, 87.38 W, 450.00 W, 0 %, 303 MiB, 24564 MiB",
+      "apps": ""
+    }
+  },
+  "environment": {
+    "torch": "2.13.0+cu130",
+    "cuda": "13.0",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+    "dirty": false
+  },
+  "array": {
+    "path": "data/processed/electronics/emb/vllm.npy",
+    "sha256": "fbb7496582c3a5dd66e63140a4cc280c2648e68d7c419a539ff51f32a1a9a8f9"
+  }
+}

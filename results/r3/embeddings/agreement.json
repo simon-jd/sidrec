@@ -1,0 +1,40 @@
+{
+  "items": 368228,
+  "cosine": {
+    "min": 0.999099978589767,
+    "mean": 0.9998384847910067,
+    "max": 0.9999351735049584,
+    "p0.01": 0.99950906474756,
+    "p0.1": 0.9996432793725679,
+    "p1": 0.9997309670981849,
+    "p50": 0.9998438553776559
+  },
+  "items_below_0.999": 0,
+  "items_below_0.99": 0,
+  "max_abs_component_difference": 0.006326667964458466,
+  "per_item_max_abs_difference": {
+    "min": 0.0012572593986988068,
+    "mean": 0.0022671314814611747,
+    "max": 0.006326667964458466,
+    "p50": 0.002191847190260887,
+    "p99": 0.003608390688896179,
+    "p99.9": 0.004396087460219869
+  },
+  "top10_neighbour_overlap": {
+    "queries": 2000,
+    "sample_seed": 0,
+    "mean_share_in_common": 0.9598
+  },
+  "rule": "the IDs use the vLLM vectors unless some item's cosine is below 0.99",
+  "ids_use": "vllm",
+  "arrays": {
+    "vllm": {
+      "path": "data/processed/electronics/emb/vllm.npy",
+      "sha256": "fbb7496582c3a5dd66e63140a4cc280c2648e68d7c419a539ff51f32a1a9a8f9"
+    },
+    "hf": {
+      "path": "data/processed/electronics/emb/hf.npy",
+      "sha256": "4d2d46f6f6773be0c6e1bdd48b91d97bd90d47da621007b45d71407b9215ca7e"
+    }
+  }
+}

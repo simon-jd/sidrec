@@ -1,0 +1,958 @@
+{
+  "encoder": "qwen3-emb-0.6b",
+  "embeddings": {
+    "source": "vllm",
+    "path": "data/processed/electronics/emb/vllm.npy",
+    "sha256": "fbb7496582c3a5dd66e63140a4cc280c2648e68d7c419a539ff51f32a1a9a8f9"
+  },
+  "items": 368228,
+  "item_ids_sha256": "3dacae9d50fec59110d452cde587e91b17aa8812d9c86abce351d782cf863e9f",
+  "train_items": 329445,
+  "settings": {
+    "hidden": [
+      512,
+      256,
+      128
+    ],
+    "latent": 32,
+    "levels": 3,
+    "codes": 256,
+    "beta": 0.25,
+    "optimizer": "AdamW, weight decay 0",
+    "lr": 0.001,
+    "batch": 1024,
+    "epochs": 746,
+    "steps": 240212,
+    "seed": 0
+  },
+  "final_loss_all_items": {
+    "recon": 0.30089,
+    "quant": 0.2286
+  },
+  "reconstruction_explained_variance": {
+    "all_items": 0.5172,
+    "train_items": 0.5148
+  },
+  "all_items": {
+    "items": 368228,
+    "distinct_3code_ids": 247708,
+    "collision_rate": 0.3273,
+    "items_in_collisions": 173189,
+    "share_of_items_in_collisions": 0.4703,
+    "largest_collision_group": 461,
+    "per_level": [
+      {
+        "codes_used": 256,
+        "usage": 1.0,
+        "perplexity": 212.3
+      },
+      {
+        "codes_used": 256,
+        "usage": 1.0,
+        "perplexity": 235.7
+      },
+      {
+        "codes_used": 256,
+        "usage": 1.0,
+        "perplexity": 245.4
+      }
+    ]
+  },
+  "train_items_only": {
+    "items": 329445,
+    "distinct_3code_ids": 226620,
+    "collision_rate": 0.3121,
+    "items_in_collisions": 149292,
+    "share_of_items_in_collisions": 0.4532,
+    "largest_collision_group": 461,
+    "per_level": [
+      {
+        "codes_used": 256,
+        "usage": 1.0,
+        "perplexity": 212.7
+      },
+      {
+        "codes_used": 256,
+        "usage": 1.0,
+        "perplexity": 237.6
+      },
+      {
+        "codes_used": 256,
+        "usage": 1.0,
+        "perplexity": 245.9
+      }
+    ]
+  },
+  "fourth_code_values": 461,
+  "prefix_coverage_by_train_items": {
+    "cold_test_items": {
+      "count": 36881,
+      "levels_1_to_1": 1.0,
+      "levels_1_to_2": 0.9648,
+      "levels_1_to_3": 0.3942
+    },
+    "cold_test_rows": {
+      "count": 535916,
+      "levels_1_to_1": 1.0,
+      "levels_1_to_2": 0.9666,
+      "levels_1_to_3": 0.4007
+    },
+    "non_train_items": {
+      "count": 38783,
+      "levels_1_to_1": 1.0,
+      "levels_1_to_2": 0.9651,
+      "levels_1_to_3": 0.3943
+    }
+  },
+  "neighbour_prefix_agreement": {
+    "queries": 1000,
+    "sample_seed": 0,
+    "levels_1_to_1": {
+      "top10_neighbours_sharing": 0.8595,
+      "random_pair_sharing": 0.00563
+    },
+    "levels_1_to_2": {
+      "top10_neighbours_sharing": 0.3227,
+      "random_pair_sharing": 0.00018
+    },
+    "levels_1_to_3": {
+      "top10_neighbours_sharing": 0.0768,
+      "random_pair_sharing": 1e-05
+    }
+  },
+  "sanity_examples": {
+    "nearest_neighbours": [
+      {
+        "query": {
+          "title": "Laptop Adapter Charger for Samsung KSAS0501900200HU GH44-02888B 18.4\" Tablet SM-767AZKBATT, SMT677AZ",
+          "sid": [
+            252,
+            41,
+            187,
+            0
+          ],
+          "train": true
+        },
+        "neighbours": [
+          {
+            "title": "40W AC Charger for Samsung Galaxy View SM-T670 T677 18.4inches Tablet",
+            "sid": [
+              252,
+              201,
+              241,
+              0
+            ],
+            "train": true,
+            "cosine": 0.91
+          },
+          {
+            "title": "AC Power Adapter Charger Fit for Samsung Galaxy View SM-T670 T677 18.4 Tablet Supply Cord",
+            "sid": [
+              252,
+              41,
+              247,
+              1
+            ],
+            "train": true,
+            "cosine": 0.892
+          },
+          {
+            "title": "UL Listed 19V 2.1A AC Charger Fit for Samsung Galaxy View SM-T670 T677 18.4 Tablet Power Adapter Sup",
+            "sid": [
+              252,
+              41,
+              247,
+              2
+            ],
+            "train": true,
+            "cosine": 0.885
+          },
+          {
+            "title": "19V 2.1A AC Charger Fit for Samsung Galaxy View SM-T670 T677 18.4 Tablet Power Adapter Supply Cord",
+            "sid": [
+              252,
+              179,
+              225,
+              0
+            ],
+            "train": true,
+            "cosine": 0.877
+          },
+          {
+            "title": "T-Power 19V 65W for Samsung Galaxy View SM-T670 SM-T677 Tablet 32GB 64GB, Samsung Chrome Series 3, 5",
+            "sid": [
+              252,
+              179,
+              102,
+              0
+            ],
+            "train": true,
+            "cosine": 0.855
+          }
+        ]
+      },
+      {
+        "query": {
+          "title": "HOMELYLIFE Power Supply",
+          "sid": [
+            182,
+            106,
+            201,
+            0
+          ],
+          "train": true
+        },
+        "neighbours": [
+          {
+            "title": "EPBOWPT DC 12V 24V to DC 5V 10A, 5V 5A, 5V 3A, 12V 5A, 10A Power Converter\u2002Power Adapter (12/24V to ",
+            "sid": [
+              182,
+              190,
+              218,
+              0
+            ],
+            "train": true,
+            "cosine": 0.684
+          },
+          {
+            "title": "Cobra CPI 1575 1500 Watt 12 Volt DC to 120 Volt AC Power Inverter",
+            "sid": [
+              182,
+              62,
+              143,
+              0
+            ],
+            "train": true,
+            "cosine": 0.656
+          },
+          {
+            "title": "Cobra CPI 2575 2500 Watt 12 Volt DC to 120 Volt AC Power Inverter",
+            "sid": [
+              182,
+              25,
+              15,
+              0
+            ],
+            "train": true,
+            "cosine": 0.653
+          },
+          {
+            "title": "BOLWEO Universal Power Supply",
+            "sid": [
+              29,
+              8,
+              116,
+              0
+            ],
+            "train": true,
+            "cosine": 0.648
+          },
+          {
+            "title": "MEAN WELL LPV-60-12 Sealed Panel Mount LPV Series AC-DC 12-volt 5-Amp Power Supply with LED Driver, ",
+            "sid": [
+              29,
+              99,
+              184,
+              0
+            ],
+            "train": true,
+            "cosine": 0.638
+          }
+        ]
+      },
+      {
+        "query": {
+          "title": "iPhone Charger, FIFADE 5Pack Nylon Braided Lightning Cable Charging Cord USB Cable Compatible with i",
+          "sid": [
+            23,
+            206,
+            172,
+            0
+          ],
+          "train": true
+        },
+        "neighbours": [
+          {
+            "title": "iPhone Charger, FIFADE 3Pack Nylon Braided Lightning Cable Charging Cord USB Cable Compatible with i",
+            "sid": [
+              23,
+              93,
+              172,
+              3
+            ],
+            "train": true,
+            "cosine": 0.998
+          },
+          {
+            "title": "iPhone Charger, FIFADE 3Pack Nylon Braided Lightning Cable Charging Cord USB Cable Compatible with i",
+            "sid": [
+              23,
+              155,
+              108,
+              0
+            ],
+            "train": true,
+            "cosine": 0.919
+          },
+          {
+            "title": "iPhone Charger Cable,3FT/6Feet/10Foot MFi Certified Nylon Braided iPhone Lightning Cord Fast USB Cha",
+            "sid": [
+              23,
+              93,
+              172,
+              1
+            ],
+            "train": true,
+            "cosine": 0.9
+          },
+          {
+            "title": "iPhone Charger Cable[MFi Certified] Lightning Cable 3Pack 6 Feet Nylon Braided iPhone Charging Cord ",
+            "sid": [
+              23,
+              93,
+              235,
+              5
+            ],
+            "train": true,
+            "cosine": 0.886
+          },
+          {
+            "title": "iPhone Charger Cable, 3/3/6/6/10FT SHARLLEN Nylon Braided Lightning Cord Durable USB Fast Charging&S",
+            "sid": [
+              23,
+              93,
+              115,
+              9
+            ],
+            "train": true,
+            "cosine": 0.885
+          }
+        ]
+      },
+      {
+        "query": {
+          "title": "Portable Amplified HD Digital TV Antenna - Magnetic Base Long Range 135 Miles 360\u00b0 Reception Support",
+          "sid": [
+            151,
+            93,
+            253,
+            1
+          ],
+          "train": false
+        },
+        "neighbours": [
+          {
+            "title": "HD Digital Indoor TV Antenna - Long Range Amplified 180 Miles Reception Support 4K 1080P for Televis",
+            "sid": [
+              151,
+              20,
+              242,
+              0
+            ],
+            "train": false,
+            "cosine": 0.971
+          },
+          {
+            "title": "Amplified HD Digital TV Antenna, 350 Miles Range Indoor HDTV Antenna with Strong Magnetic Base, Supp",
+            "sid": [
+              151,
+              74,
+              202,
+              0
+            ],
+            "train": false,
+            "cosine": 0.904
+          },
+          {
+            "title": "TV Antenna - HDTV Antenna Support 4K 1080P, 130 Miles Range Digital Antenna for HDTV, VHF UHF Channe",
+            "sid": [
+              151,
+              29,
+              201,
+              0
+            ],
+            "train": true,
+            "cosine": 0.893
+          },
+          {
+            "title": "2022 Newest Portable Amplified Digital HDTV Antenna Support Smart TVs and All Older TVs-420 Miles Ra",
+            "sid": [
+              151,
+              216,
+              43,
+              0
+            ],
+            "train": true,
+            "cosine": 0.893
+          },
+          {
+            "title": "[NEWEST 2018] Amplified HD Digital TV Antenna with Long 65-80 Miles Range \u2013 Support 4K 1080p & All O",
+            "sid": [
+              151,
+              246,
+              242,
+              0
+            ],
+            "train": true,
+            "cosine": 0.888
+          }
+        ]
+      },
+      {
+        "query": {
+          "title": "ZRM&E 8 Pin Graphics Card Power Supply 180 Degree Angled Adapter Steering Connector Up Angled for De",
+          "sid": [
+            180,
+            83,
+            253,
+            2
+          ],
+          "train": false
+        },
+        "neighbours": [
+          {
+            "title": "BQZYX+ ATX 8Pin Female to 8pin Male 180 Degree Angled Adapter for Desktops Graphics Card Upgrade Ver",
+            "sid": [
+              180,
+              83,
+              253,
+              0
+            ],
+            "train": true,
+            "cosine": 0.85
+          },
+          {
+            "title": "Timack ATX 8Pin Female to 8pin Male 180 Degree Angled Adapter for Desktops Graphics Card Updated Ver",
+            "sid": [
+              180,
+              83,
+              253,
+              1
+            ],
+            "train": true,
+            "cosine": 0.843
+          },
+          {
+            "title": "CY ATX 6Pin Female to 6pin Male 180 Degree Angled Adapter for Desktops Graphics Card",
+            "sid": [
+              180,
+              125,
+              187,
+              0
+            ],
+            "train": true,
+            "cosine": 0.792
+          },
+          {
+            "title": "Cablecc ATX 6Pin Female to 6pin Male 180 Degree Angled Power Adapter for Desktops Graphics Card",
+            "sid": [
+              180,
+              103,
+              125,
+              0
+            ],
+            "train": true,
+            "cosine": 0.789
+          },
+          {
+            "title": "chenyang 1set ATX 6Pin Female to 6pin Male 180 Degree Angled Power GPU Adapter for Desktops Graphics",
+            "sid": [
+              180,
+              125,
+              88,
+              0
+            ],
+            "train": true,
+            "cosine": 0.766
+          }
+        ]
+      }
+    ],
+    "same_two_code_prefix": [
+      {
+        "prefix": [
+          45,
+          84
+        ],
+        "items": 22,
+        "train_items": 22,
+        "examples": [
+          {
+            "title": "Intone I60 Lightweight Folding 3.5mm Stereo Over-ear Headphones Portable Stretch Headsets Earphones ",
+            "sid": [
+              45,
+              84,
+              153,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "Sound Intone I60 Lightweight Folding 3.5mm Stereo Over-ear Headphones Portable Stretch Headsets Earp",
+            "sid": [
+              45,
+              84,
+              153,
+              1
+            ],
+            "train": true
+          },
+          {
+            "title": "CozyPhones Sleep Headphones - Thin Earphone Speakers - Most Comfortable Headphones for Sleeping - Pe",
+            "sid": [
+              45,
+              84,
+              164,
+              1
+            ],
+            "train": true
+          },
+          {
+            "title": "Audio-Technica ATH-CLR100iSLG SonicFuel In-Ear Headphones with In-Line Microphone & Control, Lime Gr",
+            "sid": [
+              45,
+              84,
+              27,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "Monster Ibeats In-ear Headphones w/ Control Talk/ \u2013 Black(Original Monster packaging/Model:MH-IBTS-I",
+            "sid": [
+              45,
+              84,
+              161,
+              1
+            ],
+            "train": true
+          }
+        ]
+      },
+      {
+        "prefix": [
+          207,
+          139
+        ],
+        "items": 101,
+        "train_items": 100,
+        "examples": [
+          {
+            "title": "Nikon EN-EL3 Rechargeable Lithium-Ion Battery Pack for D50, D70, D70s, and D100",
+            "sid": [
+              207,
+              139,
+              214,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "Power2000 2 Pack of EN-EL18 Batteries for Nikon D4, D4S, D5 Digital SLR Cameras",
+            "sid": [
+              207,
+              139,
+              58,
+              6
+            ],
+            "train": true
+          },
+          {
+            "title": "WT Nixxell Battery for Pentax D-Li109 and Pentax KP, K-R, K-S1, K-S2, K-30, K-50, K-70, K-500 Digita",
+            "sid": [
+              207,
+              139,
+              160,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "2x Masione 7.4V 1350mAh Replacement Nikon EN-EL14 Battery for Nikon D3100 D3200 D5100 P7000 P7100 P7",
+            "sid": [
+              207,
+              139,
+              92,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "BM Premium EN-EL15B Battery for Nikon Z6, Z7, D780, D850, D7500, 1 V1, D500, D600, D610, D750, D800,",
+            "sid": [
+              207,
+              139,
+              184,
+              3
+            ],
+            "train": true
+          }
+        ]
+      },
+      {
+        "prefix": [
+          164,
+          213
+        ],
+        "items": 26,
+        "train_items": 26,
+        "examples": [
+          {
+            "title": "72mm Digital Tulip Flower Lens Hood for Canon EF-S 18-200mm f/3.5-5.6 is Standard Zoom Lens+ Cap Kee",
+            "sid": [
+              164,
+              213,
+              172,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "62mm Digital Tulip Flower Lens Hood for Nikon 70-300mm f/4-5.6G AF Nikkor SLR Camera Lens",
+            "sid": [
+              164,
+              213,
+              156,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "CowboyStudio 3-in-1 Collapsible Soft Rubber Lens Hood for Camera Lens with 62mm Filter Thread",
+            "sid": [
+              164,
+              213,
+              79,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "67mm Tulip Flower Lens Hood + 67mm Soft Rubber Lens Hood for Select Canon, Nikon, Panasonic, Olympus",
+            "sid": [
+              164,
+              213,
+              217,
+              0
+            ],
+            "train": true
+          },
+          {
+            "title": "Reversible Bayonet Lens Hood Shade for Canon EF-M 32mm f/1.4 STM Lens Replaces Canon ES-60 Lens Hood",
+            "sid": [
+              164,
+              213,
+              48,
+              0
+            ],
+            "train": true
+          }
+        ]
+      }
+    ],
+    "largest_three_code_group": {
+      "prefix": [
+        226,
+        134,
+        180
+      ],
+      "items": 461,
+      "examples": [
+        {
+          "title": "Allstate 3-Year Desktop Protection Plan ($75-99.99)",
+          "sid": [
+            226,
+            134,
+            180,
+            0
+          ],
+          "train": true
+        },
+        {
+          "title": "Allstate 3-Year Desktop Protection Plan ($150-174.99)",
+          "sid": [
+            226,
+            134,
+            180,
+            1
+          ],
+          "train": true
+        },
+        {
+          "title": "Allstate 3-Year Desktop Protection Plan ($350-399.99)",
+          "sid": [
+            226,
+            134,
+            180,
+            2
+          ],
+          "train": true
+        },
+        {
+          "title": "Allstate 3-Year Desktop Protection Plan ($1250-1499.99)",
+          "sid": [
+            226,
+            134,
+            180,
+            3
+          ],
+          "train": true
+        },
+        {
+          "title": "Allstate 3-Year Consumer Electronics Protection Plan ($125-149.99)",
+          "sid": [
+            226,
+            134,
+            180,
+            4
+          ],
+          "train": true
+        }
+      ]
+    }
+  },
+  "artifacts": {
+    "codes": {
+      "path": "data/processed/electronics/sid/qwen3-emb-0.6b.npy",
+      "sha256": "d870373c68ac2da8f04a45281259dd7a905969c35892cc94c61fa8b142bae01f",
+      "shape": [
+        368228,
+        4
+      ]
+    },
+    "model": {
+      "path": "data/runs/r3/rqvae.pt",
+      "sha256": "2acfff306f4588b005228825de94e029aa318492f7db499b3baf99975f250486"
+    }
+  },
+  "loss_log": [
+    {
+      "epoch": 50,
+      "recon": 0.31497928500175476,
+      "quant": 0.178854838013649,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 237121
+    },
+    {
+      "epoch": 100,
+      "recon": 0.31007862091064453,
+      "quant": 0.21137635409832,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 234163
+    },
+    {
+      "epoch": 150,
+      "recon": 0.30788901448249817,
+      "quant": 0.22386041283607483,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 233028
+    },
+    {
+      "epoch": 200,
+      "recon": 0.3065417408943176,
+      "quant": 0.23006828129291534,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 231803
+    },
+    {
+      "epoch": 250,
+      "recon": 0.30551835894584656,
+      "quant": 0.23195578157901764,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 231405
+    },
+    {
+      "epoch": 300,
+      "recon": 0.3049584627151489,
+      "quant": 0.233573779463768,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 230289
+    },
+    {
+      "epoch": 350,
+      "recon": 0.30457520484924316,
+      "quant": 0.23448356986045837,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 229761
+    },
+    {
+      "epoch": 400,
+      "recon": 0.30424895882606506,
+      "quant": 0.23443888127803802,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 230000
+    },
+    {
+      "epoch": 450,
+      "recon": 0.3040938079357147,
+      "quant": 0.2351137101650238,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 230114
+    },
+    {
+      "epoch": 500,
+      "recon": 0.3038195073604584,
+      "quant": 0.2338859587907791,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 229440
+    },
+    {
+      "epoch": 550,
+      "recon": 0.30393651127815247,
+      "quant": 0.23230016231536865,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 228044
+    },
+    {
+      "epoch": 600,
+      "recon": 0.304702490568161,
+      "quant": 0.23174123466014862,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 227601
+    },
+    {
+      "epoch": 650,
+      "recon": 0.3044877350330353,
+      "quant": 0.23069600760936737,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 227812
+    },
+    {
+      "epoch": 700,
+      "recon": 0.30455273389816284,
+      "quant": 0.23161424696445465,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 226401
+    },
+    {
+      "epoch": 746,
+      "recon": 0.30435362458229065,
+      "quant": 0.23078760504722595,
+      "codes_used": [
+        256,
+        256,
+        256
+      ],
+      "distinct_ids": 226620
+    }
+  ],
+  "train_seconds": 440.0,
+  "wall_time_s": 445.6,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-06T01:33:19-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2520 MHz, 10251 MHz, 3105 MHz, 57, 29.76 W, 450.00 W, 29 %, 2158 MiB, 24564 MiB",
+      "apps": "9059, .venv/bin/python, 1846 MiB"
+    },
+    "during_training": {
+      "samples": 15,
+      "interval_s": 30.0,
+      "pstates": [
+        "P2"
+      ],
+      "clocks.sm": {
+        "min": 2775.0,
+        "median": 2775.0,
+        "max": 2790.0
+      },
+      "clocks.mem": {
+        "min": 10251.0,
+        "median": 10251.0,
+        "max": 10251.0
+      },
+      "temperature.gpu": {
+        "min": 57.0,
+        "median": 63.0,
+        "max": 65.0
+      },
+      "power.draw": {
+        "min": 31.99,
+        "median": 165.79,
+        "max": 187.74
+      },
+      "utilization.gpu": {
+        "min": 27.0,
+        "median": 48.0,
+        "max": 76.0
+      },
+      "memory.used": {
+        "min": 3508.0,
+        "median": 9376.0,
+        "max": 9376.0
+      }
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-06T01:40:45-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2520 MHz, 10251 MHz, 3105 MHz, 57, 61.40 W, 450.00 W, 0 %, 15136 MiB, 24564 MiB",
+      "apps": "9059, .venv/bin/python, 14824 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+    "dirty": true
+  }
+}
