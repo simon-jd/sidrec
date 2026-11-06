@@ -121,9 +121,69 @@ def tuning() -> dict:
     return out
 
 
+def result_lines(text: str) -> list[dict]:
+    return [json.loads(x[7:]) for x in text.splitlines() if x.startswith("RESULT ")]
+
+
+def ddp_entries(results: list[dict]) -> dict:
+    out = {}
+    for r in results:
+        rec = r[r["step"]].get("record") if isinstance(r[r["step"]], dict) else None
+        if rec:
+            out[r["step"]] = {
+                "processes": rec["processes"],
+                "global_batch": rec["global_batch"],
+                "per_gpu_batch": rec["per_gpu_batch"],
+                "timed_steps": rec["timed_steps"],
+                "step_ms": rec["rank0_step_ms"],
+                "windows_per_s": rec["windows_per_s"],
+                "mean_loss_timed": round(rec["mean_loss_timed"], 4),
+                "gpu_util_median": {g: s.get("utilization.gpu") for g, s in (rec["gpus"] or {}).items()},
+                "sm_clock_median_mhz": {g: s.get("clocks.sm") for g, s in (rec["gpus"] or {}).items()},
+                "allreduce": rec.get("allreduce"),
+                "device": rec["environment"]["device"],
+                "torch": rec["environment"]["torch"],
+                "source_commit": rec["source_commit"],
+            }
+    return out
+
+
 def ddp() -> dict:
-    path = RESULTS / "ddp" / "summary.json"
-    return load(path) if path.exists() else {}
+    """The 2 x A10 node's entries (ddp/node-main/report.json) and the RTX 4090 reference (ddp/rtx4090)."""
+    node_path, ref_path = (
+        RESULTS / "ddp" / "node-main" / "report.json",
+        RESULTS / "ddp" / "rtx4090" / "payload.log",
+    )
+    if not node_path.exists():
+        return {}
+    report = load(node_path)
+    node = ddp_entries(report["results"])
+    out = {
+        "run_id": report["run_id"],
+        "pool": report["pool"],
+        "job_seconds": report["seconds"],
+        "credits_estimate": report["credits_estimate"],
+        "a10_node": node,
+        "rtx4090": ddp_entries(result_lines(ref_path.read_text())) if ref_path.exists() else {},
+        "scaling": {},
+    }
+    smoke = RESULTS / "ddp" / "node-smoke" / "report.json"
+    if smoke.exists():
+        out["smoke"] = {k: load(smoke)[k] for k in ("run_id", "seconds", "credits_estimate")}
+    for batch in (128, 1024):
+        one, two = node.get(f"1gpu_b{batch}"), node.get(f"2gpu_b{batch}")
+        if one and two:
+            t1, t2 = one["step_ms"]["mean"], two["step_ms"]["mean"]
+            half = node.get(f"1gpu_b{batch // 2}")
+            out["scaling"][f"global_batch_{batch}"] = {
+                "step_ms_1gpu": t1,
+                "step_ms_2gpu": t2,
+                "speedup": round(t1 / t2, 3),
+                "scaling_efficiency": round(t1 / (2 * t2), 3),
+                "step_ms_1gpu_at_per_gpu_batch": half["step_ms"]["mean"] if half else None,
+                "loss_1gpu_vs_2gpu": [one["mean_loss_timed"], two["mean_loss_timed"]],
+            }
+    return out
 
 
 def main() -> None:
