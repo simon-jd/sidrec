@@ -104,3 +104,10 @@ def test_semantic_ids_are_unique_and_match_their_checksum():
     codes = np.load(path)
     assert codes.shape == (368_228, 4) and len(np.unique(codes, axis=0)) == len(codes)
     assert int(codes[:, :3].max()) < 256
+
+
+def test_distribution_keeps_the_mean_unrounded():
+    from sidrec.semantic_ids.embed_catalog import distribution
+
+    got = distribution(np.array([0.9991, 0.9999, 0.99995]))
+    assert got["mean"] < 1.0 and got["min"] <= got["mean"] <= got["max"]

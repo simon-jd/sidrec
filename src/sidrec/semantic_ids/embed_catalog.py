@@ -27,7 +27,7 @@ LENGTH_EDGES = [0, 64, 128, 256, 384, 512, 768, 1024, 2048]
 
 
 def distribution(values: np.ndarray, percentiles=(1, 10, 50, 90, 99, 99.9)) -> dict:
-    out = {"min": float(values.min()), "mean": round(float(values.mean()), 2), "max": float(values.max())}
+    out = {"min": float(values.min()), "mean": float(values.mean()), "max": float(values.max())}
     out.update({f"p{p:g}": float(np.percentile(values, p)) for p in percentiles})
     return out
 
