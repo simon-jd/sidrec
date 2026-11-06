@@ -26,9 +26,9 @@
     {
       "model": "sasrec",
       "seed": 0,
-      "epochs": 11,
-      "hours": 1.21,
-      "measured": false
+      "epochs": 12,
+      "hours": 1.29,
+      "measured": true
     },
     {
       "model": "sasrec",
@@ -117,8 +117,8 @@
   ],
   "hstu_sid_tuning_hours": 1.18,
   "tiger_eps_curve_hours": 0.11,
-  "measured_hours": 1.18,
-  "total_hours": 29.5,
+  "measured_hours": 2.46,
+  "total_hours": 29.6,
   "limit_hours": 60.0,
   "within_limit": true,
   "bound_at_30_epochs_hours": 75.6
