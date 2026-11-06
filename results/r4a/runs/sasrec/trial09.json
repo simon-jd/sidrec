@@ -74,7 +74,7 @@
       "valid_ndcg@10": 0.001856731143667283,
       "valid_recall@10": 0.004678117581343387,
       "valid_recall@50": 0.017427733556765815,
-      "train_s": 14.8,
+      "train_s": 14.6,
       "eval_s": 1.8
     },
     {
@@ -83,7 +83,7 @@
       "valid_ndcg@10": 0.0028078357392799518,
       "valid_recall@10": 0.007596704370897919,
       "valid_recall@50": 0.016883116883116882,
-      "train_s": 14.5,
+      "train_s": 14.4,
       "eval_s": 1.8
     },
     {
@@ -101,7 +101,7 @@
       "valid_ndcg@10": 0.002525973369843791,
       "valid_recall@10": 0.006270074012009496,
       "valid_recall@50": 0.01886608015640274,
-      "train_s": 14.4,
+      "train_s": 14.5,
       "eval_s": 1.8
     },
     {
@@ -173,7 +173,7 @@
       "valid_ndcg@10": 0.002907902503716829,
       "valid_recall@10": 0.00754084625052367,
       "valid_recall@50": 0.017246194665549504,
-      "train_s": 14.5,
+      "train_s": 14.4,
       "eval_s": 1.8
     }
   ],
@@ -181,19 +181,19 @@
   "peak_memory_gb": 4.19,
   "test": null,
   "checkpoint": "data/runs/r4a/sasrec/trial09.pt",
-  "wall_time_s": 196.7,
+  "wall_time_s": 196.4,
   "gpu": {
     "nvidia_smi_start": {
-      "time": "2026-11-06T04:35:24-0800",
+      "time": "2026-11-06T05:19:00-0800",
       "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
-      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2775 MHz, 10501 MHz, 3105 MHz, 69, 96.72 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2760 MHz, 10501 MHz, 3105 MHz, 71, 103.15 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
       "apps": ""
     },
     "nvidia_smi_end": {
-      "time": "2026-11-06T04:38:40-0800",
+      "time": "2026-11-06T05:22:17-0800",
       "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
-      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2760 MHz, 10251 MHz, 3105 MHz, 72, 338.74 W, 450.00 W, 100 %, 7190 MiB, 24564 MiB",
-      "apps": "792358, .venv/bin/python, 6878 MiB"
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2760 MHz, 10251 MHz, 3105 MHz, 71, 309.83 W, 450.00 W, 8 %, 7190 MiB, 24564 MiB",
+      "apps": "978741, .venv/bin/python, 6878 MiB"
     },
     "sampled": {
       "samples": 20,
@@ -205,7 +205,7 @@
       "clocks.sm": {
         "min": 2760.0,
         "median": 2760.0,
-        "max": 2775.0
+        "max": 2760.0
       },
       "clocks.mem": {
         "min": 10251.0,
@@ -213,14 +213,14 @@
         "max": 10501.0
       },
       "temperature.gpu": {
-        "min": 69.0,
+        "min": 71.0,
         "median": 78.0,
         "max": 79.0
       },
       "power.draw": {
-        "min": 96.8,
-        "median": 361.66499999999996,
-        "max": 364.06
+        "min": 103.09,
+        "median": 362.09000000000003,
+        "max": 364.07
       },
       "utilization.gpu": {
         "min": 0.0,
@@ -241,8 +241,8 @@
     "host": "rtx4090-workstation"
   },
   "git": {
-    "commit": "495a3aff74d4e3bd19e57d369696df676e0e9a0e",
-    "dirty": true
+    "commit": "cd498234fe673d99f4d243db031d0c472d2ebdcd",
+    "dirty": false
   },
   "protocol": "2026-11-05 with the R2, R3 and R4a clarifications"
 }
