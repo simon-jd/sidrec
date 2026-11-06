@@ -1,0 +1,70 @@
+{
+  "model": "hstu-sid",
+  "analysis": "share of the ranking taken by items outside the train split; validation only",
+  "dataset": "electronics-dev",
+  "trial": 9,
+  "seed": 0,
+  "checkpoint": "data/runs/r4b/hstu-sid/trial09.pt",
+  "valid_rows": 71610,
+  "catalog_share_outside_train": 0.49830538034439087,
+  "top10_share_outside_train": 0.6903225183486938,
+  "top50_share_outside_train": 0.8385969996452332,
+  "ranked_over_catalog": {
+    "all": {
+      "recall@10": 0.00682865521575199,
+      "ndcg@10": 0.003888813067983796,
+      "recall@50": 0.015528557464041335,
+      "ndcg@50": 0.0058017458509953684,
+      "users": 71610
+    },
+    "warm": {
+      "recall@10": 0.009348887234218582,
+      "ndcg@10": 0.005383615896477301,
+      "recall@50": 0.0195457930007446,
+      "ndcg@50": 0.007641194692273958,
+      "users": 48348
+    },
+    "cold": {
+      "recall@10": 0.0015905769065428595,
+      "ndcg@10": 0.0007819982131990002,
+      "recall@50": 0.007179090361963717,
+      "ndcg@50": 0.0019786148829729557,
+      "users": 23262
+    }
+  },
+  "ranked_among_train_items": {
+    "all": {
+      "recall@10": 0.015305124982544337,
+      "ndcg@10": 0.007963314319770548,
+      "recall@50": 0.039561513755062144,
+      "ndcg@50": 0.013192627054467068,
+      "users": 71610
+    },
+    "warm": {
+      "recall@10": 0.022668983205096385,
+      "ndcg@10": 0.011794757558508501,
+      "recall@50": 0.05859601224456027,
+      "ndcg@50": 0.019540084871564216,
+      "users": 48348
+    },
+    "cold": {
+      "recall@10": 0.0,
+      "ndcg@10": 0.0,
+      "recall@50": 0.0,
+      "ndcg@50": 0.0,
+      "users": 23262
+    }
+  },
+  "wall_time_s": 6.2,
+  "git": {
+    "commit": "7eb579459c162529ba0388cf18fd8013962ff683",
+    "dirty": true,
+    "src_tree": "b044ac152e9957181325175a217fa5b931e91828"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  }
+}

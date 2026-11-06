@@ -1,0 +1,407 @@
+{
+  "model": "hstu-sid",
+  "dataset": "electronics-dev",
+  "phase": "tune",
+  "trial": 3,
+  "seed": 0,
+  "config": {
+    "lr": 0.0001,
+    "dropout": 0.2,
+    "weight_decay": 0.01,
+    "width": 128,
+    "layers": 2
+  },
+  "fixed": {
+    "batch": 128,
+    "max_len": 50,
+    "optimizer": "AdamW, linear warm-up then constant",
+    "loss": "exact full-softmax CE over the train items, chunked fused forward-backward",
+    "precision": "float32 with TF32 matmuls",
+    "heads": 4,
+    "head_dim": "width / 4",
+    "rab_time_buckets": 128,
+    "temperature": 0.05,
+    "item_embedding": "ID row (zero outside train) + embeddings of prefixes (c1), (c1,c2), (c1,c2,c3)",
+    "prefix_tables": "one row per prefix of a train item, zero init; other prefixes share a zero row",
+    "ranking": "every catalog item by its score"
+  },
+  "data": {
+    "users": 102587,
+    "interactions": {
+      "train": 816106,
+      "valid": 72834,
+      "test": 76068
+    },
+    "train_items": 184738,
+    "catalog_items": 368228,
+    "valid_rows": 71610,
+    "valid_cold_rows": 23262,
+    "test_rows": 75036,
+    "test_cold_rows": 41983
+  },
+  "epochs_run": 25,
+  "best_epoch": 22,
+  "train_windows": 98621,
+  "train_targets": 704319,
+  "vocab_items": 184738,
+  "steps_per_epoch": 771,
+  "warmup_steps": 1156,
+  "valid_rows": 71610,
+  "valid": {
+    "all": {
+      "recall@10": 0.0015779919005725457,
+      "ndcg@10": 0.0010380326631697617,
+      "recall@50": 0.002890657729367407,
+      "ndcg@50": 0.0013138554451135943,
+      "users": 71610
+    },
+    "warm": {
+      "recall@10": 0.0019235542318193101,
+      "ndcg@10": 0.0013488913599209898,
+      "recall@50": 0.003061140067841483,
+      "ndcg@50": 0.0015896037755133876,
+      "users": 48348
+    },
+    "cold": {
+      "recall@10": 0.0008597713008339781,
+      "ndcg@10": 0.0003919404840566854,
+      "recall@50": 0.0025363253374602354,
+      "ndcg@50": 0.0007407370426473742,
+      "users": 23262
+    }
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 13.5278,
+      "valid_ndcg@10": 1.3014379964187105e-05,
+      "valid_recall@10": 2.7929060187124703e-05,
+      "valid_recall@50": 0.00013964530093562352,
+      "valid_cold_recall@50": 0.00042988565041698906,
+      "train_s": 30.1,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 2,
+      "loss": 11.48831,
+      "valid_ndcg@10": 4.4739518008018465e-05,
+      "valid_recall@10": 9.775171065493646e-05,
+      "valid_recall@50": 0.00016757436112274822,
+      "valid_cold_recall@50": 0.0005158627805003868,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 3,
+      "loss": 11.02575,
+      "valid_ndcg@10": 1.0669039120328534e-05,
+      "valid_recall@10": 2.7929060187124703e-05,
+      "valid_recall@50": 0.00020946795140343527,
+      "valid_cold_recall@50": 0.0006448284756254836,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 4,
+      "loss": 10.43857,
+      "valid_ndcg@10": 2.880561989648053e-05,
+      "valid_recall@10": 5.5858120374249406e-05,
+      "valid_recall@50": 0.00025136154168412233,
+      "valid_cold_recall@50": 0.0006448284756254836,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 5,
+      "loss": 9.76985,
+      "valid_ndcg@10": 7.858972668422956e-05,
+      "valid_recall@10": 0.00013964530093562352,
+      "valid_recall@50": 0.0004887585532746823,
+      "valid_cold_recall@50": 0.0012466683862092682,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 6,
+      "loss": 9.15759,
+      "valid_ndcg@10": 0.0001757906880389062,
+      "valid_recall@10": 0.00030721966205837174,
+      "valid_recall@50": 0.0007401200949588046,
+      "valid_cold_recall@50": 0.001762531166709655,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 7,
+      "loss": 8.63593,
+      "valid_ndcg@10": 0.00022444308801848492,
+      "valid_recall@10": 0.0003770423125261835,
+      "valid_recall@50": 0.0010613042871107387,
+      "valid_cold_recall@50": 0.0019344854268764507,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 8,
+      "loss": 8.19662,
+      "valid_ndcg@10": 0.0003347619126010155,
+      "valid_recall@10": 0.0005446166736489317,
+      "valid_recall@50": 0.001228878648233487,
+      "valid_cold_recall@50": 0.002235405382168343,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 9,
+      "loss": 7.82501,
+      "valid_ndcg@10": 0.0004199797309051648,
+      "valid_recall@10": 0.0006284038542103058,
+      "valid_recall@50": 0.0016478145510403575,
+      "valid_cold_recall@50": 0.00275126816266873,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 10,
+      "loss": 7.50657,
+      "valid_ndcg@10": 0.0004889705140577959,
+      "valid_recall@10": 0.000754084625052367,
+      "valid_recall@50": 0.0017316017316017316,
+      "valid_cold_recall@50": 0.0024933367724185363,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 11,
+      "loss": 7.23225,
+      "valid_ndcg@10": 0.0005553857519030151,
+      "valid_recall@10": 0.0009076944560815529,
+      "valid_recall@50": 0.0021226085742214774,
+      "valid_cold_recall@50": 0.0028802338577938267,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 12,
+      "loss": 6.99442,
+      "valid_ndcg@10": 0.000612788359646022,
+      "valid_recall@10": 0.0008937299259879905,
+      "valid_recall@50": 0.002108644044127915,
+      "valid_cold_recall@50": 0.0029662109878772244,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 13,
+      "loss": 6.78358,
+      "valid_ndcg@10": 0.0006515305608990178,
+      "valid_recall@10": 0.0009635525764558023,
+      "valid_recall@50": 0.002346041055718475,
+      "valid_cold_recall@50": 0.0028372452927521276,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 14,
+      "loss": 6.596,
+      "valid_ndcg@10": 0.0007255170214837554,
+      "valid_recall@10": 0.0011590559977656752,
+      "valid_recall@50": 0.0023600055858120374,
+      "valid_cold_recall@50": 0.0025793139025019345,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 15,
+      "loss": 6.43212,
+      "valid_ndcg@10": 0.000761875665752484,
+      "valid_recall@10": 0.0011730205278592375,
+      "valid_recall@50": 0.002709118838151096,
+      "valid_cold_recall@50": 0.0030091995529189235,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 16,
+      "loss": 6.28002,
+      "valid_ndcg@10": 0.0008437265007153539,
+      "valid_recall@10": 0.0012847367686077363,
+      "valid_recall@50": 0.0026392961876832845,
+      "valid_cold_recall@50": 0.002622302467543633,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 17,
+      "loss": 6.14555,
+      "valid_ndcg@10": 0.0008119365929582024,
+      "valid_recall@10": 0.0012428431783270493,
+      "valid_recall@50": 0.0026811897779639715,
+      "valid_cold_recall@50": 0.00275126816266873,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 18,
+      "loss": 6.02496,
+      "valid_ndcg@10": 0.0008917238141512261,
+      "valid_recall@10": 0.0013405948889819858,
+      "valid_recall@50": 0.002709118838151096,
+      "valid_cold_recall@50": 0.002665291032585332,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 19,
+      "loss": 5.91467,
+      "valid_ndcg@10": 0.0008634246430101661,
+      "valid_recall@10": 0.0013405948889819858,
+      "valid_recall@50": 0.0026392961876832845,
+      "valid_cold_recall@50": 0.0024503482073768377,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 20,
+      "loss": 5.81017,
+      "valid_ndcg@10": 0.0009530704571956415,
+      "valid_recall@10": 0.0014802401899176093,
+      "valid_recall@50": 0.002862728669180282,
+      "valid_cold_recall@50": 0.002665291032585332,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 21,
+      "loss": 5.71683,
+      "valid_ndcg@10": 0.0009694218533665536,
+      "valid_recall@10": 0.0014802401899176093,
+      "valid_recall@50": 0.0028487641390867197,
+      "valid_cold_recall@50": 0.002622302467543633,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 22,
+      "loss": 5.63098,
+      "valid_ndcg@10": 0.0010380326631697617,
+      "valid_recall@10": 0.0015779919005725457,
+      "valid_recall@50": 0.002890657729367407,
+      "valid_cold_recall@50": 0.0025363253374602354,
+      "train_s": 30.0,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 23,
+      "loss": 5.5495,
+      "valid_ndcg@10": 0.0009887527228963336,
+      "valid_recall@10": 0.0014942047200111716,
+      "valid_recall@50": 0.002904622259460969,
+      "valid_cold_recall@50": 0.002149428252084945,
+      "train_s": 30.0,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 24,
+      "loss": 5.47323,
+      "valid_ndcg@10": 0.0009926880408429686,
+      "valid_recall@10": 0.001508169250104734,
+      "valid_recall@50": 0.002974444909928781,
+      "valid_cold_recall@50": 0.002192416817126644,
+      "train_s": 30.0,
+      "eval_s": 2.3
+    },
+    {
+      "epoch": 25,
+      "loss": 5.40286,
+      "valid_ndcg@10": 0.0009953432516737262,
+      "valid_recall@10": 0.001508169250104734,
+      "valid_recall@50": 0.003142019271051529,
+      "valid_cold_recall@50": 0.00236437107729344,
+      "train_s": 29.9,
+      "eval_s": 2.3
+    }
+  ],
+  "params": 45847908,
+  "peak_memory_gb": 7.42,
+  "prefix_table_rows": [
+    256,
+    32962,
+    138876
+  ],
+  "test": null,
+  "checkpoint": "data/runs/r4b/hstu-sid/trial03.pt",
+  "wall_time_s": 827.6,
+  "processes": [
+    {
+      "epochs": [
+        1,
+        25
+      ],
+      "wall_time_s": 827.6,
+      "git": {
+        "commit": "7eb579459c162529ba0388cf18fd8013962ff683",
+        "dirty": false,
+        "src_tree": "b044ac152e9957181325175a217fa5b931e91828"
+      },
+      "nvidia_smi_start": {
+        "time": "2026-11-06T09:48:26-0800",
+        "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+        "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2775 MHz, 10501 MHz, 3105 MHz, 60, 95.89 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+        "apps": ""
+      },
+      "nvidia_smi_end": {
+        "time": "2026-11-06T10:02:14-0800",
+        "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+        "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2775 MHz, 10251 MHz, 3105 MHz, 62, 156.69 W, 450.00 W, 7 %, 19372 MiB, 24564 MiB",
+        "apps": "2050505, .venv/bin/python, 19060 MiB"
+      },
+      "sampled": {
+        "samples": 83,
+        "interval_s": 10.0,
+        "pstates": [
+          "P0",
+          "P2"
+        ],
+        "clocks.sm": {
+          "min": 2775.0,
+          "median": 2775.0,
+          "max": 2775.0
+        },
+        "clocks.mem": {
+          "min": 10251.0,
+          "median": 10251.0,
+          "max": 10501.0
+        },
+        "temperature.gpu": {
+          "min": 60.0,
+          "median": 66.0,
+          "max": 68.0
+        },
+        "power.draw": {
+          "min": 95.89,
+          "median": 230.69,
+          "max": 300.91
+        },
+        "utilization.gpu": {
+          "min": 0.0,
+          "median": 99.0,
+          "max": 100.0
+        },
+        "memory.used": {
+          "min": 304.0,
+          "median": 19372.0,
+          "max": 19372.0
+        }
+      },
+      "peak_memory_gb": 7.42
+    }
+  ],
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a and R4b clarifications"
+}
