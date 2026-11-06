@@ -40,6 +40,12 @@ MODELS = {
         ["tiger_table1", "tiger_table9"],
         ["mender_tiger"],
     ),
+    # Diagnostic outside the protocol: the paper's setting with the paper's optimizer (Adafactor), seeds 0-2.
+    "tiger_st5-xxl_adafactor": (
+        "TIGER, Sentence-T5-XXL IDs, Adafactor (diagnostic)",
+        ["tiger_table1", "tiger_table9"],
+        ["mender_tiger"],
+    ),
 }
 
 
@@ -47,7 +53,7 @@ def load_runs(run_dir: str) -> tuple[list[dict], list[dict]]:
     tune, final = [], []
     for path in sorted((RESULTS / "runs" / run_dir).glob("*.json")):
         record = json.loads(path.read_text())
-        (final if record["phase"] == "final" else tune).append(record)
+        (final if record["phase"] in ("final", "diagnostic") else tune).append(record)
     return tune, final
 
 
@@ -62,10 +68,8 @@ def summarize() -> dict:
             k: {"source": s, **dict(zip(METRICS, v, strict=True))} for k, (s, v) in PUBLISHED.items()
         }
     }
-    seconds = 0.0
     for run_dir, (label, primary, secondary) in MODELS.items():
         tune, final = load_runs(run_dir)
-        seconds += gpu_seconds(tune + final)
         if len(final) != 3:
             out[run_dir] = {"label": label, "status": f"{len(final)} of 3 final runs"}
             continue
@@ -95,10 +99,9 @@ def summarize() -> dict:
             "tuning_trials": len(tune),
             "gpu": sorted({r["environment"]["device"] for r in tune + final}),
         }
-    for name in ("embeddings", "semantic_ids"):
-        for path in sorted((RESULTS / name).glob("*.json")):
-            seconds += json.loads(path.read_text())["wall_time_s"]
-    out["gpu_hours_rtx4090"] = round(seconds / 3600, 2)
+    # Every recorded GPU job: runs (including diagnostics and superseded ones), embeddings, RQ-VAEs.
+    records = [json.loads(p.read_text()) for p in sorted(RESULTS.rglob("*.json")) if p.name != "summary.json"]
+    out["gpu_hours_rtx4090"] = round(gpu_seconds(records) / 3600, 2)
     return out
 
 
