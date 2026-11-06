@@ -253,3 +253,30 @@ No recommendation metric was computed while deciding them; the check was codeboo
 - **Equivalence:** a test loads the same weights into both and checks that their logits agree to 1e-5.
 - **Why:** it trains about 25% faster at TIGER's size (13.8 against 18.5 ms per step of 256 examples on the
   RTX 4090).
+
+### 2026-11-05: RQ-VAE optimizer, replacing the RQ-VAE change above
+The fix above was wrong. Its IDs used every code, but the RQ-VAE behind them had learned nothing.
+
+- **What was wrong:** the decoder output the mean embedding for every item. It explained 0% of the embedding
+  variance for all three encoders. The encoder output had shrunk until the quantization terms were about
+  10^-6, so the codes came from an encoder that was barely trained. The check above looked only at code use
+  and missed this.
+- **How it was found:** two TIGER tuning trials (1 and 2) had run on those IDs, plus part of trial 3. Their
+  validation NDCG@10 was low, which led to a check of the tokenizer's reconstruction. The new RQ-VAE was chosen
+  on reconstruction and code use only, never on a recommendation metric.
+  - The two finished trials are kept under `results/r2/superseded/`, labelled with the IDs they used, and are
+    not part of the tuning budget.
+  - TIGER's 12 trials are rerun from the start on the new IDs.
+- **Variants checked:** 20,000 steps each on the Sentence-T5 vectors, scored by explained variance and code use.
+  - Every Adagrad-at-0.4 variant either diverged or explained no variance: raw, centred or standardized
+    inputs, and losses averaged or summed over dimensions.
+  - AdamW at 1e-3 with averaged losses collapsed to one code.
+- **New setting:**
+  - the paper's loss, summed over dimensions as it is written, with the paper's batch, epochs and k-means
+    initialisation;
+  - Adam (AdamW with no weight decay) at learning rate 1e-3.
+  - Over 40,000 steps it explained 57% of the Sentence-T5 variance and 55% of the Qwen3-Embedding-4B variance.
+    About 95% of items had a distinct three-code ID.
+- **What does not change:** the first level uses only part of its codebook, about 100 of 256 codes for
+  Sentence-T5 and about 180 for Qwen3-Embedding-4B. The other two levels use all 256. The paper reports at
+  least 80% use; this is reported, not tuned away.
