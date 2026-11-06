@@ -3,7 +3,7 @@ import pytest
 import torch
 
 from sidrec.semantic_ids.embed import item_text
-from sidrec.semantic_ids.rqvae import RQVAE, add_dedupe_code, code_stats
+from sidrec.semantic_ids.rqvae import RQVAE, add_dedupe_code, code_stats, train
 
 
 def test_dedupe_code_and_collision_stats():
@@ -37,3 +37,19 @@ def test_item_text_uses_title_brand_price_categories():
     expected = "Title: Rose & Oud Cream; Brand: Acme; Price: 12.50; Categories: Beauty, Skin Care, Fragrance"
     assert item_text(meta) == expected
     assert item_text({"title": "X", "categories": []}) == "Title: X"
+
+
+def test_rqvae_training_learns_to_reconstruct_not_just_the_mean():
+    # Normalized vectors around 64 directions plus a shared offset, like sentence embeddings. A decoder that
+    # outputs the mean explains none of the variance; the trained one must explain a good share of it.
+    g = torch.Generator().manual_seed(0)
+    centers = torch.randn(64, 48, generator=g)
+    x = centers[torch.randint(0, 64, (2048,), generator=g)] + 0.3 * torch.randn(2048, 48, generator=g)
+    x = torch.nn.functional.normalize(x + 1.0, dim=1)
+    model, log = train(x, epochs=200, seed=0)
+    with torch.no_grad():
+        z_hat = model.quantize(model.encoder(x))[0]
+        x_hat = model.decoder(z_hat)
+    explained = 1 - ((x - x_hat) ** 2).sum() / ((x - x.mean(0)) ** 2).sum()
+    assert explained.item() > 0.7
+    assert log[-1]["codes_used"][0] > 16

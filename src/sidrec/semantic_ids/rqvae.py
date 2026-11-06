@@ -3,15 +3,14 @@
     python -m sidrec.semantic_ids.rqvae --encoder st5-xxl
 
 Encoder 512-256-128 (ReLU) to a 32-dim latent, 3 levels of residual quantization with 256 codes each, and a
-mirrored decoder. The loss is
+mirrored decoder. The loss is the paper's,
 
-    mean_d (x - x_hat)^2 + sum_l (||sg[r_l] - e_l||^2 + beta ||r_l - sg[e_l]||^2),   beta = 0.25,
+    ||x - x_hat||^2 + sum_l (||sg[r_l] - e_l||^2 + beta ||r_l - sg[e_l]||^2),   beta = 0.25,
 
-with a straight-through gradient. The paper writes the reconstruction term as ||x - x_hat||^2; summed over the
-input dimensions, Adagrad at 0.4 diverges within 20 steps, so it is averaged over them (protocol, Changes).
-
-Adagrad (accumulator starting at 0.1, as in TensorFlow), learning rate 0.4, batch 1024, 20,000 epochs; each
-level's codebook is initialised by k-means on the first batch. Items that share all three codes get a fourth
+with a straight-through gradient; batch 1024, 20,000 epochs, each level's codebook initialised by k-means on
+the first batch. The optimizer is Adam (AdamW without weight decay) at 1e-3, not the paper's Adagrad at 0.4:
+every Adagrad variant we tried either diverged or left a decoder that outputs the mean embedding (protocol,
+Changes). Items that share all three codes get a fourth
 code 0, 1, 2, ... in item-index order; every other item gets 0.
 
 It trains on the items that occur in some user's training part and assigns codes to every item. Codes go to
@@ -91,7 +90,7 @@ class RQVAE(nn.Module):
         z = self.encoder(x)
         z_hat, codes, q_loss = self.quantize(z)
         x_hat = self.decoder(z + (z_hat - z).detach())
-        recon = ((x - x_hat) ** 2).mean()  # averaged over the input dimensions (see the docstring)
+        recon = ((x - x_hat) ** 2).sum(1).mean()
         return recon, q_loss, codes
 
 
@@ -131,15 +130,13 @@ def code_stats(codes3: np.ndarray, codes: int = 256) -> dict:
     }
 
 
-def train(x_train: torch.Tensor, epochs: int, seed: int, batch: int = 1024, lr: float = 0.4):
+def train(x_train: torch.Tensor, epochs: int, seed: int, batch: int = 1024, lr: float = 1e-3):
     torch.manual_seed(seed)
     model = RQVAE(x_train.shape[1]).to(x_train.device)
     g = torch.Generator(device=x_train.device).manual_seed(seed)
     order = torch.randperm(x_train.shape[0], generator=g, device=x_train.device)
     model.init_codebooks(x_train[order[:batch]])
-    # TensorFlow's Adagrad starts its accumulator at 0.1; PyTorch's starts at 0, which makes the first steps
-    # move every weight by about the learning rate (0.4) and diverges.
-    opt = torch.optim.Adagrad(model.parameters(), lr=lr, initial_accumulator_value=0.1)
+    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.0)
     log = []
     for epoch in range(1, epochs + 1):
         order = torch.randperm(x_train.shape[0], generator=g, device=x_train.device)
@@ -182,6 +179,8 @@ def main() -> None:
         z = model.encoder(emb)
         _, codes3, _ = model.quantize(z)
         recon, q_loss, _ = model(emb)
+        x_hat = model.decoder(model.quantize(z)[0])
+        explained = 1 - ((emb - x_hat) ** 2).sum() / ((emb - emb.mean(0)) ** 2).sum()
     codes3 = codes3.cpu().numpy()
     codes4 = add_dedupe_code(codes3)
     SID_DIR.mkdir(parents=True, exist_ok=True)
@@ -196,13 +195,14 @@ def main() -> None:
             "levels": 3,
             "codes": 256,
             "beta": 0.25,
-            "optimizer": "Adagrad",
-            "lr": 0.4,
+            "optimizer": "AdamW, weight decay 0",
+            "lr": 1e-3,
             "batch": 1024,
             "epochs": args.epochs,
             "seed": args.seed,
         },
         "final_loss_all_items": {"recon": round(recon.item(), 5), "quant": round(q_loss.item(), 5)},
+        "reconstruction_explained_variance": round(explained.item(), 4),
         **code_stats(codes3),
         "fourth_code_values": int(codes4[:, 3].max()) + 1,
         "loss_log": log,
@@ -212,7 +212,8 @@ def main() -> None:
         "git": common.git_state(),
     }
     common.write_json(common.RESULTS / "semantic_ids" / f"{args.encoder}.json", record)
-    print({k: record[k] for k in ("collision_rate", "largest_collision_group", "per_level", "wall_time_s")})
+    keys = ("reconstruction_explained_variance", "collision_rate", "largest_collision_group", "per_level")
+    print({k: record[k] for k in keys})
 
 
 if __name__ == "__main__":
