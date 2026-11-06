@@ -101,6 +101,7 @@ def train(
     device: str,
     max_epochs: int = MAX_EPOCHS,
     optimizer: str = "adamw",
+    patience: int = PATIENCE,
 ):
     common.seed_all(seed)
     codes, layout = load_ids(encoder)
@@ -155,7 +156,7 @@ def train(
         if metrics["ndcg@10"] > best:
             best, best_epoch, best_valid = metrics["ndcg@10"], epoch, metrics
             best_state = copy.deepcopy(model.state_dict())
-        elif epoch - best_epoch >= PATIENCE:
+        elif epoch - best_epoch >= patience:
             break
     model.load_state_dict(best_state)
     run = {
@@ -195,7 +196,9 @@ def main() -> None:
     torch.backends.cuda.matmul.allow_tf32 = True
     device = "cuda"
     cfg = trials("tiger")[args.trial - 1]
-    suffix = "_adafactor" if args.optimizer == "adafactor" else ""
+    suffix = ("_adafactor" if args.optimizer == "adafactor" else "") + (
+        f"_patience{args.patience}" if args.patience != PATIENCE else ""
+    )
     run_dir = common.RESULTS / "runs" / f"tiger_{args.encoder}{suffix}"
     tag = f"trial{args.trial:02d}" + (f"_seed{args.seed}" if args.final else "")
     ckpt = common.CHECKPOINTS / f"tiger_{args.encoder}{suffix}" / f"{tag}.pt"
@@ -216,7 +219,7 @@ def main() -> None:
         print(record["test"])
         return
     model, run, (data, tokens, layout, trie) = train(
-        cfg, args.seed, data, args.encoder, device, args.max_epochs, args.optimizer
+        cfg, args.seed, data, args.encoder, device, args.max_epochs, args.optimizer, args.patience
     )
     ckpt.parent.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), ckpt)
