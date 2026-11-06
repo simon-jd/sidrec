@@ -226,3 +226,30 @@ uses them.
   seeds 0, 1 and 2 on IDs built the same way from Qwen3-Embedding-0.6B and Qwen3-Embedding-4B vectors. Those
   models use last-token pooling and L2 normalization, with no instruction prefix, as they are meant to be used
   for documents.
+
+### 2026-11-05: RQ-VAE loss scale, found before any TIGER model was trained
+The RQ-VAE as specified above did not train, so two details change. Both concern only the semantic-ID tokenizer.
+No recommendation metric was computed while deciding them; the check was codebook use on the training items.
+
+- **What failed:** with the reconstruction and quantization terms summed over dimensions, as the paper writes
+  them, Adagrad at learning rate 0.4 diverged within 20 steps. The encoder output grew to a norm of about 10^4,
+  and every item fell on a single code at all three levels.
+- **Change 1, the Adagrad accumulator:** it starts at 0.1, the TensorFlow default, instead of PyTorch's 0. With
+  that alone it still diverged.
+- **Change 2, the reconstruction term:** it is averaged over the input dimensions instead of summed. The
+  quantization terms stay squared norms over the 32 latent dimensions.
+- **Result of the check:** over 6,000 steps on Sentence-T5 vectors, all three levels kept at least 232 of their
+  256 codes, and about 99% of items had a distinct three-code ID.
+- **Alternatives tried in the same check:**
+  - averaging both terms: the first level collapsed to 2 codes;
+  - summing both terms with a gradient clip of 1.0: it worked, but adds a mechanism the paper does not have;
+  - AdamW at 1e-3: it collapsed with the averaged terms and kept only 74 first-level codes with the summed ones.
+- **Averaging over the input dimensions also helps the encoder comparison:** the loss scale then no longer
+  depends on the embedding width (768, 1,024 or 2,560).
+
+### 2026-11-05: TIGER's T5 implementation
+- **What changed:** the T5 encoder-decoder is our own compact implementation, `src/sidrec/models/t5.py`. It is
+  not Hugging Face transformers' T5, as the first R2 clarification said.
+- **Equivalence:** a test loads the same weights into both and checks that their logits agree to 1e-5.
+- **Why:** it trains about 25% faster at TIGER's size (13.8 against 18.5 ms per step of 256 examples on the
+  RTX 4090).
