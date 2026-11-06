@@ -179,6 +179,7 @@ def main() -> None:
     data = loo.load()
     t0 = time.time()
     smi_before = common.nvidia_smi()
+    git = common.git_state()  # the code this run started with
     if args.test:  # the selected tuning trial becomes the seed-0 final run; test is computed only here
         record = json.loads((run_dir / f"{tag}.json").read_text())
         codes, layout = load_ids(args.encoder)
@@ -219,7 +220,7 @@ def main() -> None:
         wall_time_s=round(time.time() - t0, 1),
         gpu={"nvidia_smi_start": smi_before, "nvidia_smi_end": common.nvidia_smi()},
         environment=common.environment(),
-        git=common.git_state(),
+        git=git,
         protocol=common.PROTOCOL_VERSION,
         checkpoint=str(ckpt.relative_to(common.ROOT)),
     )
