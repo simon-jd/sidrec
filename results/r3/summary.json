@@ -1,0 +1,299 @@
+{
+  "item_docs": {
+    "items": 368228,
+    "tokens_total": 94219784,
+    "tokens_per_item": {
+      "min": 4.0,
+      "mean": 255.8734914237918,
+      "max": 1651.0,
+      "p1": 35.0,
+      "p10": 71.0,
+      "p50": 253.0,
+      "p90": 429.0,
+      "p99": 704.0,
+      "p99.9": 1192.0
+    },
+    "train_items": 329445
+  },
+  "throughput": [
+    {
+      "run": "vllm",
+      "label": "vLLM 0.31.0, full catalog",
+      "items": 368228,
+      "tokens": 94219784,
+      "encode_s": 767.94,
+      "items_per_s": 479.5,
+      "tokens_per_s": 122691.2,
+      "outside_encode_s": 39.3,
+      "padding_share": 0.0,
+      "sm_clock_mhz_median": 2685.0,
+      "power_w_median": 444.71,
+      "utilization_median": 92.0,
+      "memory_used_mib_max": 20716.0,
+      "pstates": [
+        "P2"
+      ],
+      "git": {
+        "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+        "dirty": false
+      }
+    },
+    {
+      "run": "hf-bs64",
+      "label": "R2 loop, batch 64, full catalog",
+      "items": 368228,
+      "tokens": 94219784,
+      "encode_s": 3250.4,
+      "items_per_s": 113.3,
+      "tokens_per_s": 28987.1,
+      "outside_encode_s": 20.1,
+      "padding_share": 0.5009,
+      "sm_clock_mhz_median": 2760.0,
+      "power_w_median": 398.645,
+      "utilization_median": 100.0,
+      "memory_used_mib_max": 12460.0,
+      "pstates": [
+        "P2",
+        "P8"
+      ],
+      "git": {
+        "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+        "dirty": false
+      }
+    },
+    {
+      "run": "vllm-sample20000",
+      "label": "vLLM 0.31.0, 20,000-item sample",
+      "items": 20000,
+      "tokens": 5090678,
+      "encode_s": 41.14,
+      "items_per_s": 486.1,
+      "tokens_per_s": 123735.2,
+      "outside_encode_s": 15.2,
+      "padding_share": 0.0,
+      "sm_clock_mhz_median": 2655.0,
+      "power_w_median": 446.07,
+      "utilization_median": 95.0,
+      "memory_used_mib_max": 20790.0,
+      "pstates": [
+        "P2"
+      ],
+      "git": {
+        "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+        "dirty": false
+      }
+    },
+    {
+      "run": "hf-bs64-sample20000",
+      "label": "R2 loop, batch 64, sample",
+      "items": 20000,
+      "tokens": 5090678,
+      "encode_s": 175.68,
+      "items_per_s": 113.8,
+      "tokens_per_s": 28976.6,
+      "outside_encode_s": 3.9,
+      "padding_share": 0.501,
+      "sm_clock_mhz_median": 2760.0,
+      "power_w_median": 398.445,
+      "utilization_median": 100.0,
+      "memory_used_mib_max": 9094.0,
+      "pstates": [
+        "P2",
+        "P3"
+      ],
+      "git": {
+        "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+        "dirty": false
+      }
+    },
+    {
+      "run": "hf-bs128-sample20000",
+      "label": "R2 loop, batch 128, sample",
+      "items": 20000,
+      "tokens": 5090678,
+      "encode_s": 195.89,
+      "items_per_s": 102.1,
+      "tokens_per_s": 25987.4,
+      "outside_encode_s": 3.1,
+      "padding_share": 0.5456,
+      "sm_clock_mhz_median": 2760.0,
+      "power_w_median": 396.645,
+      "utilization_median": 100.0,
+      "memory_used_mib_max": 16322.0,
+      "pstates": [
+        "P2",
+        "P3"
+      ],
+      "git": {
+        "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+        "dirty": false
+      }
+    },
+    {
+      "run": "hf-bs256-sample20000",
+      "label": "R2 loop, batch 256, sample",
+      "items": 20000,
+      "tokens": 5090678,
+      "encode_s": 213.79,
+      "items_per_s": 93.5,
+      "tokens_per_s": 23811.6,
+      "outside_encode_s": 3.1,
+      "padding_share": 0.58,
+      "sm_clock_mhz_median": 2760.0,
+      "power_w_median": 401.345,
+      "utilization_median": 100.0,
+      "memory_used_mib_max": 23778.0,
+      "pstates": [
+        "P2",
+        "P3"
+      ],
+      "git": {
+        "commit": "86eafd99fa35cc7a996fcb55e882548130f2f244",
+        "dirty": false
+      }
+    }
+  ],
+  "full_catalog_speedup_vllm_over_hf": 4.23,
+  "agreement": {
+    "items": 368228,
+    "cosine": {
+      "min": 0.999099978589767,
+      "mean": 0.9998384847910067,
+      "max": 0.9999351735049584,
+      "p0.01": 0.99950906474756,
+      "p0.1": 0.9996432793725679,
+      "p1": 0.9997309670981849,
+      "p50": 0.9998438553776559
+    },
+    "items_below_0.999": 0,
+    "items_below_0.99": 0,
+    "max_abs_component_difference": 0.006326667964458466,
+    "per_item_max_abs_difference": {
+      "min": 0.0012572593986988068,
+      "mean": 0.0022671314814611747,
+      "max": 0.006326667964458466,
+      "p50": 0.002191847190260887,
+      "p99": 0.003608390688896179,
+      "p99.9": 0.004396087460219869
+    },
+    "top10_neighbour_overlap": {
+      "queries": 2000,
+      "sample_seed": 0,
+      "mean_share_in_common": 0.9598
+    },
+    "rule": "the IDs use the vLLM vectors unless some item's cosine is below 0.99",
+    "ids_use": "vllm"
+  },
+  "semantic_ids": {
+    "train_items": 329445,
+    "settings": {
+      "hidden": [
+        512,
+        256,
+        128
+      ],
+      "latent": 32,
+      "levels": 3,
+      "codes": 256,
+      "beta": 0.25,
+      "optimizer": "AdamW, weight decay 0",
+      "lr": 0.001,
+      "batch": 1024,
+      "epochs": 746,
+      "steps": 240212,
+      "seed": 0
+    },
+    "reconstruction_explained_variance": {
+      "all_items": 0.5172,
+      "train_items": 0.5148
+    },
+    "fourth_code_values": 461,
+    "prefix_coverage_by_train_items": {
+      "cold_test_items": {
+        "count": 36881,
+        "levels_1_to_1": 1.0,
+        "levels_1_to_2": 0.9648,
+        "levels_1_to_3": 0.3942
+      },
+      "cold_test_rows": {
+        "count": 535916,
+        "levels_1_to_1": 1.0,
+        "levels_1_to_2": 0.9666,
+        "levels_1_to_3": 0.4007
+      },
+      "non_train_items": {
+        "count": 38783,
+        "levels_1_to_1": 1.0,
+        "levels_1_to_2": 0.9651,
+        "levels_1_to_3": 0.3943
+      }
+    },
+    "neighbour_prefix_agreement": {
+      "queries": 1000,
+      "sample_seed": 0,
+      "levels_1_to_1": {
+        "top10_neighbours_sharing": 0.8595,
+        "random_pair_sharing": 0.00563
+      },
+      "levels_1_to_2": {
+        "top10_neighbours_sharing": 0.3227,
+        "random_pair_sharing": 0.00018
+      },
+      "levels_1_to_3": {
+        "top10_neighbours_sharing": 0.0768,
+        "random_pair_sharing": 1e-05
+      }
+    },
+    "all_items": {
+      "items": 368228,
+      "distinct_3code_ids": 247708,
+      "collision_rate": 0.3273,
+      "items_in_collisions": 173189,
+      "share_of_items_in_collisions": 0.4703,
+      "largest_collision_group": 461,
+      "per_level": [
+        {
+          "codes_used": 256,
+          "usage": 1.0,
+          "perplexity": 212.3
+        },
+        {
+          "codes_used": 256,
+          "usage": 1.0,
+          "perplexity": 235.7
+        },
+        {
+          "codes_used": 256,
+          "usage": 1.0,
+          "perplexity": 245.4
+        }
+      ]
+    },
+    "train_items_only": {
+      "items": 329445,
+      "distinct_3code_ids": 226620,
+      "collision_rate": 0.3121,
+      "items_in_collisions": 149292,
+      "share_of_items_in_collisions": 0.4532,
+      "largest_collision_group": 461,
+      "per_level": [
+        {
+          "codes_used": 256,
+          "usage": 1.0,
+          "perplexity": 212.7
+        },
+        {
+          "codes_used": 256,
+          "usage": 1.0,
+          "perplexity": 237.6
+        },
+        {
+          "codes_used": 256,
+          "usage": 1.0,
+          "perplexity": 245.9
+        }
+      ]
+    }
+  },
+  "gpu_hours_rtx4090_recorded": 1.44
+}

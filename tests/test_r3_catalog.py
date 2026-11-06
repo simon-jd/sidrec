@@ -106,6 +106,17 @@ def test_semantic_ids_are_unique_and_match_their_checksum():
     assert int(codes[:, :3].max()) < 256
 
 
+def test_r3_summary_matches_the_run_records():
+    from sidrec.eval import r3_summary
+
+    path = catalog.RESULTS / "summary.json"
+    if not path.exists():
+        pytest.skip("R3 summary not built")
+    assert json.loads(path.read_text()) == json.loads(json.dumps(r3_summary.summarize()))
+    sums = (catalog.RESULTS / "SHA256SUMS").read_text().splitlines()
+    assert sums == r3_summary.checksums() and len(sums) == 5
+
+
 def test_distribution_keeps_the_mean_unrounded():
     from sidrec.semantic_ids.embed_catalog import distribution
 

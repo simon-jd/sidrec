@@ -1,0 +1,5 @@
+234bd7adc8360a27e5b0a3816cbc6d1ff23d932759bf2d8f454d3d87b3e7c6e9  data/processed/electronics/item_docs.json
+fbb7496582c3a5dd66e63140a4cc280c2648e68d7c419a539ff51f32a1a9a8f9  data/processed/electronics/emb/vllm.npy
+4d2d46f6f6773be0c6e1bdd48b91d97bd90d47da621007b45d71407b9215ca7e  data/processed/electronics/emb/hf.npy
+d870373c68ac2da8f04a45281259dd7a905969c35892cc94c61fa8b142bae01f  data/processed/electronics/sid/qwen3-emb-0.6b.npy
+2acfff306f4588b005228825de94e029aa318492f7db499b3baf99975f250486  data/runs/r3/rqvae.pt
