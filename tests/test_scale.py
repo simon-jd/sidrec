@@ -173,3 +173,26 @@ def test_semantic_ids_need_a_461_code_last_level():
         and tokens.max() < layout.user_offset
         and len({tuple(c) for c in codes[1:]}) == 368_228
     )
+
+
+def test_rank_shares_of_a_global_batch_average_to_its_gradient():
+    from sidrec.train.ddp_scaling import Step
+    from sidrec.train.scale_idrec import build
+
+    d = toy()
+    flat, (vocab_np, v) = scale.Flat(d, "cpu"), scale.id_vocab(d)
+    vocab, ex = torch.as_tensor(vocab_np), scale.id_train_examples(d, "cpu")
+    torch.manual_seed(0)
+    step = Step(build("hstu", {"width": 8, "layers": 1, "dropout": 0.0}, v), v)
+    rows = torch.arange(len(ex))
+    n_global = torch.minimum(ex.end - ex.start, torch.tensor(3)).sum()  # 3 + 1 targets
+    params = list(step.parameters())
+
+    def grads(rows: torch.Tensor, scale_by: torch.Tensor) -> list[torch.Tensor]:
+        loss = step(flat.id_inputs(ex.take(rows), vocab, 3, train=True), scale_by)
+        return list(torch.autograd.grad(loss, params))
+
+    full = grads(rows, 1 / n_global)
+    shares = [grads(rows[r::2], 2 / n_global) for r in range(2)]  # what each of 2 ranks computes
+    for g, a, b in zip(full, *shares, strict=True):
+        torch.testing.assert_close(g, (a + b) / 2, atol=1e-6, rtol=1e-5)  # DDP averages over ranks
