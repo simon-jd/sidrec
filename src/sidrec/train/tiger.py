@@ -7,7 +7,8 @@
 ``--optimizer adafactor`` is a diagnostic outside the protocol: Adafactor with relative step size
 min(lr, 1/sqrt(step)) and update clipping 1.0, the T5X default that TIGER trained with, instead of AdamW. With
 lr 0.01 that is the paper's schedule: 0.01 for 10,000 steps, then inverse square root. Its runs go to
-runs/tiger_<encoder>_adafactor and are never selected from.
+runs/tiger_<encoder>_adafactor and are never selected from. ``--patience`` other than 10 is a diagnostic of
+training length, recorded the same way (suffix _patience<N>).
 
 Training examples: every position of each user's training part, with up to 20 preceding items as input.
 Evaluation: beam search of width 20 constrained to valid semantic IDs; the top 10 are ranked, with no history
@@ -192,6 +193,7 @@ def main() -> None:
     parser.add_argument(
         "--optimizer", choices=["adamw", "adafactor"], default="adamw", help="see the docstring"
     )
+    parser.add_argument("--patience", type=int, default=PATIENCE, help="diagnostic runs only")
     args = parser.parse_args()
     torch.backends.cuda.matmul.allow_tf32 = True
     device = "cuda"
