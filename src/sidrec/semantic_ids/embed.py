@@ -21,7 +21,6 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from sidrec.data import loo
 from sidrec.train import common
 
 META = common.ROOT / "data" / "raw" / "beauty2014" / "meta_Beauty.json.gz"
@@ -72,7 +71,10 @@ def encode(name: str, texts: list[str], batch_size: int) -> tuple[np.ndarray, di
     model = SentenceTransformer(
         repo, revision=revision, device="cuda", model_kwargs={"dtype": torch.bfloat16}
     )
-    tokens = sum(len(ids) for ids in model.tokenizer(texts)["input_ids"])
+    tokens = sum(
+        sum(model.tokenizer(texts[s : s + 10_000], return_length=True)["length"])
+        for s in range(0, len(texts), 10_000)
+    )
     torch.cuda.reset_peak_memory_stats()
     torch.cuda.synchronize()
     t0 = time.time()
@@ -102,6 +104,8 @@ def main() -> None:
     parser.add_argument("--encoder", choices=sorted(ENCODERS), required=True)
     parser.add_argument("--batch-size", type=int, default=64)
     args = parser.parse_args()
+    from sidrec.data import loo  # polars; imported here so the vLLM environment can use ENCODERS
+
     data = loo.load()
     texts = item_texts(data.item_ids)
     smi = common.nvidia_smi()

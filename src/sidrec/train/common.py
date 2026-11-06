@@ -6,6 +6,7 @@ import json
 import os
 import random
 import subprocess
+import threading
 import time
 from pathlib import Path
 
@@ -44,6 +45,67 @@ def nvidia_smi() -> dict:
     state = query([f"--query-gpu={SMI_FIELDS}", "--format=csv,noheader"])
     apps = query(["--query-compute-apps=pid,process_name,used_memory", "--format=csv,noheader"])
     return {"time": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "fields": SMI_FIELDS, "state": state, "apps": apps}
+
+
+SAMPLED = (
+    "pstate",
+    "clocks.sm",
+    "clocks.mem",
+    "temperature.gpu",
+    "power.draw",
+    "utilization.gpu",
+    "memory.used",
+)
+
+
+def smi_numbers(state: str) -> dict:
+    """The sampled fields of one nvidia-smi state line; numbers without units, pstate as text."""
+    values = dict(zip(SMI_FIELDS.split(","), (v.strip() for v in state.split(",")), strict=False))
+    out = {}
+    for field in SAMPLED:
+        raw = values.get(field, "")
+        if field == "pstate":
+            out[field] = raw
+            continue
+        try:
+            out[field] = float(raw.split()[0])
+        except (ValueError, IndexError):
+            continue
+    return out
+
+
+class SmiSampler:
+    """Samples the nvidia-smi state every ``interval`` seconds in a background thread while a run goes on.
+
+    Clocks cannot be locked on this machine, so a run records what they were while it ran.
+    """
+
+    def __init__(self, interval: float = 10.0):
+        self.interval, self.samples = interval, []
+        self._stop = threading.Event()
+        self._thread = threading.Thread(target=self._loop, daemon=True)
+
+    def _loop(self) -> None:
+        while not self._stop.is_set():
+            self.samples.append(smi_numbers(nvidia_smi()["state"]))
+            self._stop.wait(self.interval)
+
+    def __enter__(self) -> SmiSampler:
+        self._thread.start()
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self._stop.set()
+        self._thread.join()
+
+    def summary(self) -> dict:
+        out: dict = {"samples": len(self.samples), "interval_s": self.interval}
+        out["pstates"] = sorted({s["pstate"] for s in self.samples if s.get("pstate")})
+        for field in SAMPLED[1:]:
+            v = np.array([s[field] for s in self.samples if field in s])
+            if len(v):
+                out[field] = {"min": float(v.min()), "median": float(np.median(v)), "max": float(v.max())}
+        return out
 
 
 def git_state() -> dict:

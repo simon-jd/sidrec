@@ -130,7 +130,9 @@ def code_stats(codes3: np.ndarray, codes: int = 256) -> dict:
     }
 
 
-def train(x_train: torch.Tensor, epochs: int, seed: int, batch: int = 1024, lr: float = 1e-3):
+def train(
+    x_train: torch.Tensor, epochs: int, seed: int, batch: int = 1024, lr: float = 1e-3, log_every: int = 1000
+):
     torch.manual_seed(seed)
     model = RQVAE(x_train.shape[1]).to(x_train.device)
     g = torch.Generator(device=x_train.device).manual_seed(seed)
@@ -147,7 +149,7 @@ def train(x_train: torch.Tensor, epochs: int, seed: int, batch: int = 1024, lr: 
             (recon + q_loss).backward()
             opt.step()
             totals += torch.stack([recon.detach(), q_loss.detach()])
-        if epoch % 1000 == 0 or epoch == epochs:
+        if epoch % log_every == 0 or epoch == epochs:
             steps = -(-x_train.shape[0] // batch)
             r, q = (totals / steps).tolist()
             with torch.no_grad():
