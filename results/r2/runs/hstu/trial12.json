@@ -1,0 +1,275 @@
+{
+  "model": "hstu",
+  "dataset": "beauty",
+  "phase": "tune",
+  "trial": 12,
+  "seed": 0,
+  "config": {
+    "lr": 0.0001,
+    "dropout": 0.0,
+    "weight_decay": 0.01,
+    "width": 64,
+    "layers": 4
+  },
+  "fixed": {
+    "batch": 128,
+    "max_len": 50,
+    "optimizer": "AdamW",
+    "heads": 4,
+    "head_dim": "width / 4",
+    "rab_time_buckets": 128,
+    "temperature": 0.05
+  },
+  "epochs_run": 42,
+  "best_epoch": 32,
+  "steps_per_epoch": 175,
+  "warmup_steps": 2625,
+  "valid": {
+    "recall@5": 0.014175200107320126,
+    "ndcg@5": 0.010207123864099804,
+    "recall@10": 0.019720073335420113,
+    "ndcg@10": 0.01200206544358476,
+    "users": 22363
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 12.48142,
+      "valid_ndcg@10": 0.00038791722416933955
+    },
+    {
+      "epoch": 2,
+      "loss": 12.40138,
+      "valid_ndcg@10": 0.00038399299149447554
+    },
+    {
+      "epoch": 3,
+      "loss": 12.20993,
+      "valid_ndcg@10": 0.0004978921427622031
+    },
+    {
+      "epoch": 4,
+      "loss": 11.90172,
+      "valid_ndcg@10": 0.0005199365770328885
+    },
+    {
+      "epoch": 5,
+      "loss": 11.46468,
+      "valid_ndcg@10": 0.0008668834139572806
+    },
+    {
+      "epoch": 6,
+      "loss": 10.83313,
+      "valid_ndcg@10": 0.002236497423074806
+    },
+    {
+      "epoch": 7,
+      "loss": 9.93253,
+      "valid_ndcg@10": 0.0048087686270462515
+    },
+    {
+      "epoch": 8,
+      "loss": 9.23246,
+      "valid_ndcg@10": 0.0054307489408568325
+    },
+    {
+      "epoch": 9,
+      "loss": 8.89936,
+      "valid_ndcg@10": 0.005963315341523527
+    },
+    {
+      "epoch": 10,
+      "loss": 8.72832,
+      "valid_ndcg@10": 0.006359386819983311
+    },
+    {
+      "epoch": 11,
+      "loss": 8.60958,
+      "valid_ndcg@10": 0.00542885565245832
+    },
+    {
+      "epoch": 12,
+      "loss": 8.50309,
+      "valid_ndcg@10": 0.006378154035321332
+    },
+    {
+      "epoch": 13,
+      "loss": 8.39195,
+      "valid_ndcg@10": 0.006190395303060209
+    },
+    {
+      "epoch": 14,
+      "loss": 8.27071,
+      "valid_ndcg@10": 0.006437542760752148
+    },
+    {
+      "epoch": 15,
+      "loss": 8.14104,
+      "valid_ndcg@10": 0.006323472849288501
+    },
+    {
+      "epoch": 16,
+      "loss": 8.00346,
+      "valid_ndcg@10": 0.006852818278388503
+    },
+    {
+      "epoch": 17,
+      "loss": 7.84666,
+      "valid_ndcg@10": 0.00820566820038567
+    },
+    {
+      "epoch": 18,
+      "loss": 7.68278,
+      "valid_ndcg@10": 0.008253307315969401
+    },
+    {
+      "epoch": 19,
+      "loss": 7.51875,
+      "valid_ndcg@10": 0.008775110919146317
+    },
+    {
+      "epoch": 20,
+      "loss": 7.35698,
+      "valid_ndcg@10": 0.009054076634108408
+    },
+    {
+      "epoch": 21,
+      "loss": 7.20458,
+      "valid_ndcg@10": 0.009237429483984679
+    },
+    {
+      "epoch": 22,
+      "loss": 7.06033,
+      "valid_ndcg@10": 0.009828878899800473
+    },
+    {
+      "epoch": 23,
+      "loss": 6.91705,
+      "valid_ndcg@10": 0.009913884393551165
+    },
+    {
+      "epoch": 24,
+      "loss": 6.78039,
+      "valid_ndcg@10": 0.0104203753778431
+    },
+    {
+      "epoch": 25,
+      "loss": 6.65629,
+      "valid_ndcg@10": 0.010941274182766508
+    },
+    {
+      "epoch": 26,
+      "loss": 6.52914,
+      "valid_ndcg@10": 0.011020959157974668
+    },
+    {
+      "epoch": 27,
+      "loss": 6.41789,
+      "valid_ndcg@10": 0.011663153195444247
+    },
+    {
+      "epoch": 28,
+      "loss": 6.30997,
+      "valid_ndcg@10": 0.011508766319566719
+    },
+    {
+      "epoch": 29,
+      "loss": 6.2088,
+      "valid_ndcg@10": 0.011750124164070458
+    },
+    {
+      "epoch": 30,
+      "loss": 6.11375,
+      "valid_ndcg@10": 0.011633936175795462
+    },
+    {
+      "epoch": 31,
+      "loss": 6.01811,
+      "valid_ndcg@10": 0.011329068881678705
+    },
+    {
+      "epoch": 32,
+      "loss": 5.94036,
+      "valid_ndcg@10": 0.01200206544358476
+    },
+    {
+      "epoch": 33,
+      "loss": 5.85612,
+      "valid_ndcg@10": 0.011346852209955809
+    },
+    {
+      "epoch": 34,
+      "loss": 5.77692,
+      "valid_ndcg@10": 0.01148953827937525
+    },
+    {
+      "epoch": 35,
+      "loss": 5.70557,
+      "valid_ndcg@10": 0.0116701179560035
+    },
+    {
+      "epoch": 36,
+      "loss": 5.63922,
+      "valid_ndcg@10": 0.011481547473017707
+    },
+    {
+      "epoch": 37,
+      "loss": 5.57611,
+      "valid_ndcg@10": 0.011479089806802515
+    },
+    {
+      "epoch": 38,
+      "loss": 5.51462,
+      "valid_ndcg@10": 0.011495748559429664
+    },
+    {
+      "epoch": 39,
+      "loss": 5.45689,
+      "valid_ndcg@10": 0.011313943011406431
+    },
+    {
+      "epoch": 40,
+      "loss": 5.39794,
+      "valid_ndcg@10": 0.011687116442835413
+    },
+    {
+      "epoch": 41,
+      "loss": 5.34969,
+      "valid_ndcg@10": 0.011720140091494238
+    },
+    {
+      "epoch": 42,
+      "loss": 5.29881,
+      "valid_ndcg@10": 0.011216453476745016
+    }
+  ],
+  "params": 862180,
+  "test": null,
+  "wall_time_s": 153.6,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T16:04:43-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2775 MHz, 10501 MHz, 3105 MHz, 58, 83.99 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T16:07:17-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2790 MHz, 10251 MHz, 3105 MHz, 56, 124.97 W, 450.00 W, 100 %, 2568 MiB, 24564 MiB",
+      "apps": "1324942, .venv/bin/python, 2256 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "340271b612d59fd0d3e903682eb30ff0a0399049",
+    "dirty": false
+  },
+  "protocol": "2026-11-05 with the R2 clarifications",
+  "checkpoint": "data/runs/r2/hstu/trial12.pt"
+}

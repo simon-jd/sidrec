@@ -1,0 +1,565 @@
+{
+  "model": "sasrec",
+  "dataset": "beauty",
+  "phase": "tune",
+  "trial": 12,
+  "seed": 0,
+  "config": {
+    "lr": 0.0001,
+    "dropout": 0.0,
+    "weight_decay": 0.01,
+    "width": 64,
+    "layers": 4
+  },
+  "fixed": {
+    "batch": 256,
+    "max_len": 50,
+    "optimizer": "AdamW",
+    "heads": 2,
+    "ffn": "4 x width, GELU",
+    "norm": "post-LN",
+    "scores": "dot product, tied table"
+  },
+  "epochs_run": 100,
+  "best_epoch": 90,
+  "steps_per_epoch": 88,
+  "warmup_steps": 1320,
+  "valid": {
+    "recall@5": 0.06864016455752806,
+    "ndcg@5": 0.04980586461333666,
+    "recall@10": 0.09269775969234896,
+    "ndcg@10": 0.05754409951061298,
+    "users": 22363
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 9.41294,
+      "valid_ndcg@10": 0.00038997617712281045
+    },
+    {
+      "epoch": 2,
+      "loss": 9.41094,
+      "valid_ndcg@10": 0.00038368188373999934
+    },
+    {
+      "epoch": 3,
+      "loss": 9.40636,
+      "valid_ndcg@10": 0.00041322724549210224
+    },
+    {
+      "epoch": 4,
+      "loss": 9.39845,
+      "valid_ndcg@10": 0.0005074884483061019
+    },
+    {
+      "epoch": 5,
+      "loss": 9.38469,
+      "valid_ndcg@10": 0.0006513849357580099
+    },
+    {
+      "epoch": 6,
+      "loss": 9.3546,
+      "valid_ndcg@10": 0.0026292042755658744
+    },
+    {
+      "epoch": 7,
+      "loss": 9.28849,
+      "valid_ndcg@10": 0.005637488365666398
+    },
+    {
+      "epoch": 8,
+      "loss": 9.21102,
+      "valid_ndcg@10": 0.006848016849038495
+    },
+    {
+      "epoch": 9,
+      "loss": 9.13239,
+      "valid_ndcg@10": 0.007434629857821694
+    },
+    {
+      "epoch": 10,
+      "loss": 9.05395,
+      "valid_ndcg@10": 0.008051044209493837
+    },
+    {
+      "epoch": 11,
+      "loss": 8.97928,
+      "valid_ndcg@10": 0.00826652819257169
+    },
+    {
+      "epoch": 12,
+      "loss": 8.91022,
+      "valid_ndcg@10": 0.008100781933909942
+    },
+    {
+      "epoch": 13,
+      "loss": 8.84931,
+      "valid_ndcg@10": 0.008255527896840288
+    },
+    {
+      "epoch": 14,
+      "loss": 8.79526,
+      "valid_ndcg@10": 0.008295858466963775
+    },
+    {
+      "epoch": 15,
+      "loss": 8.74458,
+      "valid_ndcg@10": 0.008645660669451593
+    },
+    {
+      "epoch": 16,
+      "loss": 8.69159,
+      "valid_ndcg@10": 0.009428896588300982
+    },
+    {
+      "epoch": 17,
+      "loss": 8.62939,
+      "valid_ndcg@10": 0.011116028034030216
+    },
+    {
+      "epoch": 18,
+      "loss": 8.55477,
+      "valid_ndcg@10": 0.012745212311776765
+    },
+    {
+      "epoch": 19,
+      "loss": 8.47432,
+      "valid_ndcg@10": 0.014660779724713342
+    },
+    {
+      "epoch": 20,
+      "loss": 8.39492,
+      "valid_ndcg@10": 0.017112238433924645
+    },
+    {
+      "epoch": 21,
+      "loss": 8.31907,
+      "valid_ndcg@10": 0.018616962492796357
+    },
+    {
+      "epoch": 22,
+      "loss": 8.24461,
+      "valid_ndcg@10": 0.020321871357241315
+    },
+    {
+      "epoch": 23,
+      "loss": 8.17057,
+      "valid_ndcg@10": 0.021722236939219968
+    },
+    {
+      "epoch": 24,
+      "loss": 8.09787,
+      "valid_ndcg@10": 0.022943511313554064
+    },
+    {
+      "epoch": 25,
+      "loss": 8.0278,
+      "valid_ndcg@10": 0.024019810546183826
+    },
+    {
+      "epoch": 26,
+      "loss": 7.96081,
+      "valid_ndcg@10": 0.02548707186324392
+    },
+    {
+      "epoch": 27,
+      "loss": 7.89679,
+      "valid_ndcg@10": 0.027223301614128982
+    },
+    {
+      "epoch": 28,
+      "loss": 7.83538,
+      "valid_ndcg@10": 0.02920263288328446
+    },
+    {
+      "epoch": 29,
+      "loss": 7.77684,
+      "valid_ndcg@10": 0.030845480720470594
+    },
+    {
+      "epoch": 30,
+      "loss": 7.72073,
+      "valid_ndcg@10": 0.032597045870037894
+    },
+    {
+      "epoch": 31,
+      "loss": 7.66676,
+      "valid_ndcg@10": 0.034053264852503054
+    },
+    {
+      "epoch": 32,
+      "loss": 7.61547,
+      "valid_ndcg@10": 0.03514058062996577
+    },
+    {
+      "epoch": 33,
+      "loss": 7.56622,
+      "valid_ndcg@10": 0.0360272868157174
+    },
+    {
+      "epoch": 34,
+      "loss": 7.51865,
+      "valid_ndcg@10": 0.03714177880120039
+    },
+    {
+      "epoch": 35,
+      "loss": 7.47325,
+      "valid_ndcg@10": 0.03819330044601458
+    },
+    {
+      "epoch": 36,
+      "loss": 7.42913,
+      "valid_ndcg@10": 0.03860755861532625
+    },
+    {
+      "epoch": 37,
+      "loss": 7.38695,
+      "valid_ndcg@10": 0.039140078633333505
+    },
+    {
+      "epoch": 38,
+      "loss": 7.3458,
+      "valid_ndcg@10": 0.04074289264918008
+    },
+    {
+      "epoch": 39,
+      "loss": 7.30585,
+      "valid_ndcg@10": 0.04157672897430526
+    },
+    {
+      "epoch": 40,
+      "loss": 7.26681,
+      "valid_ndcg@10": 0.04232196502453749
+    },
+    {
+      "epoch": 41,
+      "loss": 7.22875,
+      "valid_ndcg@10": 0.04334174936578665
+    },
+    {
+      "epoch": 42,
+      "loss": 7.19199,
+      "valid_ndcg@10": 0.04357937567829214
+    },
+    {
+      "epoch": 43,
+      "loss": 7.15584,
+      "valid_ndcg@10": 0.04422650778009327
+    },
+    {
+      "epoch": 44,
+      "loss": 7.11982,
+      "valid_ndcg@10": 0.045111021099978096
+    },
+    {
+      "epoch": 45,
+      "loss": 7.08483,
+      "valid_ndcg@10": 0.0463138537885608
+    },
+    {
+      "epoch": 46,
+      "loss": 7.05046,
+      "valid_ndcg@10": 0.04684786171750165
+    },
+    {
+      "epoch": 47,
+      "loss": 7.01648,
+      "valid_ndcg@10": 0.04715154304844935
+    },
+    {
+      "epoch": 48,
+      "loss": 6.98344,
+      "valid_ndcg@10": 0.04801196155857874
+    },
+    {
+      "epoch": 49,
+      "loss": 6.95038,
+      "valid_ndcg@10": 0.04834084821739578
+    },
+    {
+      "epoch": 50,
+      "loss": 6.918,
+      "valid_ndcg@10": 0.04892665339126464
+    },
+    {
+      "epoch": 51,
+      "loss": 6.88595,
+      "valid_ndcg@10": 0.049412094720750775
+    },
+    {
+      "epoch": 52,
+      "loss": 6.85436,
+      "valid_ndcg@10": 0.050155186972317585
+    },
+    {
+      "epoch": 53,
+      "loss": 6.82301,
+      "valid_ndcg@10": 0.05072361137204422
+    },
+    {
+      "epoch": 54,
+      "loss": 6.79198,
+      "valid_ndcg@10": 0.051086019487088144
+    },
+    {
+      "epoch": 55,
+      "loss": 6.76223,
+      "valid_ndcg@10": 0.051195710123255064
+    },
+    {
+      "epoch": 56,
+      "loss": 6.73204,
+      "valid_ndcg@10": 0.052136742810556136
+    },
+    {
+      "epoch": 57,
+      "loss": 6.70244,
+      "valid_ndcg@10": 0.0522610438437807
+    },
+    {
+      "epoch": 58,
+      "loss": 6.67321,
+      "valid_ndcg@10": 0.05263407796671709
+    },
+    {
+      "epoch": 59,
+      "loss": 6.6452,
+      "valid_ndcg@10": 0.053063744647366747
+    },
+    {
+      "epoch": 60,
+      "loss": 6.61636,
+      "valid_ndcg@10": 0.05359392095935172
+    },
+    {
+      "epoch": 61,
+      "loss": 6.58902,
+      "valid_ndcg@10": 0.05380845822213363
+    },
+    {
+      "epoch": 62,
+      "loss": 6.56124,
+      "valid_ndcg@10": 0.05413198379470698
+    },
+    {
+      "epoch": 63,
+      "loss": 6.53398,
+      "valid_ndcg@10": 0.05407994825950674
+    },
+    {
+      "epoch": 64,
+      "loss": 6.50739,
+      "valid_ndcg@10": 0.05429814870664349
+    },
+    {
+      "epoch": 65,
+      "loss": 6.48058,
+      "valid_ndcg@10": 0.054880765152268904
+    },
+    {
+      "epoch": 66,
+      "loss": 6.45479,
+      "valid_ndcg@10": 0.05471155989146137
+    },
+    {
+      "epoch": 67,
+      "loss": 6.42973,
+      "valid_ndcg@10": 0.05466372906561234
+    },
+    {
+      "epoch": 68,
+      "loss": 6.40451,
+      "valid_ndcg@10": 0.055252047330447626
+    },
+    {
+      "epoch": 69,
+      "loss": 6.37933,
+      "valid_ndcg@10": 0.05566159131917228
+    },
+    {
+      "epoch": 70,
+      "loss": 6.35491,
+      "valid_ndcg@10": 0.05575541983604326
+    },
+    {
+      "epoch": 71,
+      "loss": 6.3305,
+      "valid_ndcg@10": 0.05580190674640333
+    },
+    {
+      "epoch": 72,
+      "loss": 6.30623,
+      "valid_ndcg@10": 0.05620740320351775
+    },
+    {
+      "epoch": 73,
+      "loss": 6.28219,
+      "valid_ndcg@10": 0.05586895749786671
+    },
+    {
+      "epoch": 74,
+      "loss": 6.25896,
+      "valid_ndcg@10": 0.056034502194276053
+    },
+    {
+      "epoch": 75,
+      "loss": 6.236,
+      "valid_ndcg@10": 0.05596351693389717
+    },
+    {
+      "epoch": 76,
+      "loss": 6.21367,
+      "valid_ndcg@10": 0.05626441263841522
+    },
+    {
+      "epoch": 77,
+      "loss": 6.19073,
+      "valid_ndcg@10": 0.05655675750127026
+    },
+    {
+      "epoch": 78,
+      "loss": 6.16865,
+      "valid_ndcg@10": 0.05708150582616184
+    },
+    {
+      "epoch": 79,
+      "loss": 6.14566,
+      "valid_ndcg@10": 0.05701892462559674
+    },
+    {
+      "epoch": 80,
+      "loss": 6.12347,
+      "valid_ndcg@10": 0.057048640762668905
+    },
+    {
+      "epoch": 81,
+      "loss": 6.10277,
+      "valid_ndcg@10": 0.056636883798043616
+    },
+    {
+      "epoch": 82,
+      "loss": 6.08319,
+      "valid_ndcg@10": 0.05695500006930927
+    },
+    {
+      "epoch": 83,
+      "loss": 6.06118,
+      "valid_ndcg@10": 0.057469451605489726
+    },
+    {
+      "epoch": 84,
+      "loss": 6.04007,
+      "valid_ndcg@10": 0.05698585382592451
+    },
+    {
+      "epoch": 85,
+      "loss": 6.01825,
+      "valid_ndcg@10": 0.0572904131976205
+    },
+    {
+      "epoch": 86,
+      "loss": 5.99781,
+      "valid_ndcg@10": 0.05706851800567455
+    },
+    {
+      "epoch": 87,
+      "loss": 5.97673,
+      "valid_ndcg@10": 0.057244066937389856
+    },
+    {
+      "epoch": 88,
+      "loss": 5.95748,
+      "valid_ndcg@10": 0.056970696158385
+    },
+    {
+      "epoch": 89,
+      "loss": 5.9377,
+      "valid_ndcg@10": 0.057184619496506335
+    },
+    {
+      "epoch": 90,
+      "loss": 5.91946,
+      "valid_ndcg@10": 0.05754409951061298
+    },
+    {
+      "epoch": 91,
+      "loss": 5.89991,
+      "valid_ndcg@10": 0.057085045140569654
+    },
+    {
+      "epoch": 92,
+      "loss": 5.88068,
+      "valid_ndcg@10": 0.0570782105951238
+    },
+    {
+      "epoch": 93,
+      "loss": 5.86166,
+      "valid_ndcg@10": 0.05731175840204561
+    },
+    {
+      "epoch": 94,
+      "loss": 5.84207,
+      "valid_ndcg@10": 0.05738226142179267
+    },
+    {
+      "epoch": 95,
+      "loss": 5.82379,
+      "valid_ndcg@10": 0.05713759340620984
+    },
+    {
+      "epoch": 96,
+      "loss": 5.80509,
+      "valid_ndcg@10": 0.057136209208469235
+    },
+    {
+      "epoch": 97,
+      "loss": 5.78628,
+      "valid_ndcg@10": 0.0574353127463519
+    },
+    {
+      "epoch": 98,
+      "loss": 5.76778,
+      "valid_ndcg@10": 0.056948567328782895
+    },
+    {
+      "epoch": 99,
+      "loss": 5.75169,
+      "valid_ndcg@10": 0.05729857506088244
+    },
+    {
+      "epoch": 100,
+      "loss": 5.73527,
+      "valid_ndcg@10": 0.05697175099868815
+    }
+  ],
+  "params": 977792,
+  "test": null,
+  "wall_time_s": 84.7,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T15:26:56-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2520 MHz, 10251 MHz, 3105 MHz, 58, 82.47 W, 450.00 W, 0 %, 1089 MiB, 24564 MiB",
+      "apps": "1213727, .venv/bin/python, 386 MiB\n1213730, .venv/bin/python, 386 MiB"
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T15:28:21-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2775 MHz, 10251 MHz, 3105 MHz, 61, 168.31 W, 450.00 W, 34 %, 3654 MiB, 24564 MiB",
+      "apps": "1213727, .venv/bin/python, 386 MiB\n1213730, .venv/bin/python, 386 MiB\n1216942, .venv/bin/python, 2560 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "5e6ea74d6fc3fcb2e72b3a98020f43ca9207726f",
+    "dirty": false
+  },
+  "protocol": "2026-11-05 with the R2 clarifications",
+  "checkpoint": "data/runs/r2/sasrec/trial12.pt"
+}

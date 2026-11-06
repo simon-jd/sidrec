@@ -1,0 +1,420 @@
+{
+  "model": "hstu",
+  "dataset": "beauty",
+  "phase": "tune",
+  "trial": 3,
+  "seed": 0,
+  "config": {
+    "lr": 0.0001,
+    "dropout": 0.2,
+    "weight_decay": 0.01,
+    "width": 128,
+    "layers": 2
+  },
+  "fixed": {
+    "batch": 128,
+    "max_len": 50,
+    "optimizer": "AdamW",
+    "heads": 4,
+    "head_dim": "width / 4",
+    "rab_time_buckets": 128,
+    "temperature": 0.05
+  },
+  "epochs_run": 71,
+  "best_epoch": 61,
+  "steps_per_epoch": 175,
+  "warmup_steps": 2625,
+  "valid": {
+    "recall@5": 0.0725752358806958,
+    "ndcg@5": 0.05346195906406856,
+    "recall@10": 0.09685641461342395,
+    "ndcg@10": 0.06129825311568729,
+    "users": 22363
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 12.53815,
+      "valid_ndcg@10": 0.0002247556226362451
+    },
+    {
+      "epoch": 2,
+      "loss": 12.3883,
+      "valid_ndcg@10": 0.00023682130315589697
+    },
+    {
+      "epoch": 3,
+      "loss": 12.12054,
+      "valid_ndcg@10": 0.00031471974771605984
+    },
+    {
+      "epoch": 4,
+      "loss": 11.74601,
+      "valid_ndcg@10": 0.0003316604813044409
+    },
+    {
+      "epoch": 5,
+      "loss": 11.32314,
+      "valid_ndcg@10": 0.0004982009288191114
+    },
+    {
+      "epoch": 6,
+      "loss": 10.86901,
+      "valid_ndcg@10": 0.0013877861486830546
+    },
+    {
+      "epoch": 7,
+      "loss": 10.23247,
+      "valid_ndcg@10": 0.005802854891754046
+    },
+    {
+      "epoch": 8,
+      "loss": 9.49751,
+      "valid_ndcg@10": 0.007910778996110026
+    },
+    {
+      "epoch": 9,
+      "loss": 9.09103,
+      "valid_ndcg@10": 0.008533884445138255
+    },
+    {
+      "epoch": 10,
+      "loss": 8.92807,
+      "valid_ndcg@10": 0.009357349904180804
+    },
+    {
+      "epoch": 11,
+      "loss": 8.85367,
+      "valid_ndcg@10": 0.009461853226791514
+    },
+    {
+      "epoch": 12,
+      "loss": 8.8059,
+      "valid_ndcg@10": 0.011995276944822886
+    },
+    {
+      "epoch": 13,
+      "loss": 8.7685,
+      "valid_ndcg@10": 0.013677978686057331
+    },
+    {
+      "epoch": 14,
+      "loss": 8.71397,
+      "valid_ndcg@10": 0.015560415444613004
+    },
+    {
+      "epoch": 15,
+      "loss": 8.63972,
+      "valid_ndcg@10": 0.01760642413863526
+    },
+    {
+      "epoch": 16,
+      "loss": 8.5303,
+      "valid_ndcg@10": 0.020393166712365258
+    },
+    {
+      "epoch": 17,
+      "loss": 8.37229,
+      "valid_ndcg@10": 0.023235657608024506
+    },
+    {
+      "epoch": 18,
+      "loss": 8.20134,
+      "valid_ndcg@10": 0.02572505454506684
+    },
+    {
+      "epoch": 19,
+      "loss": 8.04273,
+      "valid_ndcg@10": 0.028847529623593816
+    },
+    {
+      "epoch": 20,
+      "loss": 7.89738,
+      "valid_ndcg@10": 0.031397711037880534
+    },
+    {
+      "epoch": 21,
+      "loss": 7.76277,
+      "valid_ndcg@10": 0.034425493273550455
+    },
+    {
+      "epoch": 22,
+      "loss": 7.63612,
+      "valid_ndcg@10": 0.03593736505243314
+    },
+    {
+      "epoch": 23,
+      "loss": 7.51409,
+      "valid_ndcg@10": 0.03888256941139402
+    },
+    {
+      "epoch": 24,
+      "loss": 7.39683,
+      "valid_ndcg@10": 0.04126121784164511
+    },
+    {
+      "epoch": 25,
+      "loss": 7.27761,
+      "valid_ndcg@10": 0.042888666758328774
+    },
+    {
+      "epoch": 26,
+      "loss": 7.16067,
+      "valid_ndcg@10": 0.045302769152298424
+    },
+    {
+      "epoch": 27,
+      "loss": 7.05169,
+      "valid_ndcg@10": 0.04697456868638621
+    },
+    {
+      "epoch": 28,
+      "loss": 6.93731,
+      "valid_ndcg@10": 0.0488811151711728
+    },
+    {
+      "epoch": 29,
+      "loss": 6.84112,
+      "valid_ndcg@10": 0.0500253265125068
+    },
+    {
+      "epoch": 30,
+      "loss": 6.73789,
+      "valid_ndcg@10": 0.05190192382469285
+    },
+    {
+      "epoch": 31,
+      "loss": 6.64444,
+      "valid_ndcg@10": 0.05301907020857537
+    },
+    {
+      "epoch": 32,
+      "loss": 6.55854,
+      "valid_ndcg@10": 0.053591021461134175
+    },
+    {
+      "epoch": 33,
+      "loss": 6.46514,
+      "valid_ndcg@10": 0.054585504604041726
+    },
+    {
+      "epoch": 34,
+      "loss": 6.38321,
+      "valid_ndcg@10": 0.05503321800127148
+    },
+    {
+      "epoch": 35,
+      "loss": 6.30839,
+      "valid_ndcg@10": 0.05575252414917068
+    },
+    {
+      "epoch": 36,
+      "loss": 6.22839,
+      "valid_ndcg@10": 0.056313676324654165
+    },
+    {
+      "epoch": 37,
+      "loss": 6.15236,
+      "valid_ndcg@10": 0.0571702469687406
+    },
+    {
+      "epoch": 38,
+      "loss": 6.08589,
+      "valid_ndcg@10": 0.0576851775881936
+    },
+    {
+      "epoch": 39,
+      "loss": 6.02261,
+      "valid_ndcg@10": 0.057809688870379315
+    },
+    {
+      "epoch": 40,
+      "loss": 5.95628,
+      "valid_ndcg@10": 0.05823973859088208
+    },
+    {
+      "epoch": 41,
+      "loss": 5.89896,
+      "valid_ndcg@10": 0.05853390911872744
+    },
+    {
+      "epoch": 42,
+      "loss": 5.8381,
+      "valid_ndcg@10": 0.05868115342948558
+    },
+    {
+      "epoch": 43,
+      "loss": 5.78559,
+      "valid_ndcg@10": 0.05893700805739119
+    },
+    {
+      "epoch": 44,
+      "loss": 5.7233,
+      "valid_ndcg@10": 0.05887960646492662
+    },
+    {
+      "epoch": 45,
+      "loss": 5.67747,
+      "valid_ndcg@10": 0.0593389375504449
+    },
+    {
+      "epoch": 46,
+      "loss": 5.62637,
+      "valid_ndcg@10": 0.059482190483676936
+    },
+    {
+      "epoch": 47,
+      "loss": 5.58447,
+      "valid_ndcg@10": 0.05915093060404416
+    },
+    {
+      "epoch": 48,
+      "loss": 5.53249,
+      "valid_ndcg@10": 0.06001288669953858
+    },
+    {
+      "epoch": 49,
+      "loss": 5.48839,
+      "valid_ndcg@10": 0.0602643350297482
+    },
+    {
+      "epoch": 50,
+      "loss": 5.45084,
+      "valid_ndcg@10": 0.05996519023431503
+    },
+    {
+      "epoch": 51,
+      "loss": 5.40518,
+      "valid_ndcg@10": 0.05990219629402051
+    },
+    {
+      "epoch": 52,
+      "loss": 5.36028,
+      "valid_ndcg@10": 0.06025208647340034
+    },
+    {
+      "epoch": 53,
+      "loss": 5.32927,
+      "valid_ndcg@10": 0.060203754521784295
+    },
+    {
+      "epoch": 54,
+      "loss": 5.29178,
+      "valid_ndcg@10": 0.060311814908783755
+    },
+    {
+      "epoch": 55,
+      "loss": 5.25322,
+      "valid_ndcg@10": 0.06061197035280094
+    },
+    {
+      "epoch": 56,
+      "loss": 5.22202,
+      "valid_ndcg@10": 0.06039692567565951
+    },
+    {
+      "epoch": 57,
+      "loss": 5.18824,
+      "valid_ndcg@10": 0.06042247270787611
+    },
+    {
+      "epoch": 58,
+      "loss": 5.15466,
+      "valid_ndcg@10": 0.06043160335647824
+    },
+    {
+      "epoch": 59,
+      "loss": 5.12597,
+      "valid_ndcg@10": 0.0607868071583664
+    },
+    {
+      "epoch": 60,
+      "loss": 5.09585,
+      "valid_ndcg@10": 0.06069839519983375
+    },
+    {
+      "epoch": 61,
+      "loss": 5.06181,
+      "valid_ndcg@10": 0.06129825311568729
+    },
+    {
+      "epoch": 62,
+      "loss": 5.03935,
+      "valid_ndcg@10": 0.06119463166297241
+    },
+    {
+      "epoch": 63,
+      "loss": 5.01406,
+      "valid_ndcg@10": 0.06102245395588703
+    },
+    {
+      "epoch": 64,
+      "loss": 4.98644,
+      "valid_ndcg@10": 0.06100677023679359
+    },
+    {
+      "epoch": 65,
+      "loss": 4.95477,
+      "valid_ndcg@10": 0.060644087371726905
+    },
+    {
+      "epoch": 66,
+      "loss": 4.92797,
+      "valid_ndcg@10": 0.060647164935060976
+    },
+    {
+      "epoch": 67,
+      "loss": 4.90655,
+      "valid_ndcg@10": 0.06052765884688418
+    },
+    {
+      "epoch": 68,
+      "loss": 4.88139,
+      "valid_ndcg@10": 0.06063524761904814
+    },
+    {
+      "epoch": 69,
+      "loss": 4.86558,
+      "valid_ndcg@10": 0.06084286541362051
+    },
+    {
+      "epoch": 70,
+      "loss": 4.83598,
+      "valid_ndcg@10": 0.06081348546613728
+    },
+    {
+      "epoch": 71,
+      "loss": 4.82482,
+      "valid_ndcg@10": 0.06104017539128616
+    }
+  ],
+  "params": 1721828,
+  "test": null,
+  "wall_time_s": 245.4,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T15:43:58-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2775 MHz, 10501 MHz, 3105 MHz, 59, 87.75 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T15:48:04-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2790 MHz, 10251 MHz, 3105 MHz, 56, 122.85 W, 450.00 W, 96 %, 2774 MiB, 24564 MiB",
+      "apps": "1262212, .venv/bin/python, 2462 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "5e6ea74d6fc3fcb2e72b3a98020f43ca9207726f",
+    "dirty": false
+  },
+  "protocol": "2026-11-05 with the R2 clarifications",
+  "checkpoint": "data/runs/r2/hstu/trial03.pt"
+}

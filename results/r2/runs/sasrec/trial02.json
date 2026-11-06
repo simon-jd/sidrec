@@ -1,0 +1,185 @@
+{
+  "model": "sasrec",
+  "dataset": "beauty",
+  "phase": "tune",
+  "trial": 2,
+  "seed": 0,
+  "config": {
+    "lr": 0.0003,
+    "dropout": 0.0,
+    "weight_decay": 0.0,
+    "width": 256,
+    "layers": 4
+  },
+  "fixed": {
+    "batch": 256,
+    "max_len": 50,
+    "optimizer": "AdamW",
+    "heads": 2,
+    "ffn": "4 x width, GELU",
+    "norm": "post-LN",
+    "scores": "dot product, tied table"
+  },
+  "epochs_run": 24,
+  "best_epoch": 14,
+  "steps_per_epoch": 88,
+  "warmup_steps": 1320,
+  "valid": {
+    "recall@5": 0.080221794929124,
+    "ndcg@5": 0.05799647293134748,
+    "recall@10": 0.10745427715422796,
+    "ndcg@10": 0.06677565071321923,
+    "users": 22363
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 9.45224,
+      "valid_ndcg@10": 0.00029104074888719407
+    },
+    {
+      "epoch": 2,
+      "loss": 9.40335,
+      "valid_ndcg@10": 0.0018971743240549866
+    },
+    {
+      "epoch": 3,
+      "loss": 9.19655,
+      "valid_ndcg@10": 0.006672484075525099
+    },
+    {
+      "epoch": 4,
+      "loss": 8.94824,
+      "valid_ndcg@10": 0.008973677440538412
+    },
+    {
+      "epoch": 5,
+      "loss": 8.77943,
+      "valid_ndcg@10": 0.011044950364543454
+    },
+    {
+      "epoch": 6,
+      "loss": 8.59841,
+      "valid_ndcg@10": 0.01644081545947938
+    },
+    {
+      "epoch": 7,
+      "loss": 8.32166,
+      "valid_ndcg@10": 0.022964857372300283
+    },
+    {
+      "epoch": 8,
+      "loss": 7.99067,
+      "valid_ndcg@10": 0.03285692335144422
+    },
+    {
+      "epoch": 9,
+      "loss": 7.65276,
+      "valid_ndcg@10": 0.04211045704905901
+    },
+    {
+      "epoch": 10,
+      "loss": 7.3461,
+      "valid_ndcg@10": 0.049600139203847135
+    },
+    {
+      "epoch": 11,
+      "loss": 7.06343,
+      "valid_ndcg@10": 0.055256466861584023
+    },
+    {
+      "epoch": 12,
+      "loss": 6.78947,
+      "valid_ndcg@10": 0.0617471046042912
+    },
+    {
+      "epoch": 13,
+      "loss": 6.51434,
+      "valid_ndcg@10": 0.06473408872945312
+    },
+    {
+      "epoch": 14,
+      "loss": 6.22887,
+      "valid_ndcg@10": 0.06677565071321923
+    },
+    {
+      "epoch": 15,
+      "loss": 5.92868,
+      "valid_ndcg@10": 0.06674377129684009
+    },
+    {
+      "epoch": 16,
+      "loss": 5.61524,
+      "valid_ndcg@10": 0.06644667619854198
+    },
+    {
+      "epoch": 17,
+      "loss": 5.29443,
+      "valid_ndcg@10": 0.06567327683605388
+    },
+    {
+      "epoch": 18,
+      "loss": 4.96958,
+      "valid_ndcg@10": 0.0650775581260066
+    },
+    {
+      "epoch": 19,
+      "loss": 4.64072,
+      "valid_ndcg@10": 0.06359840313382899
+    },
+    {
+      "epoch": 20,
+      "loss": 4.30083,
+      "valid_ndcg@10": 0.06260374454886958
+    },
+    {
+      "epoch": 21,
+      "loss": 3.95721,
+      "valid_ndcg@10": 0.06011231505050889
+    },
+    {
+      "epoch": 22,
+      "loss": 3.60942,
+      "valid_ndcg@10": 0.058624778750205386
+    },
+    {
+      "epoch": 23,
+      "loss": 3.25494,
+      "valid_ndcg@10": 0.05551525574408593
+    },
+    {
+      "epoch": 24,
+      "loss": 2.91072,
+      "valid_ndcg@10": 0.05315376422756186
+    }
+  ],
+  "params": 6270464,
+  "test": null,
+  "wall_time_s": 27.3,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T15:22:52-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2805 MHz, 10501 MHz, 3105 MHz, 42, 65.36 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T15:23:20-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2775 MHz, 10251 MHz, 3105 MHz, 59, 332.63 W, 450.00 W, 97 %, 4792 MiB, 24564 MiB",
+      "apps": "1204086, .venv/bin/python, 4480 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "5e6ea74d6fc3fcb2e72b3a98020f43ca9207726f",
+    "dirty": false
+  },
+  "protocol": "2026-11-05 with the R2 clarifications",
+  "checkpoint": "data/runs/r2/sasrec/trial02.pt"
+}

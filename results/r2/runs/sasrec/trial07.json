@@ -1,0 +1,175 @@
+{
+  "model": "sasrec",
+  "dataset": "beauty",
+  "phase": "tune",
+  "trial": 7,
+  "seed": 0,
+  "config": {
+    "lr": 0.001,
+    "dropout": 0.0,
+    "weight_decay": 0.0001,
+    "width": 128,
+    "layers": 2
+  },
+  "fixed": {
+    "batch": 256,
+    "max_len": 50,
+    "optimizer": "AdamW",
+    "heads": 2,
+    "ffn": "4 x width, GELU",
+    "norm": "post-LN",
+    "scores": "dot product, tied table"
+  },
+  "epochs_run": 22,
+  "best_epoch": 12,
+  "steps_per_epoch": 88,
+  "warmup_steps": 1320,
+  "valid": {
+    "recall@5": 0.0817868801144748,
+    "ndcg@5": 0.05961098692603588,
+    "recall@10": 0.11116576487948844,
+    "ndcg@10": 0.06907055391828215,
+    "users": 22363
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 9.42248,
+      "valid_ndcg@10": 0.0004773921077901588
+    },
+    {
+      "epoch": 2,
+      "loss": 9.33897,
+      "valid_ndcg@10": 0.007907776205197281
+    },
+    {
+      "epoch": 3,
+      "loss": 9.02716,
+      "valid_ndcg@10": 0.00943443835409374
+    },
+    {
+      "epoch": 4,
+      "loss": 8.77321,
+      "valid_ndcg@10": 0.010426500259162266
+    },
+    {
+      "epoch": 5,
+      "loss": 8.51106,
+      "valid_ndcg@10": 0.01766038643670468
+    },
+    {
+      "epoch": 6,
+      "loss": 8.11328,
+      "valid_ndcg@10": 0.031482441043116385
+    },
+    {
+      "epoch": 7,
+      "loss": 7.65609,
+      "valid_ndcg@10": 0.042925152805122185
+    },
+    {
+      "epoch": 8,
+      "loss": 7.26182,
+      "valid_ndcg@10": 0.05237879433682776
+    },
+    {
+      "epoch": 9,
+      "loss": 6.91633,
+      "valid_ndcg@10": 0.060828052011808895
+    },
+    {
+      "epoch": 10,
+      "loss": 6.59226,
+      "valid_ndcg@10": 0.06506540879407091
+    },
+    {
+      "epoch": 11,
+      "loss": 6.2823,
+      "valid_ndcg@10": 0.0679115211266379
+    },
+    {
+      "epoch": 12,
+      "loss": 5.98906,
+      "valid_ndcg@10": 0.06907055391828215
+    },
+    {
+      "epoch": 13,
+      "loss": 5.70773,
+      "valid_ndcg@10": 0.0673914631136608
+    },
+    {
+      "epoch": 14,
+      "loss": 5.42672,
+      "valid_ndcg@10": 0.06638441301958772
+    },
+    {
+      "epoch": 15,
+      "loss": 5.13565,
+      "valid_ndcg@10": 0.06388261655720007
+    },
+    {
+      "epoch": 16,
+      "loss": 4.82071,
+      "valid_ndcg@10": 0.06055469296499848
+    },
+    {
+      "epoch": 17,
+      "loss": 4.46148,
+      "valid_ndcg@10": 0.05889113238330363
+    },
+    {
+      "epoch": 18,
+      "loss": 4.08712,
+      "valid_ndcg@10": 0.05630959482587184
+    },
+    {
+      "epoch": 19,
+      "loss": 3.7129,
+      "valid_ndcg@10": 0.052505185658436905
+    },
+    {
+      "epoch": 20,
+      "loss": 3.343,
+      "valid_ndcg@10": 0.050355486710406815
+    },
+    {
+      "epoch": 21,
+      "loss": 2.99876,
+      "valid_ndcg@10": 0.04829767465259709
+    },
+    {
+      "epoch": 22,
+      "loss": 2.67676,
+      "valid_ndcg@10": 0.04517131544809884
+    }
+  ],
+  "params": 1952256,
+  "test": null,
+  "wall_time_s": 9.3,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-05T15:25:22-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2520 MHz, 10501 MHz, 3105 MHz, 52, 77.74 W, 450.00 W, 0 %, 304 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-05T15:25:31-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2790 MHz, 10251 MHz, 3105 MHz, 63, 301.75 W, 450.00 W, 93 %, 3304 MiB, 24564 MiB",
+      "apps": "1211925, .venv/bin/python, 2992 MiB"
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "5e6ea74d6fc3fcb2e72b3a98020f43ca9207726f",
+    "dirty": false
+  },
+  "protocol": "2026-11-05 with the R2 clarifications",
+  "checkpoint": "data/runs/r2/sasrec/trial07.pt"
+}
