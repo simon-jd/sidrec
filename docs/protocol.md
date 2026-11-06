@@ -403,3 +403,98 @@ uses them. Nothing above changes. R4a computes no test metric.
   are kept.
 - **Cost measurements:** they time one evaluation over all 1,141,362 eligible validation rows as a stand-in
   for the 1,199,539 test rows. Nothing is selected from them.
+
+### 2026-11-06: R4b final runs, TIGER's cold-start retrieval, HSTU-SID and the time ablation, written before any R4b run
+R4b trains the selected configurations on the full train split and reports test metrics. It also adds two
+models that can rank cold-start items, and one ablation. The sections and entries above leave the points below
+open; R4b fixes them here, and every R4b run uses them. Nothing above changes.
+
+**Final runs**
+- **Configurations:** the R4a selections on the dev subset ([results/r4a/README.md](../results/r4a/README.md)).
+  - SASRec: trial 1.
+  - The HSTU-style model: trial 1.
+  - TIGER: trial 2.
+  - HSTU-SID: selected the same way from its own 12 dev trials (below).
+- **Seeds 0, 1 and 2, each trained from scratch on the full train split.** The selected dev trial is not reused
+  as seed 0, because it trained on the dev subset. On Beauty, tuning and final runs shared one training set.
+- **Training length:** section 3 and the R4a entry. Every epoch is evaluated on the 100,000-row validation
+  sample, with patience 3 and at most 30 epochs, and the best epoch's weights are kept.
+- **Test, used once per final run:** after training, the best epoch's weights are evaluated on all 1,199,539
+  eligible test rows.
+  - The metrics are Recall@10, Recall@50 and NDCG@10, over all rows, warm rows and cold rows.
+  - Nothing is selected on test, and no final run is repeated because of its test result.
+- **Runs that span processes:** each process holds the GPU lock for about an hour of training at most.
+  - After every epoch it saves the training state: the model, the optimizer, the schedule, the batch-order
+    generator, the CPU and CUDA random generators, and the early-stopping state.
+  - The next process resumes from that state.
+  - A test checks, on the CPU, that a run resumed after every epoch ends with the same history and weights as
+    an uninterrupted one.
+
+**TIGER's cold-start retrieval (inference only)**
+- **Source:** Rajput et al., NeurIPS 2023 (arXiv 2305.05065v3), section 4.3 "New Capabilities", paragraph
+  "Cold-Start Recommendation", and Fig. 5. The paper:
+  - retrieves, for a semantic ID the model predicts, the seen item with that ID;
+  - adds to the candidates the "unseen items having the same first three semantic tokens", (c1, c2, c3);
+  - limits unseen items with a hyperparameter ε, the largest share of them among the top K;
+  - uses ε = 0.1 in Fig. 5a, its main cold-start comparison, and varies ε in Fig. 5b.
+- **Fixed from the paper:**
+  - the prefix rule: the first three codes (c1, c2, c3), the RQ-VAE codes, not the fourth code that separates
+    collisions;
+  - ε = 0.1;
+  - unseen items: items outside the train split, the protocol's cold items. That is 38,783 of the 368,228
+    items on the full split.
+- **What the paper leaves open, fixed here:**
+  - **Predicted IDs:** the 50 items of plain TIGER's beam. That beam has width 50, is constrained to the
+    catalog and has the user's history removed (R4a entry). There is no second decoding.
+  - **Candidates:** unseen items whose (c1, c2, c3) equals that of one of the 50 beam items, and that are
+    neither in the user's 50-item history nor in the beam already.
+  - **Their order:** their own full-ID score, the sum of their four tokens' log-probabilities. That is the
+    prefix's beam score plus the last code's log-probability, the same score that ranks the beam.
+  - **One ranked list of 50 for every K:** position j (1-based) takes the best remaining candidate while the
+    list holds fewer than floor(ε j) unseen items. Otherwise it takes the next beam item.
+    - Unseen items that the beam emitted itself count towards the share.
+    - With ε = 0.1, the candidates fill positions 10, 20, 30, 40 and 50, and the beam's last five items drop
+      out.
+    - The paper reports Recall@K only. The NDCG@10 of this list follows from this placement, which is ours.
+- **Inference only,** on the three final TIGER checkpoints. The test pass that scores plain TIGER also scores
+  this list at ε = 0.1, from the same beam. No other ε is computed on test.
+- **Validation ε curve, as analysis:** ε in {0, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5, 1}, on the 100,000-row
+  validation sample, one beam pass per checkpoint. Nothing is selected from it.
+
+**HSTU-SID**
+- **Definition:** the HSTU-style model with one change. The embedding of catalog item i is
+  e(i) = E_id[i] + E_1[(c1)] + E_2[(c1, c2)] + E_3[(c1, c2, c3)], with R3's semantic IDs.
+  - E_id is the HSTU-style model's item table. Items outside the train split get its zero row (R4a entry).
+  - Each prefix table has one row per prefix that occurs among the source's train items. On the full split
+    that is 256, 39,715 and 226,620 rows; on the dev subset 256, 32,962 and 138,876.
+  - A prefix that no train item has shares a zero row with padding. On the full split, 1,355 of the 38,783
+    items outside train lack a (c1, c2) row and 23,492 lack a (c1, c2, c3) row.
+  - The prefix tables start at zero, so with the same seed HSTU-SID starts as exactly the HSTU-style model. A
+    test checks this.
+  - e(i) replaces the item table wherever the HSTU-style model uses it: as the input embedding (times the
+    square root of the width), and, L2-normalized and divided by the temperature 0.05, as the scoring table.
+- **Citation:** after Singh et al., RecSys 2024 (arXiv 2306.08121v2, section 3.3). They represent an item by
+  the sum of learned embeddings of pieces of its semantic ID, in place of its random ID. Their pieces are
+  non-overlapping N-grams. The prefix pieces and the kept ID row are this repository's design, as the plan
+  states it.
+- **Loss:** the HSTU-style model's, the exact full-softmax cross-entropy over the train items. Items outside
+  the train split are never targets or negatives in training.
+- **Ranking:** HSTU-SID scores every one of the 368,228 catalog items, on the dev subset too. The history is
+  removed and ties go to the lower catalog index, as for every model. A cold target can therefore be ranked.
+- **Tuning:** the 12 shared trials on the dev subset, seed 0, validation only.
+  - Selection uses validation NDCG@10 over all 71,610 eligible dev rows, cold rows included.
+  - The selected trial is then trained with seeds 0, 1 and 2 as above.
+- **Everything else** is the HSTU-style model's: 4 heads, the relative attention bias with time, temperature
+  0.05, batch 128, AdamW with a constant learning rate after warm-up, float32 with TF32.
+
+**The HSTU-style model without the time bias**
+- **Run:** the selected HSTU configuration (trial 1), seed 0, trained on the full train split and tested once.
+- **The change:** the time part of the relative attention bias is removed, and the position part stays. As in
+  R2's ablation on Beauty, this removes every timestamp input, including the target's time.
+- **Comparison:** against HSTU seed 0 and the HSTU 3-seed mean and standard deviation. With one seed, a
+  difference smaller than the HSTU standard deviation is not called a difference.
+
+**GPU-hour stop**
+- Before the long runs, the total is projected from R4a's cost table. It is projected again after each final
+  run, with the measured times.
+- R4b stops and reports options if the projection passes 60 GPU-hours.
