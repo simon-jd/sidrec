@@ -3,14 +3,15 @@
     python -m sidrec.eval.r4b_summary              # summary.json
     python -m sidrec.eval.r4b_summary --projection # projection.json
 
-**Projection (RTX 4090).** From R4a's cost table (results/r4a/cost, full split, width 256 x 4 layers, the size
-of every selected configuration):
+**Projection (RTX 4090).** From R4a's cost table (results/r4a/cost, full split), at the width and depth of
+each run's selected configuration (256 x 4 or 64 x 2, the two sizes R4a measured):
 - one epoch = the measured training epoch plus one evaluation of the 100,000-row validation sample;
 - one test evaluation = the timed evaluation of all 1,141,362 validation rows, scaled to the 1,199,539
   test rows;
 - epochs per run = what the selected dev-subset trial ran (its best epoch plus the patience), at most 30;
-- HSTU-SID and the ablation = the HSTU-style model's cost and epochs; HSTU-SID's epoch is scaled by its dev
-  epoch time over the HSTU-style model's, at trial 1;
+- the ablation = the HSTU-style model's cost and epochs;
+- HSTU-SID = the HSTU-style model's cost at HSTU-SID's selected size, times HSTU-SID's mean dev epoch time
+  over the HSTU-style model's for the same trial; before its tuning, the HSTU-style model's cost and epochs;
 - a run = epochs x epoch + one test evaluation, plus 1 minute of start-up for each process of at most an hour.
 Each R4b record that exists replaces its projected run by its measured wall time, so the same function
 re-projects the total as runs finish.
@@ -66,30 +67,36 @@ def selected(model: str) -> dict:
 
 def projection(cost_dir=R4A / "cost") -> dict:
     """Projected GPU-hours of every R4b run; finished runs count with their measured wall time."""
-    cost = {}
-    for path in cost_dir.glob("*_full_trial01.json"):
+    sizes = {}  # (model, width, layers) -> cost of one full-split epoch and one test evaluation
+    for path in cost_dir.glob("*_full_trial*.json"):
         r = load(path)
         h = r["history"][0]
-        cost[r["model"]] = {
+        sizes[(r["model"], r["config"]["width"], r["config"]["layers"])] = {
             "epoch_s": h["train_s"] + h["eval_s"],
             "sample_eval_s": h["eval_s"],
             "test_s": r["full_valid_eval"]["seconds"] * TEST_ROWS / VALID_ROWS,
         }
     tuned = bool(tuning_records())
+    like = {m: m for m in FINAL} | {"hstu-notime": "hstu", "hstu-sid": "hstu-sid" if tuned else "hstu"}
+    chosen = {m: selected(like[m]) for m in FINAL}
+    cost = {}
+    for m, rec in chosen.items():
+        c = rec["config"]
+        cost[m] = dict(sizes[(COST_AS.get(m, m), c["width"], c["layers"])])
     ratio = 1.0
     if tuned:
 
         def mean(r):
             return statistics.mean(x["train_s"] for x in r["history"])
 
-        ratio = mean(dev_trial("hstu-sid", 1)) / mean(dev_trial("hstu", 1))
+        t = chosen["hstu-sid"]["trial"]
+        ratio = mean(dev_trial("hstu-sid", t)) / mean(dev_trial("hstu", t))
+        cost["hstu-sid"]["epoch_s"] *= ratio
     runs, total, done = [], 0.0, 0.0
     for model, seeds in FINAL.items():
-        base = cost[COST_AS.get(model, model)]
-        like = model if model != "hstu-notime" and (model != "hstu-sid" or tuned) else "hstu"
-        epochs = min(MAX_EPOCHS, selected(like)["epochs_run"])
-        epoch_s = base["epoch_s"] * (ratio if model == "hstu-sid" else 1.0)
-        train_s = epochs * epoch_s
+        base = cost[model]
+        epochs = min(MAX_EPOCHS, chosen[model]["epochs_run"])
+        train_s = epochs * base["epoch_s"]
         projected_s = train_s + base["test_s"] + STARTUP_S * math.ceil(train_s / 3600)
         for seed in seeds:
             rec = record(model, seed)
@@ -116,7 +123,11 @@ def projection(cost_dir=R4A / "cost") -> dict:
     )
     total += tuning_h + eps_h
     return {
-        "basis": "R4a full-split cost at width 256 x 4; epochs of the selected dev trial (module docstring)",
+        "basis": "R4a full-split cost at each selected size; epochs of the selected dev trial (docstring)",
+        "configs": {
+            m: f"trial {r['trial']}, {r['config']['width']} x {r['config']['layers']}"
+            for m, r in chosen.items()
+        },
         "epoch_hours": {m: round(c["epoch_s"] / 3600, 3) for m, c in cost.items()},
         "test_eval_hours": {m: round(c["test_s"] / 3600, 3) for m, c in cost.items()},
         "hstu_sid_epoch_ratio": round(ratio, 3),
@@ -127,17 +138,15 @@ def projection(cost_dir=R4A / "cost") -> dict:
         "total_hours": round(total, 1),
         "limit_hours": LIMIT_H,
         "within_limit": total <= LIMIT_H,
-        "bound_at_30_epochs_hours": round(bound_at_cap(cost, ratio) + tuning_h + eps_h, 1),
+        "bound_at_30_epochs_hours": round(bound_at_cap(cost) + tuning_h + eps_h, 1),
     }
 
 
-def bound_at_cap(cost: dict, ratio: float) -> float:
-    total = 0.0
-    for model, seeds in FINAL.items():
-        base = cost[COST_AS.get(model, model)]
-        epoch_s = base["epoch_s"] * (ratio if model == "hstu-sid" else 1.0)
-        total += len(seeds) * (MAX_EPOCHS * epoch_s + base["test_s"]) / 3600
-    return total
+def bound_at_cap(cost: dict) -> float:
+    return (
+        sum(len(seeds) * (MAX_EPOCHS * cost[m]["epoch_s"] + cost[m]["test_s"]) for m, seeds in FINAL.items())
+        / 3600
+    )
 
 
 def tuning_records() -> list[dict]:
@@ -252,11 +261,29 @@ def eps_curve() -> dict:
     }
 
 
+def hstu_sid_flood() -> dict:
+    """The validation-only check of how much of HSTU-SID's ranking items outside train take."""
+    out = {}
+    for path in sorted((RESULTS / "hstu_sid_flood").glob("*.json")):
+        r = load(path)
+        out[path.stem] = {
+            "dataset": r["dataset"],
+            "valid_rows": r["valid_rows"],
+            "catalog_share_outside_train": r["catalog_share_outside_train"],
+            "top10_share_outside_train": r["top10_share_outside_train"],
+            "top50_share_outside_train": r["top50_share_outside_train"],
+            "ranked_over_catalog": r["ranked_over_catalog"],
+            "ranked_among_train_items": r["ranked_among_train_items"],
+        }
+    return out
+
+
 def gpu_hours() -> dict:
     groups = {
         "final_runs": [p for p in (RESULTS / "runs").glob("*/seed*.json")],
         "hstu_sid_tuning": [p for p in (RESULTS / "runs" / "hstu-sid").glob("trial*.json")],
         "tiger_eps_curve": [p for p in (RESULTS / "tiger_eps").glob("seed*.json")],
+        "hstu_sid_flood_check": [p for p in (RESULTS / "hstu_sid_flood").glob("*.json")],
     }
     out = {k: round(sum(load(p)["wall_time_s"] for p in v) / 3600, 2) for k, v in groups.items()}
     out["total"] = round(sum(out.values()), 2)
@@ -280,6 +307,7 @@ def main() -> None:
         "time_ablation": ablation(final),
         "hstu_sid_tuning": hstu_sid_tuning(),
         "tiger_eps_curve_valid": eps_curve(),
+        "hstu_sid_flood_valid": hstu_sid_flood(),
         "gpu_hours": gpu_hours(),
         "projection_now": projection(),
     }

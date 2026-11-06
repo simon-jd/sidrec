@@ -182,3 +182,18 @@ def test_projection_from_the_r4a_cost_table(monkeypatch, tmp_path):
     assert [r["epochs"] for r in sasrec] == [11, 11, 11]
     assert sasrec[0]["hours"] == round((11 * epoch + test + 2 * 60) / 3600, 2)
     assert len(p["runs"]) == 13 and p["total_hours"] < p["bound_at_30_epochs_hours"]
+
+
+def test_summary_tables_report_mean_and_sample_std_and_leave_empty_parts_empty():
+    from sidrec.eval.r4b_summary import table
+
+    def result(x: float, cold: bool = True) -> dict:
+        part = {"recall@10": x, "recall@50": 2 * x, "ndcg@10": x / 2}
+        return {"all": part, "warm": part, "cold": part if cold else None}
+
+    t = table([result(0.1), result(0.2), result(0.3)])
+    assert t["all"]["recall@50"]["mean"] == pytest.approx(0.4)
+    assert t["all"]["recall@10"]["std"] == pytest.approx(0.1)  # sample standard deviation
+    assert t["warm"]["ndcg@10"]["values"] == [0.05, 0.1, 0.15] and t["all"]["ndcg@10"]["n"] == 3
+    no_cold = table([result(0.1, cold=False)])["cold"]
+    assert no_cold == {"recall@10": None, "recall@50": None, "ndcg@10": None}
