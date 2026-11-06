@@ -1,0 +1,23 @@
+{
+  "trial": 2,
+  "checkpoint": "data/runs/r4a/tiger/trial02.pt",
+  "rows": 71610,
+  "cold_target_rows": 23262,
+  "emitted_items": 3580500,
+  "emitted_cold_items": 756,
+  "cold_share_of_emitted": 0.00021114369501466275,
+  "rows_with_any_cold_item": 734,
+  "catalog_items_outside_dev_train": 183490,
+  "seconds": 51.9,
+  "git": {
+    "commit": "e94b07cc11fc4ea22748adab196cb7dadad5741e",
+    "dirty": false
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "catalog_share_outside_dev_train": 0.4983053977427029
+}
