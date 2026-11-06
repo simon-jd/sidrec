@@ -1,0 +1,125 @@
+{
+  "basis": "R4a full-split cost at each selected size; epochs of the selected dev trial (docstring)",
+  "configs": {
+    "sasrec": "trial 1, 256 x 4",
+    "hstu": "trial 1, 256 x 4",
+    "hstu-sid": "trial 6, 64 x 2",
+    "tiger": "trial 2, 256 x 4",
+    "hstu-notime": "trial 1, 256 x 4"
+  },
+  "epoch_hours": {
+    "sasrec": 0.106,
+    "hstu": 0.214,
+    "hstu-sid": 0.152,
+    "tiger": 0.272,
+    "hstu-notime": 0.214
+  },
+  "test_eval_hours": {
+    "sasrec": 0.012,
+    "hstu": 0.013,
+    "hstu-sid": 0.009,
+    "tiger": 0.24,
+    "hstu-notime": 0.013
+  },
+  "hstu_sid_epoch_ratio": 1.075,
+  "runs": [
+    {
+      "model": "sasrec",
+      "seed": 0,
+      "epochs": 11,
+      "hours": 1.21,
+      "measured": false
+    },
+    {
+      "model": "sasrec",
+      "seed": 1,
+      "epochs": 11,
+      "hours": 1.21,
+      "measured": false
+    },
+    {
+      "model": "sasrec",
+      "seed": 2,
+      "epochs": 11,
+      "hours": 1.21,
+      "measured": false
+    },
+    {
+      "model": "hstu",
+      "seed": 0,
+      "epochs": 16,
+      "hours": 3.51,
+      "measured": false
+    },
+    {
+      "model": "hstu",
+      "seed": 1,
+      "epochs": 16,
+      "hours": 3.51,
+      "measured": false
+    },
+    {
+      "model": "hstu",
+      "seed": 2,
+      "epochs": 16,
+      "hours": 3.51,
+      "measured": false
+    },
+    {
+      "model": "hstu-sid",
+      "seed": 0,
+      "epochs": 5,
+      "hours": 0.79,
+      "measured": false
+    },
+    {
+      "model": "hstu-sid",
+      "seed": 1,
+      "epochs": 5,
+      "hours": 0.79,
+      "measured": false
+    },
+    {
+      "model": "hstu-sid",
+      "seed": 2,
+      "epochs": 5,
+      "hours": 0.79,
+      "measured": false
+    },
+    {
+      "model": "tiger",
+      "seed": 0,
+      "epochs": 9,
+      "hours": 2.74,
+      "measured": false
+    },
+    {
+      "model": "tiger",
+      "seed": 1,
+      "epochs": 9,
+      "hours": 2.74,
+      "measured": false
+    },
+    {
+      "model": "tiger",
+      "seed": 2,
+      "epochs": 9,
+      "hours": 2.74,
+      "measured": false
+    },
+    {
+      "model": "hstu-notime",
+      "seed": 0,
+      "epochs": 16,
+      "hours": 3.51,
+      "measured": false
+    }
+  ],
+  "hstu_sid_tuning_hours": 1.18,
+  "tiger_eps_curve_hours": 0.11,
+  "measured_hours": 1.18,
+  "total_hours": 29.5,
+  "limit_hours": 60.0,
+  "within_limit": true,
+  "bound_at_30_epochs_hours": 75.6
+}
