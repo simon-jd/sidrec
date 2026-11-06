@@ -86,6 +86,7 @@ def constrained_beam_search(
     layout: Layout,
     beam: int = 20,
     exclude: torch.Tensor | None = None,
+    last: dict | None = None,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Top-``beam`` items per row, best first, and their log-probabilities. Only valid IDs can be emitted; a
     slot with no valid continuation left holds item -1 and score -inf.
@@ -93,7 +94,12 @@ def constrained_beam_search(
     An item's score is the sum of its tokens' log-probabilities, each taken from the softmax over the whole
     token vocabulary. ``exclude`` [B, E], sorted ascending per row (0 is never an item), lists items that may
     not be emitted, such as the user's history: they are removed at the last level, so the beam fills with
-    other items."""
+    other items.
+
+    ``last``, if given, receives the state before the last level, which TIGER's cold-start retrieval reads:
+    ``node`` [B, beam] the trie nodes of the three-code prefixes, ``score`` [B, beam] their log-probabilities,
+    ``logp`` [B, beam, size] the last code's log-probabilities after each prefix, and ``src`` [B, beam] the
+    prefix each returned item extends. It changes nothing in the search."""
     b = input_ids.shape[0]
     device = input_ids.device
     enc = model.encode(input_ids, attention_mask).repeat_interleave(beam, 0)
@@ -112,7 +118,11 @@ def constrained_beam_search(
             at = torch.searchsorted(exclude, flat).clamp(max=exclude.shape[1] - 1)
             nxt = nxt.masked_fill((exclude.gather(1, at) == flat).view(b, beam, size), -1)
         cand = (scores[..., None] + logp).masked_fill(nxt < 0, -torch.inf).view(b, beam * size)
+        if last is not None and level == len(layout.level_sizes) - 1:
+            last.update(node=node.clone(), score=scores.clone(), logp=logp)
         scores, idx = cand.topk(beam, dim=1)
+        if last is not None and level == len(layout.level_sizes) - 1:
+            last["src"] = idx // size
         node = nxt.view(b, beam * size).gather(1, idx)
         src = idx // size
         tok = (idx % size) + offset
