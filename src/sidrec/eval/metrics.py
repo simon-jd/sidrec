@@ -67,6 +67,14 @@ def metrics_from_ranks(ranks: torch.Tensor, ks: tuple[int, ...] = KS) -> dict[st
     return out
 
 
+def split_metrics(ranks: torch.Tensor, cold: torch.Tensor, ks: tuple[int, ...] = (10, 50)) -> dict:
+    """Electronics metrics (protocol, section 2): all rows, warm rows (target seen in train) and cold rows."""
+    out = {"all": metrics_from_ranks(ranks, ks)}
+    for name, rows in (("warm", ~cold), ("cold", cold)):
+        out[name] = metrics_from_ranks(ranks[rows], ks) if bool(rows.any()) else None
+    return out
+
+
 def history_exclusion(histories: torch.Tensor, n_columns: int, exclude_padding: bool = True) -> torch.Tensor:
     """[B, n_columns] bool mask of the items in each row of ``histories`` (0 is padding).
 

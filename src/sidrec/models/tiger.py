@@ -85,9 +85,15 @@ def constrained_beam_search(
     trie: Trie,
     layout: Layout,
     beam: int = 20,
+    exclude: torch.Tensor | None = None,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Top-``beam`` items per row, best first, and their log-probabilities. Only valid IDs can be emitted; a
-    slot with no valid continuation left holds item -1 and score -inf."""
+    slot with no valid continuation left holds item -1 and score -inf.
+
+    An item's score is the sum of its tokens' log-probabilities, each taken from the softmax over the whole
+    token vocabulary. ``exclude`` [B, E], sorted ascending per row (0 is never an item), lists items that may
+    not be emitted, such as the user's history: they are removed at the last level, so the beam fills with
+    other items."""
     b = input_ids.shape[0]
     device = input_ids.device
     enc = model.encode(input_ids, attention_mask).repeat_interleave(beam, 0)
@@ -101,6 +107,10 @@ def constrained_beam_search(
         logp = F.log_softmax(logits.float(), dim=-1)[:, offset : offset + size].view(b, beam, size)
         nxt = trie.tables[level][node.clamp(min=0)]  # [b, beam, size]
         nxt = nxt.masked_fill(~torch.isfinite(scores)[..., None], -1)
+        if exclude is not None and level == len(layout.level_sizes) - 1:
+            flat = nxt.reshape(b, beam * size)
+            at = torch.searchsorted(exclude, flat).clamp(max=exclude.shape[1] - 1)
+            nxt = nxt.masked_fill((exclude.gather(1, at) == flat).view(b, beam, size), -1)
         cand = (scores[..., None] + logp).masked_fill(nxt < 0, -torch.inf).view(b, beam * size)
         scores, idx = cand.topk(beam, dim=1)
         node = nxt.view(b, beam * size).gather(1, idx)
