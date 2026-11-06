@@ -331,3 +331,75 @@ Beauty recipe and changes only what the larger catalog requires.
   - the collision rate before the fourth code;
   - the share of cold-start test items whose first two codes occur among the train items' IDs.
 - No recommendation metric is computed in R3.
+
+### 2026-11-06: Electronics training and evaluation details, written before any Electronics model was trained
+Sections 2 and 3 leave the points below open for the scale run. R4a fixes them here, and every Electronics run
+uses them. Nothing above changes. R4a computes no test metric.
+
+**Inputs**
+- **Item numbering:** the R3 order. Catalog items are 1 to 368,228 in ascending `parent_asin` order, and 0 is
+  padding. The dev subset uses the same numbering.
+- **Training windows of SASRec and the HSTU-style model:** one per user, the last 50 inputs of the user's train
+  interactions, as on Beauty. A user with one train interaction has no target.
+  - On the full split this keeps 11,308,328 of the 11,491,609 train targets (98.4%).
+  - The 183,281 left out are the earliest targets of the 7,005 users with more than 51 train interactions.
+- **TIGER's training examples:** every train position with at least one earlier train item, as on Beauty. That
+  is 11,491,609 examples on the full split. The input is the user token and the 20 most recent earlier items.
+- **Evaluation input:** section 2's input, the 50 most recent earlier interactions from any split.
+  - The item-ID models read all 50.
+  - TIGER's encoder reads the most recent 20 of them, its Beauty history length. 13.3% of validation rows
+    have more than 20.
+  - The history mask always removes all 50, for every model.
+- **Items outside the train split in the item-ID models:** the shared out-of-vocabulary row starts at zero. No
+  training input is outside the train split, so the row never gets a gradient and stays zero.
+- **Dev-subset vocabulary:** an item-ID model tuned on the dev subset has the subset's 184,738 train items, the
+  same set its cold-start flags use (data.md).
+- **HSTU time bias:** Electronics timestamps are in milliseconds. They are floored to seconds before bucketing,
+  because the buckets are defined in seconds.
+
+**Ranking**
+- **Item-ID models:** the target is ranked among the train items. A target outside the train split is a miss.
+  - For any K up to 50, this equals ranking the full catalog with every other item scored below all train
+    items, as section 2 states. A test checks it.
+  - Ties go to the lower catalog index, because the train items keep catalog order.
+- **TIGER's beam width:** 50, the cascade's width, also when TIGER is evaluated on its own. Recall@50 needs 50
+  items.
+- **TIGER's valid IDs:** the beam is constrained to the semantic IDs of all 368,228 catalog items.
+- **TIGER's history mask:** section 2's masking applies to every model on Electronics. On Beauty, TIGER had none,
+  as in its paper. The 50 history items are removed at the fourth level, so the beam still returns 50 items.
+- **How TIGER scores the beam:** an item's score is the sum of its four tokens' log-probabilities.
+  - Each comes from the softmax over the whole token vocabulary, not renormalized over the valid codes.
+  - The 50 items are ranked by that sum.
+- **Fourth code:** its token range has 461 codes, the size of the largest collision group (R3). The vocabulary
+  is 2 special tokens, 3 × 256 codes, 461 codes and 2,000 user tokens: 3,231 tokens.
+
+**Training**
+- **Loss of the item-ID models:** the exact full-softmax cross-entropy over the train items (329,445 on the full
+  split).
+  - It is computed in chunks of rows by a fused forward and backward pass (`sidrec.train.fused_ce`), so at most
+    2^28 logits exist at once.
+  - Logits and log-sum-exp are in float32, with TF32 matrix products as on Beauty. Nothing is sampled.
+- **Batch sizes:** the R2 values, on the dev subset and on the full split: SASRec 256, HSTU-style 128, TIGER 256.
+  - The learning rate is selected on the dev subset and reused on the full split. That transfer only holds at
+    the same batch size.
+  - Steps per epoch: 386, 771 and 2,796 on the dev subset; 6,160, 12,319 and 44,890 on the full split.
+- **Warm-up:** 5% of the maximum number of steps, which is 30 epochs times the steps per epoch.
+- **Everything else as on Beauty:**
+  - AdamW, with weight decay on every parameter;
+  - a constant learning rate after warm-up for the item-ID models, inverse-square-root decay for TIGER;
+  - TIGER's gradient clip of 1.0;
+  - float32 with TF32 for the item-ID models, bfloat16 autocast for TIGER.
+- **Trials:** the 12 shared draws, trial 1 included. Section 3 replaces trial 1 with a published configuration
+  only on Beauty.
+
+**Validation and selection**
+- **The 100,000-row validation sample:** the first 100,000 eligible validation rows sorted by sha256 of
+  `user_id|parent_asin|timestamp`, with the timestamp in milliseconds. This is the test sample's rule from
+  section 2.
+- **Dev subset:** it has 71,610 eligible validation rows, fewer than 100,000, so every epoch evaluates all of
+  them. Selection uses validation NDCG@10 over those rows. Cold rows count, and they are misses for the
+  item-ID models.
+- **Early stopping:** on validation NDCG@10, with patience 3 and at most 30 epochs. The best epoch's weights
+  are kept.
+- **Cost measurements:** they time one evaluation over all 1,141,362 eligible validation rows as a stand-in
+  for the 1,199,539 test rows. Nothing is selected from them.
