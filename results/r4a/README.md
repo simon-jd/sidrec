@@ -30,11 +30,11 @@ from the run records in this folder.
     `F.cross_entropy` on the full logits, for SASRec's table and for the HSTU-style model's normalized one.
 - **TIGER's fourth code:** its token range has 461 codes, the size of R3's largest collision group. The
   vocabulary is 3,231 tokens.
-- **Inputs:** the windows are cut on the GPU from the pipeline's user timelines (`sidrec.data.scale`). The
-  input cache is checked against the tables when it is built:
-  - every evaluation row's history column equals the timeline before its target;
-  - the cold-start flags equal "target not in this source's train split";
-  - the counts equal those in [data.md](../../docs/data.md).
+- **Inputs:** the windows are cut on the GPU from the pipeline's user timelines (`sidrec.data.scale`).
+  - When the input cache is built, it checks that the catalog order is R3's.
+  - It also checks that every evaluation row's history column equals the timeline before its target.
+  - And it checks that the cold-start flags mean "target not in this source's train split".
+  - A test checks the cache's counts against [data.md](../../docs/data.md).
 
 ## Cost, measured before tuning
 Each model trained one epoch on the dev subset and on the full train split, on the RTX 4090. Two
