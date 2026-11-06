@@ -4,6 +4,11 @@
     python -m sidrec.train.tiger --encoder st5-xxl --trial 1 --test   # its best checkpoint on test
     python -m sidrec.train.tiger --encoder qwen3-emb-4b --trial 1 --seed 2 --final   # train, then test
 
+``--optimizer adafactor`` is a diagnostic outside the protocol: Adafactor with relative step size
+min(lr, 1/sqrt(step)) and update clipping 1.0, the T5X default that TIGER trained with, instead of AdamW. With
+lr 0.01 that is the paper's schedule: 0.01 for 10,000 steps, then inverse square root. Its runs go to
+runs/tiger_<encoder>_adafactor and are never selected from.
+
 Training examples: every position of each user's training part, with up to 20 preceding items as input.
 Evaluation: beam search of width 20 constrained to valid semantic IDs; the top 10 are ranked, with no history
 masking. Selection: validation NDCG@10, every epoch; patience 10, at most 300 epochs.
@@ -88,7 +93,15 @@ def load_ids(encoder: str):
     return codes, layout
 
 
-def train(cfg: dict, seed: int, data: loo.Beauty, encoder: str, device: str, max_epochs: int = MAX_EPOCHS):
+def train(
+    cfg: dict,
+    seed: int,
+    data: loo.Beauty,
+    encoder: str,
+    device: str,
+    max_epochs: int = MAX_EPOCHS,
+    optimizer: str = "adamw",
+):
     common.seed_all(seed)
     codes, layout = load_ids(encoder)
     tokens = layout.item_tokens(codes)
@@ -97,11 +110,16 @@ def train(cfg: dict, seed: int, data: loo.Beauty, encoder: str, device: str, max
     va = {k: torch.as_tensor(v, device=device) for k, v in examples(data, tokens, layout, "valid").items()}
     trie = Trie(codes, layout.level_sizes, device)
     model = build_t5(layout, cfg["width"], cfg["layers"], cfg["dropout"]).to(device)
-    opt = torch.optim.AdamW(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])
+    adafactor = optimizer == "adafactor"
+    if adafactor:  # its own step-size schedule and update clipping; no warm-up, no gradient clip
+        opt = torch.optim.Adafactor(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])
+    else:
+        opt = torch.optim.AdamW(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])
     n = tr["inputs"].shape[0]
     steps_per_epoch = math.ceil(n / BATCH)
     warmup = max(1, int(WARMUP_SHARE * MAX_EPOCHS * steps_per_epoch))
-    sched = torch.optim.lr_scheduler.LambdaLR(opt, common.warmup_schedule(warmup, "inverse_sqrt"))
+    factor = (lambda step: 1.0) if adafactor else common.warmup_schedule(warmup, "inverse_sqrt")
+    sched = torch.optim.lr_scheduler.LambdaLR(opt, factor)
     gen = torch.Generator(device=device).manual_seed(seed)
     best, best_epoch, best_state, best_valid, history = -1.0, 0, None, None, []
     for epoch in range(1, max_epochs + 1):
@@ -116,7 +134,8 @@ def train(cfg: dict, seed: int, data: loo.Beauty, encoder: str, device: str, max
                 loss = model(inputs, inputs > 0, tr["labels"][idx])
             opt.zero_grad(set_to_none=True)
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), CLIP)
+            if not adafactor:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), CLIP)
             opt.step()
             sched.step()
             total += loss.detach() * len(idx)
@@ -169,13 +188,17 @@ def main() -> None:
     parser.add_argument("--final", action="store_true", help="evaluate on test after training")
     parser.add_argument("--test", action="store_true", help="only evaluate the saved checkpoint on test")
     parser.add_argument("--max-epochs", type=int, default=MAX_EPOCHS, help="for smoke tests only")
+    parser.add_argument(
+        "--optimizer", choices=["adamw", "adafactor"], default="adamw", help="see the docstring"
+    )
     args = parser.parse_args()
     torch.backends.cuda.matmul.allow_tf32 = True
     device = "cuda"
     cfg = trials("tiger")[args.trial - 1]
-    run_dir = common.RESULTS / "runs" / f"tiger_{args.encoder}"
+    suffix = "_adafactor" if args.optimizer == "adafactor" else ""
+    run_dir = common.RESULTS / "runs" / f"tiger_{args.encoder}{suffix}"
     tag = f"trial{args.trial:02d}" + (f"_seed{args.seed}" if args.final else "")
-    ckpt = common.CHECKPOINTS / f"tiger_{args.encoder}" / f"{tag}.pt"
+    ckpt = common.CHECKPOINTS / f"tiger_{args.encoder}{suffix}" / f"{tag}.pt"
     data = loo.load()
     t0 = time.time()
     smi_before = common.nvidia_smi()
@@ -193,7 +216,7 @@ def main() -> None:
         print(record["test"])
         return
     model, run, (data, tokens, layout, trie) = train(
-        cfg, args.seed, data, args.encoder, device, args.max_epochs
+        cfg, args.seed, data, args.encoder, device, args.max_epochs, args.optimizer
     )
     ckpt.parent.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), ckpt)
@@ -202,7 +225,7 @@ def main() -> None:
         "encoder": args.encoder,
         "embedding_model": ENCODERS[args.encoder][0],
         "dataset": "beauty",
-        "phase": "final" if args.final else "tune",
+        "phase": "diagnostic" if suffix else ("final" if args.final else "tune"),
         "trial": args.trial,
         "seed": args.seed,
         "config": cfg,
@@ -210,7 +233,7 @@ def main() -> None:
             "batch": BATCH,
             "history": HISTORY,
             "beam": BEAM,
-            "optimizer": "AdamW, inverse-sqrt",
+            "optimizer": "Adafactor (T5X default)" if suffix else "AdamW, inverse-sqrt",
             **FIXED,
         },
         **run,
