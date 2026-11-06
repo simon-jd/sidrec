@@ -1,0 +1,175 @@
+{
+  "model": "hstu",
+  "dataset": "electronics-full",
+  "phase": "cost",
+  "trial": 4,
+  "seed": 0,
+  "config": {
+    "lr": 0.001,
+    "dropout": 0.3,
+    "weight_decay": 0.01,
+    "width": 64,
+    "layers": 2
+  },
+  "fixed": {
+    "batch": 128,
+    "max_len": 50,
+    "optimizer": "AdamW, linear warm-up then constant",
+    "loss": "exact full-softmax CE, chunked fused forward-backward",
+    "precision": "float32 with TF32 matmuls",
+    "heads": 4,
+    "head_dim": "width / 4",
+    "rab_time_buckets": 128,
+    "temperature": 0.05
+  },
+  "data": {
+    "users": 1641026,
+    "interactions": {
+      "train": 13096427,
+      "valid": 1161644,
+      "test": 1215465
+    },
+    "train_items": 329445,
+    "catalog_items": 368228,
+    "valid_rows": 1141362,
+    "valid_cold_rows": 185482,
+    "test_rows": 1199539,
+    "test_cold_rows": 535916
+  },
+  "epochs_run": 1,
+  "best_epoch": 1,
+  "train_windows": 1576803,
+  "train_targets": 11308328,
+  "vocab_items": 329445,
+  "steps_per_epoch": 12319,
+  "warmup_steps": 18478,
+  "valid_rows": 100000,
+  "valid": {
+    "all": {
+      "recall@10": 0.01408,
+      "ndcg@10": 0.007291269284984506,
+      "recall@50": 0.041670000000000006,
+      "ndcg@50": 0.013280097219121295,
+      "users": 100000
+    },
+    "warm": {
+      "recall@10": 0.016813144822315627,
+      "ndcg@10": 0.008706616933731976,
+      "recall@50": 0.04975878868933894,
+      "ndcg@50": 0.01585796859371572,
+      "users": 83744
+    },
+    "cold": {
+      "recall@10": 0.0,
+      "ndcg@10": 0.0,
+      "recall@50": 0.0,
+      "ndcg@50": 0.0,
+      "users": 16256
+    }
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 11.68078,
+      "valid_ndcg@10": 0.007291269284984506,
+      "valid_recall@10": 0.01408,
+      "valid_recall@50": 0.041670000000000006,
+      "train_s": 507.6,
+      "eval_s": 2.8
+    }
+  ],
+  "params": 21130148,
+  "peak_memory_gb": 6.34,
+  "full_valid_eval": {
+    "rows": 1141362,
+    "seconds": 32.1,
+    "metrics": {
+      "all": {
+        "recall@10": 0.014083174312794714,
+        "ndcg@10": 0.007294576625265512,
+        "recall@50": 0.04189555986619495,
+        "ndcg@50": 0.013350531552518304,
+        "users": 1141362
+      },
+      "warm": {
+        "recall@10": 0.016815918316106623,
+        "ndcg@10": 0.008710039509317377,
+        "recall@50": 0.0500251077541114,
+        "ndcg@50": 0.015941111220912036,
+        "users": 955880
+      },
+      "cold": {
+        "recall@10": 0.0,
+        "ndcg@10": 0.0,
+        "recall@50": 0.0,
+        "ndcg@50": 0.0,
+        "users": 185482
+      }
+    }
+  },
+  "test": null,
+  "wall_time_s": 543.6,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-06T03:29:20-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2775 MHz, 10501 MHz, 3105 MHz, 63, 91.75 W, 450.00 W, 0 %, 303 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-06T03:38:24-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2775 MHz, 10251 MHz, 3105 MHz, 70, 305.51 W, 450.00 W, 100 %, 9638 MiB, 24564 MiB",
+      "apps": "512116, .venv/bin/python, 9326 MiB"
+    },
+    "sampled": {
+      "samples": 55,
+      "interval_s": 10.0,
+      "pstates": [
+        "P0",
+        "P2"
+      ],
+      "clocks.sm": {
+        "min": 2775.0,
+        "median": 2775.0,
+        "max": 2775.0
+      },
+      "clocks.mem": {
+        "min": 10251.0,
+        "median": 10251.0,
+        "max": 10501.0
+      },
+      "temperature.gpu": {
+        "min": 63.0,
+        "median": 68.0,
+        "max": 72.0
+      },
+      "power.draw": {
+        "min": 91.75,
+        "median": 239.32,
+        "max": 305.51
+      },
+      "utilization.gpu": {
+        "min": 0.0,
+        "median": 98.0,
+        "max": 100.0
+      },
+      "memory.used": {
+        "min": 303.0,
+        "median": 4482.0,
+        "max": 9636.0
+      }
+    }
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "7dbe095f8e4abfb5c925f97f35ffdbd4f58cafbb",
+    "dirty": false
+  },
+  "protocol": "2026-11-05 with the R2, R3 and R4a clarifications"
+}

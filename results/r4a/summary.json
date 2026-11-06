@@ -56,6 +56,24 @@
         "commit": "c73d0d2"
       },
       {
+        "model": "hstu",
+        "source": "full",
+        "trial": 4,
+        "width": 64,
+        "layers": 2,
+        "params": 21130148,
+        "steps_per_epoch": 12319,
+        "epoch_train_s": 507.6,
+        "ms_per_step": 41.2,
+        "sample_eval_rows": 100000,
+        "sample_eval_s": 2.8,
+        "all_valid_eval_rows": 1141362,
+        "all_valid_eval_s": 32.1,
+        "peak_memory_gb": 6.34,
+        "sm_clock_median_mhz": 2775.0,
+        "commit": "7dbe095"
+      },
+      {
         "model": "sasrec",
         "source": "dev",
         "trial": 1,
@@ -110,6 +128,24 @@
         "commit": "c73d0d2"
       },
       {
+        "model": "sasrec",
+        "source": "full",
+        "trial": 4,
+        "width": 64,
+        "layers": 2,
+        "params": 21187904,
+        "steps_per_epoch": 6160,
+        "epoch_train_s": 256.9,
+        "ms_per_step": 41.7,
+        "sample_eval_rows": 100000,
+        "sample_eval_s": 2.8,
+        "all_valid_eval_rows": 1141362,
+        "all_valid_eval_s": 31.4,
+        "peak_memory_gb": 6.26,
+        "sm_clock_median_mhz": 2760.0,
+        "commit": "7dbe095"
+      },
+      {
         "model": "tiger",
         "source": "dev",
         "trial": 1,
@@ -144,6 +180,42 @@
         "peak_memory_gb": 5.76,
         "sm_clock_median_mhz": 2775.0,
         "commit": "ea54a46"
+      },
+      {
+        "model": "tiger",
+        "source": "full",
+        "trial": 1,
+        "width": 256,
+        "layers": 4,
+        "params": 9746048,
+        "steps_per_epoch": 44890,
+        "epoch_train_s": 908.4,
+        "ms_per_step": 20.2,
+        "sample_eval_rows": 100000,
+        "sample_eval_s": 72.1,
+        "all_valid_eval_rows": 1141362,
+        "all_valid_eval_s": 822.4,
+        "peak_memory_gb": 8.94,
+        "sm_clock_median_mhz": 2760.0,
+        "commit": "c73d0d2"
+      },
+      {
+        "model": "tiger",
+        "source": "full",
+        "trial": 4,
+        "width": 64,
+        "layers": 2,
+        "params": 1322048,
+        "steps_per_epoch": 44890,
+        "epoch_train_s": 322.1,
+        "ms_per_step": 7.2,
+        "sample_eval_rows": 100000,
+        "sample_eval_s": 22.2,
+        "all_valid_eval_rows": 1141362,
+        "all_valid_eval_s": 253.1,
+        "peak_memory_gb": 6.21,
+        "sm_clock_median_mhz": 2775.0,
+        "commit": "7dbe095"
       }
     ],
     "gpu_hours": {
@@ -161,9 +233,92 @@
           "total": 7.24
         }
       },
-      "r4b": {}
+      "r4b": {
+        "trial1_config_10_epochs": {
+          "sasrec": 3.22,
+          "hstu": 6.47,
+          "tiger": 8.89,
+          "cascade": 0.79,
+          "total": 19.37
+        },
+        "trial1_config_30_epochs": {
+          "sasrec": 9.57,
+          "hstu": 19.33,
+          "tiger": 25.23,
+          "cascade": 0.79,
+          "total": 54.92
+        },
+        "trial4_config_10_epochs": {
+          "sasrec": 2.19,
+          "hstu": 4.28,
+          "tiger": 3.09,
+          "cascade": 0.28,
+          "total": 9.84
+        },
+        "trial4_config_30_epochs": {
+          "sasrec": 6.52,
+          "hstu": 12.79,
+          "tiger": 8.83,
+          "cascade": 0.28,
+          "total": 28.42
+        }
+      }
     }
   },
-  "tuning": {},
+  "tuning": {
+    "hstu": {
+      "trials": [
+        {
+          "trial": 1,
+          "config": {
+            "lr": 0.0001,
+            "dropout": 0.3,
+            "weight_decay": 0.0001,
+            "width": 256,
+            "layers": 4
+          },
+          "valid_ndcg@10": 0.006764375733420658,
+          "valid_recall@10": 0.012540148024018993,
+          "valid_recall@50": 0.03105711492808267,
+          "best_epoch": 13,
+          "epochs_run": 16,
+          "wall_time_s": 559.8
+        },
+        {
+          "trial": 2,
+          "config": {
+            "lr": 0.0003,
+            "dropout": 0.0,
+            "weight_decay": 0.0,
+            "width": 256,
+            "layers": 4
+          },
+          "valid_ndcg@10": 0.004563664753259244,
+          "valid_recall@10": 0.008462505236698784,
+          "valid_recall@50": 0.02196620583717358,
+          "best_epoch": 3,
+          "epochs_run": 6,
+          "wall_time_s": 208.9
+        },
+        {
+          "trial": 3,
+          "config": {
+            "lr": 0.0001,
+            "dropout": 0.2,
+            "weight_decay": 0.01,
+            "width": 128,
+            "layers": 2
+          },
+          "valid_ndcg@10": 0.0054053602785730055,
+          "valid_recall@10": 0.010222036028487641,
+          "valid_recall@50": 0.02583438067309035,
+          "best_epoch": 8,
+          "epochs_run": 11,
+          "wall_time_s": 303.6
+        }
+      ],
+      "gpu_hours": 0.3
+    }
+  },
   "ddp": {}
 }
