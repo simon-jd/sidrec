@@ -4,6 +4,9 @@
     python -m sidrec.train.idrec --model sasrec --trial 3 --test            # its best checkpoint on test
     python -m sidrec.train.idrec --model sasrec --trial 3 --seed 1 --final  # final run: train, then test
 
+``--model hstu-notime`` is an ablation: the HSTU-style model without the time part of its attention bias, run
+only with the selected HSTU configuration and seeds.
+
 Loss: full-softmax cross-entropy over all items at every non-padding position of each user's training window.
 Selection: validation NDCG@10, evaluated every epoch; patience 10, at most 300 epochs.
 """
@@ -30,16 +33,19 @@ MAX_LEN = 50
 MAX_EPOCHS = 300
 PATIENCE = 10
 WARMUP_SHARE = 0.05
-BATCH = {"sasrec": 256, "hstu": 128}  # S3-Rec; generative-recommenders amzn-books
+BATCH = {"sasrec": 256, "hstu": 128, "hstu-notime": 128}  # S3-Rec; generative-recommenders amzn-books
 FIXED = {
     "sasrec": {"heads": 2, "ffn": "4 x width, GELU", "norm": "post-LN", "scores": "dot product, tied table"},
     "hstu": {"heads": 4, "head_dim": "width / 4", "rab_time_buckets": 128, "temperature": 0.05},
+    "hstu-notime": {"heads": 4, "head_dim": "width / 4", "rab_time_buckets": 0, "temperature": 0.05},
 }
 
 
 def build(model: str, cfg: dict, n_items: int) -> torch.nn.Module:
-    cls = {"sasrec": SASRec, "hstu": HSTU}[model]
-    return cls(n_items, cfg["width"], cfg["layers"], cfg["dropout"], max_len=MAX_LEN)
+    if model == "sasrec":
+        return SASRec(n_items, cfg["width"], cfg["layers"], cfg["dropout"], max_len=MAX_LEN)
+    time_bias = model == "hstu"
+    return HSTU(n_items, cfg["width"], cfg["layers"], cfg["dropout"], max_len=MAX_LEN, time_bias=time_bias)
 
 
 def to_device(arrays: dict, device: str) -> dict[str, torch.Tensor]:
@@ -113,7 +119,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--model", choices=["sasrec", "hstu"], required=True)
+    parser.add_argument("--model", choices=["sasrec", "hstu", "hstu-notime"], required=True)
     parser.add_argument("--trial", type=int, required=True, help="1..12, the protocol's trial list")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--final", action="store_true", help="evaluate on test after training")
@@ -123,7 +129,7 @@ def main() -> None:
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.allow_tf32 = True
     device = "cuda"
-    cfg = trials(args.model)[args.trial - 1]
+    cfg = trials(args.model.removesuffix("-notime"))[args.trial - 1]
     tag = f"trial{args.trial:02d}" + (f"_seed{args.seed}" if args.final else "")
     ckpt = common.CHECKPOINTS / args.model / f"{tag}.pt"
     data = loo.load()

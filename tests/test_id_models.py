@@ -56,3 +56,14 @@ def test_trial_list_is_fixed_and_trial_one_is_the_published_setting():
     for model in ("sasrec", "hstu", "tiger"):
         t = trials(model)
         assert t[0] == PUBLISHED[model] and t[1:] == shared[1:]
+
+
+def test_hstu_without_time_bias_ignores_timestamps():
+    torch.manual_seed(0)
+    model = HSTU(20, 32, 2, 0.0, max_len=4, time_bias=False).eval()
+    inputs = torch.tensor([[0, 3, 4, 5]])
+    a = model.encode(inputs, input_ts=torch.tensor([[0, 1, 2, 3]]), query_ts=torch.tensor([[1, 2, 3, 4]]))
+    b = model.encode(
+        inputs, input_ts=torch.tensor([[0, 9, 10**6, 10**8]]), query_ts=torch.tensor([[5, 7, 9, 10**9]])
+    )
+    assert torch.allclose(a, b)

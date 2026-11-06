@@ -31,9 +31,9 @@ def time_buckets(dt: torch.Tensor, n_buckets: int) -> torch.Tensor:
 
 
 class RelativeBias(nn.Module):
-    def __init__(self, max_len: int, n_buckets: int = 128):
+    def __init__(self, max_len: int, n_buckets: int = 128, use_time: bool = True):
         super().__init__()
-        self.max_len, self.n_buckets = max_len, n_buckets
+        self.max_len, self.n_buckets, self.use_time = max_len, n_buckets, use_time
         self.pos_w = nn.Parameter(torch.empty(2 * max_len - 1).normal_(std=0.02))
         self.time_w = nn.Parameter(torch.empty(n_buckets + 1).normal_(std=0.02))
 
@@ -41,6 +41,8 @@ class RelativeBias(nn.Module):
         n = input_ts.shape[1]
         i = torch.arange(n, device=input_ts.device)
         pos = self.pos_w[(i[None, :] - i[:, None]) + self.max_len - 1]  # [n, n], key minus query
+        if not self.use_time:
+            return pos[None]
         dt = query_ts[:, :, None] - input_ts[:, None, :]  # [B, n, n]
         return pos[None] + self.time_w[time_buckets(dt, self.n_buckets)]
 
@@ -79,6 +81,7 @@ class HSTU(nn.Module):
         heads: int = 4,
         temperature: float = 0.05,
         n_buckets: int = 128,
+        time_bias: bool = True,
     ):
         super().__init__()
         self.d, self.temperature, self.dropout = d, temperature, dropout
@@ -86,7 +89,7 @@ class HSTU(nn.Module):
         nn.init.trunc_normal_(self.item_emb.weight, std=0.02)
         self.pos_emb = nn.Embedding(max_len, d)
         nn.init.uniform_(self.pos_emb.weight, -math.sqrt(1.0 / d), math.sqrt(1.0 / d))
-        self.rab = RelativeBias(max_len, n_buckets)
+        self.rab = RelativeBias(max_len, n_buckets, use_time=time_bias)
         self.layers = nn.ModuleList(HSTULayer(d, heads, dropout) for _ in range(layers))
 
     def encode(self, inputs: torch.Tensor, input_ts: torch.Tensor, query_ts: torch.Tensor) -> torch.Tensor:
