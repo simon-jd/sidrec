@@ -10,7 +10,7 @@
   "epoch_hours": {
     "sasrec": 0.106,
     "hstu": 0.212,
-    "hstu-sid": 0.152,
+    "hstu-sid": 0.154,
     "tiger": 0.236,
     "hstu-notime": 0.212
   },
@@ -75,15 +75,15 @@
       "model": "hstu-sid",
       "seed": 0,
       "epochs": 5,
-      "hours": 0.79,
-      "measured": false,
+      "hours": 0.78,
+      "measured": true,
       "in_progress": false
     },
     {
       "model": "hstu-sid",
       "seed": 1,
       "epochs": 5,
-      "hours": 0.79,
+      "hours": 0.8,
       "measured": false,
       "in_progress": false
     },
@@ -91,7 +91,7 @@
       "model": "hstu-sid",
       "seed": 2,
       "epochs": 5,
-      "hours": 0.79,
+      "hours": 0.8,
       "measured": false,
       "in_progress": false
     },
@@ -130,9 +130,9 @@
   ],
   "hstu_sid_tuning_hours": 1.18,
   "tiger_eps_curve_hours": 0.11,
-  "measured_hours": 10.0,
+  "measured_hours": 10.78,
   "total_hours": 35.6,
   "limit_hours": 60.0,
   "within_limit": true,
-  "bound_at_30_epochs_hours": 65.0
+  "bound_at_30_epochs_hours": 61.2
 }
