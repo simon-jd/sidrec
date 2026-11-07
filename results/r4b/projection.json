@@ -122,17 +122,17 @@
     {
       "model": "hstu-notime",
       "seed": 0,
-      "epochs": 16,
-      "hours": 3.48,
-      "measured": false,
+      "epochs": 12,
+      "hours": 1.93,
+      "measured": true,
       "in_progress": false
     }
   ],
   "hstu_sid_tuning_hours": 1.18,
   "tiger_eps_curve_hours": 0.11,
-  "measured_hours": 10.78,
-  "total_hours": 35.6,
+  "measured_hours": 12.72,
+  "total_hours": 34.1,
   "limit_hours": 60.0,
   "within_limit": true,
-  "bound_at_30_epochs_hours": 61.2
+  "bound_at_30_epochs_hours": 56.7
 }
