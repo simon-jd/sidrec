@@ -1,5 +1,5 @@
 {
-  "basis": "R4a full-split cost at each selected size; epochs of the selected dev trial (docstring)",
+  "basis": "R4a cost and dev epochs, replaced by measured runs as they finish (module docstring)",
   "configs": {
     "sasrec": "trial 1, 256 x 4",
     "hstu": "trial 1, 256 x 4",
@@ -9,10 +9,10 @@
   },
   "epoch_hours": {
     "sasrec": 0.106,
-    "hstu": 0.214,
+    "hstu": 0.212,
     "hstu-sid": 0.152,
-    "tiger": 0.272,
-    "hstu-notime": 0.214
+    "tiger": 0.236,
+    "hstu-notime": 0.212
   },
   "test_eval_hours": {
     "sasrec": 0.012,
@@ -28,98 +28,111 @@
       "seed": 0,
       "epochs": 12,
       "hours": 1.29,
-      "measured": true
+      "measured": true,
+      "in_progress": false
     },
     {
       "model": "sasrec",
       "seed": 1,
-      "epochs": 11,
-      "hours": 1.21,
-      "measured": false
+      "epochs": 12,
+      "hours": 1.31,
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "sasrec",
       "seed": 2,
-      "epochs": 11,
-      "hours": 1.21,
-      "measured": false
+      "epochs": 12,
+      "hours": 1.31,
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "hstu",
       "seed": 0,
-      "epochs": 16,
-      "hours": 3.51,
-      "measured": false
+      "epochs": 12,
+      "hours": 2.57,
+      "measured": true,
+      "in_progress": false
     },
     {
       "model": "hstu",
       "seed": 1,
       "epochs": 16,
-      "hours": 3.51,
-      "measured": false
+      "hours": 3.48,
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "hstu",
       "seed": 2,
       "epochs": 16,
-      "hours": 3.51,
-      "measured": false
+      "hours": 3.48,
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "hstu-sid",
       "seed": 0,
       "epochs": 5,
       "hours": 0.79,
-      "measured": false
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "hstu-sid",
       "seed": 1,
       "epochs": 5,
       "hours": 0.79,
-      "measured": false
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "hstu-sid",
       "seed": 2,
       "epochs": 5,
       "hours": 0.79,
-      "measured": false
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "tiger",
       "seed": 0,
-      "epochs": 9,
-      "hours": 2.74,
-      "measured": false
+      "epochs": 19,
+      "hours": 4.81,
+      "measured": false,
+      "in_progress": true
     },
     {
       "model": "tiger",
       "seed": 1,
-      "epochs": 9,
-      "hours": 2.74,
-      "measured": false
+      "epochs": 19,
+      "hours": 4.81,
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "tiger",
       "seed": 2,
-      "epochs": 9,
-      "hours": 2.74,
-      "measured": false
+      "epochs": 19,
+      "hours": 4.81,
+      "measured": false,
+      "in_progress": false
     },
     {
       "model": "hstu-notime",
       "seed": 0,
       "epochs": 16,
-      "hours": 3.51,
-      "measured": false
+      "hours": 3.48,
+      "measured": false,
+      "in_progress": false
     }
   ],
   "hstu_sid_tuning_hours": 1.18,
   "tiger_eps_curve_hours": 0.11,
-  "measured_hours": 2.46,
-  "total_hours": 29.6,
+  "measured_hours": 5.03,
+  "total_hours": 35.0,
   "limit_hours": 60.0,
   "within_limit": true,
-  "bound_at_30_epochs_hours": 75.6
+  "bound_at_30_epochs_hours": 67.5
 }
