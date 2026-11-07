@@ -13,8 +13,14 @@ each run's selected configuration (256 x 4 or 64 x 2, the two sizes R4a measured
 - HSTU-SID = the HSTU-style model's cost at HSTU-SID's selected size, times HSTU-SID's mean dev epoch time
   over the HSTU-style model's for the same trial; before its tuning, the HSTU-style model's cost and epochs;
 - a run = epochs x epoch + one test evaluation, plus 1 minute of start-up for each process of at most an hour.
-Each R4b record that exists replaces its projected run by its measured wall time, so the same function
-re-projects the total as runs finish.
+Each R4b record that exists replaces its projected run by its measured wall time, and the measured runs also
+replace the estimates of the runs still to come:
+- epochs of an unfinished run = the most of: the dev estimate, the epochs any finished run of that model (for
+  the ablation, of the HSTU-style model) took, and, for a run in progress, its epochs so far plus the
+  patience; at most 30;
+- one epoch = the mean measured epoch (training and sample evaluation) of the finished runs of that model, or
+  the per-epoch wall time of the run in progress, else the R4a estimate.
+The bound charges every unfinished run 30 epochs at the same epoch time.
 
 **Summary.** Test metrics of each final run, mean and sample standard deviation over seeds; TIGER's cold-start
 retrieval at ε = 0.1 next to plain TIGER; the time ablation; HSTU-SID's tuning trials; the validation ε curve;
@@ -29,7 +35,8 @@ import math
 import statistics
 
 from sidrec.train import common
-from sidrec.train.scale_idrec import MAX_EPOCHS
+from sidrec.train.scale_idrec import CHECKPOINTS_R4B as CHECKPOINTS
+from sidrec.train.scale_idrec import MAX_EPOCHS, PATIENCE
 
 R4A = common.ROOT / "results" / "r4a"
 RESULTS = common.ROOT / "results" / "r4b"
@@ -92,16 +99,32 @@ def projection(cost_dir=R4A / "cost") -> dict:
         t = chosen["hstu-sid"]["trial"]
         ratio = mean(dev_trial("hstu-sid", t)) / mean(dev_trial("hstu", t))
         cost["hstu-sid"]["epoch_s"] *= ratio
-    runs, total, done = [], 0.0, 0.0
+    runs, total, done, cap_total = [], 0.0, 0.0, 0.0
     for model, seeds in FINAL.items():
         base = cost[model]
-        epochs = min(MAX_EPOCHS, chosen[model]["epochs_run"])
-        train_s = epochs * base["epoch_s"]
-        projected_s = train_s + base["test_s"] + STARTUP_S * math.ceil(train_s / 3600)
+        epochs = chosen[model]["epochs_run"]
+        same = "hstu" if model == "hstu-notime" else model
+        finished = [r for r in (record(same, s) for s in SEEDS) if r]
+        if finished:
+            epochs = max(epochs, *(r["epochs_run"] for r in finished))
+            base["epoch_s"] = statistics.mean(
+                h["train_s"] + h["eval_s"] for r in finished for h in r["history"]
+            )
+        for seed in seeds:
+            live = in_progress(same, seed)
+            if live and not finished:
+                epochs = max(epochs, live["epochs"] + PATIENCE)
+                base["epoch_s"] = live["epoch_s"]
+        epochs = min(MAX_EPOCHS, epochs)
         for seed in seeds:
             rec = record(model, seed)
-            hours = rec["wall_time_s"] / 3600 if rec else projected_s / 3600
-            done += hours if rec else 0.0
+            if rec:
+                hours = rec["wall_time_s"] / 3600
+                done += hours
+                cap_total += hours
+            else:
+                hours = run_hours(epochs, base)
+                cap_total += run_hours(MAX_EPOCHS, base)
             total += hours
             runs.append(
                 {
@@ -110,6 +133,7 @@ def projection(cost_dir=R4A / "cost") -> dict:
                     "epochs": rec["epochs_run"] if rec else epochs,
                     "hours": round(hours, 2),
                     "measured": rec is not None,
+                    "in_progress": bool(in_progress(model, seed)) and rec is None,
                 }
             )
     # HSTU-SID's 12 trials: measured once they exist, else the HSTU-style model's R4a tuning time.
@@ -123,7 +147,7 @@ def projection(cost_dir=R4A / "cost") -> dict:
     )
     total += tuning_h + eps_h
     return {
-        "basis": "R4a full-split cost at each selected size; epochs of the selected dev trial (docstring)",
+        "basis": "R4a cost and dev epochs, replaced by measured runs as they finish (module docstring)",
         "configs": {
             m: f"trial {r['trial']}, {r['config']['width']} x {r['config']['layers']}"
             for m, r in chosen.items()
@@ -138,15 +162,23 @@ def projection(cost_dir=R4A / "cost") -> dict:
         "total_hours": round(total, 1),
         "limit_hours": LIMIT_H,
         "within_limit": total <= LIMIT_H,
-        "bound_at_30_epochs_hours": round(bound_at_cap(cost) + tuning_h + eps_h, 1),
+        "bound_at_30_epochs_hours": round(cap_total + tuning_h + eps_h, 1),
     }
 
 
-def bound_at_cap(cost: dict) -> float:
-    return (
-        sum(len(seeds) * (MAX_EPOCHS * cost[m]["epoch_s"] + cost[m]["test_s"]) for m, seeds in FINAL.items())
-        / 3600
-    )
+def run_hours(epochs: int, base: dict) -> float:
+    train_s = epochs * base["epoch_s"]
+    return (train_s + base["test_s"] + STARTUP_S * math.ceil(train_s / 3600)) / 3600
+
+
+def in_progress(model: str, seed: int) -> dict | None:
+    """Epochs and per-epoch wall time of a final run that has paused at least once and is not finished."""
+    path = CHECKPOINTS / model / f"seed{seed}.processes.json"
+    if record(model, seed) or not path.exists():
+        return None
+    procs = load(path)
+    epochs = procs[-1]["epochs"][1]
+    return {"epochs": epochs, "epoch_s": sum(p["wall_time_s"] for p in procs) / epochs}
 
 
 def tuning_records() -> list[dict]:

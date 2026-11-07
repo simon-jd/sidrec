@@ -173,6 +173,7 @@ def test_projection_from_the_r4a_cost_table(monkeypatch, tmp_path):
     from sidrec.eval import r4b_summary
 
     monkeypatch.setattr(r4b_summary, "RESULTS", tmp_path)  # no R4b record yet
+    monkeypatch.setattr(r4b_summary, "CHECKPOINTS", tmp_path)  # and no run in progress
     p = r4b_summary.projection()
     cost = r4b_summary.load(r4b_summary.R4A / "cost" / "sasrec_full_trial01.json")
     epoch = cost["history"][0]["train_s"] + cost["history"][0]["eval_s"]
@@ -197,3 +198,25 @@ def test_summary_tables_report_mean_and_sample_std_and_leave_empty_parts_empty()
     assert t["warm"]["ndcg@10"]["values"] == [0.05, 0.1, 0.15] and t["all"]["ndcg@10"]["n"] == 3
     no_cold = table([result(0.1, cold=False)])["cold"]
     assert no_cold == {"recall@10": None, "recall@50": None, "ndcg@10": None}
+
+
+def test_projection_takes_measured_epochs_for_the_runs_still_to_come(monkeypatch, tmp_path):
+    import json
+
+    from sidrec.eval import r4b_summary
+
+    monkeypatch.setattr(r4b_summary, "RESULTS", tmp_path)
+    monkeypatch.setattr(r4b_summary, "CHECKPOINTS", tmp_path)
+    history = [{"train_s": 700.0, "eval_s": 20.0}] * 20
+    done = {"epochs_run": 20, "wall_time_s": 20 * 720.0 + 900.0, "history": history}
+    (tmp_path / "runs" / "tiger").mkdir(parents=True)
+    (tmp_path / "runs" / "tiger" / "seed0.json").write_text(json.dumps(done))
+    (tmp_path / "hstu").mkdir()
+    procs = [{"epochs": [1, 4], "wall_time_s": 4 * 900.0}, {"epochs": [5, 14], "wall_time_s": 10 * 900.0}]
+    (tmp_path / "hstu" / "seed0.processes.json").write_text(json.dumps(procs))
+    runs = {(r["model"], r["seed"]): r for r in r4b_summary.projection()["runs"]}
+    assert runs[("tiger", 0)]["measured"] and runs[("tiger", 1)]["epochs"] == 20
+    assert runs[("tiger", 1)]["hours"] > 20 * 720.0 / 3600
+    # HSTU seed 0 is in progress at 14 epochs: it and the seeds after it are charged 14 + 3 = 17 epochs.
+    assert runs[("hstu", 0)]["in_progress"] and runs[("hstu", 2)]["epochs"] == 17
+    assert runs[("hstu-notime", 0)]["epochs"] == 17
