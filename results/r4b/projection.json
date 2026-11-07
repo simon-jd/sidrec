@@ -98,24 +98,24 @@
     {
       "model": "tiger",
       "seed": 0,
-      "epochs": 19,
-      "hours": 4.81,
-      "measured": false,
-      "in_progress": true
+      "epochs": 20,
+      "hours": 4.97,
+      "measured": true,
+      "in_progress": false
     },
     {
       "model": "tiger",
       "seed": 1,
-      "epochs": 19,
-      "hours": 4.81,
+      "epochs": 20,
+      "hours": 5.04,
       "measured": false,
       "in_progress": false
     },
     {
       "model": "tiger",
       "seed": 2,
-      "epochs": 19,
-      "hours": 4.81,
+      "epochs": 20,
+      "hours": 5.04,
       "measured": false,
       "in_progress": false
     },
@@ -130,9 +130,9 @@
   ],
   "hstu_sid_tuning_hours": 1.18,
   "tiger_eps_curve_hours": 0.11,
-  "measured_hours": 5.03,
-  "total_hours": 35.0,
+  "measured_hours": 10.0,
+  "total_hours": 35.6,
   "limit_hours": 60.0,
   "within_limit": true,
-  "bound_at_30_epochs_hours": 67.5
+  "bound_at_30_epochs_hours": 65.0
 }
