@@ -10,8 +10,8 @@
   "epoch_hours": {
     "sasrec": 0.106,
     "hstu": 0.212,
-    "hstu-sid": 0.154,
-    "tiger": 0.236,
+    "hstu-sid": 0.155,
+    "tiger": 0.238,
     "hstu-notime": 0.212
   },
   "test_eval_hours": {
@@ -34,17 +34,17 @@
     {
       "model": "sasrec",
       "seed": 1,
-      "epochs": 12,
-      "hours": 1.31,
-      "measured": false,
+      "epochs": 11,
+      "hours": 1.18,
+      "measured": true,
       "in_progress": false
     },
     {
       "model": "sasrec",
       "seed": 2,
       "epochs": 12,
-      "hours": 1.31,
-      "measured": false,
+      "hours": 1.29,
+      "measured": true,
       "in_progress": false
     },
     {
@@ -58,17 +58,17 @@
     {
       "model": "hstu",
       "seed": 1,
-      "epochs": 16,
-      "hours": 3.48,
-      "measured": false,
+      "epochs": 12,
+      "hours": 2.57,
+      "measured": true,
       "in_progress": false
     },
     {
       "model": "hstu",
       "seed": 2,
-      "epochs": 16,
-      "hours": 3.48,
-      "measured": false,
+      "epochs": 11,
+      "hours": 2.35,
+      "measured": true,
       "in_progress": false
     },
     {
@@ -83,8 +83,8 @@
       "model": "hstu-sid",
       "seed": 1,
       "epochs": 5,
-      "hours": 0.8,
-      "measured": false,
+      "hours": 0.79,
+      "measured": true,
       "in_progress": false
     },
     {
@@ -106,16 +106,16 @@
     {
       "model": "tiger",
       "seed": 1,
-      "epochs": 20,
-      "hours": 5.04,
-      "measured": false,
+      "epochs": 17,
+      "hours": 4.33,
+      "measured": true,
       "in_progress": false
     },
     {
       "model": "tiger",
       "seed": 2,
       "epochs": 20,
-      "hours": 5.04,
+      "hours": 5.08,
       "measured": false,
       "in_progress": false
     },
@@ -130,9 +130,9 @@
   ],
   "hstu_sid_tuning_hours": 1.18,
   "tiger_eps_curve_hours": 0.11,
-  "measured_hours": 12.72,
-  "total_hours": 34.1,
+  "measured_hours": 25.23,
+  "total_hours": 31.2,
   "limit_hours": 60.0,
   "within_limit": true,
-  "bound_at_30_epochs_hours": 56.7
+  "bound_at_30_epochs_hours": 37.6
 }
