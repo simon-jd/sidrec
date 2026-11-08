@@ -23,6 +23,9 @@ A cascade recommender on public Amazon review data, built the way recent industr
   - A polars reference implementation is in `src/sidrec/data/electronics.py`.
   - A parity check, `src/sidrec/data/parity.py`, compares the two. The last run is in
     `results/r1/parity_electronics.json`.
+- **Cascade results (R4c):** [results/r4c/README.md](results/r4c/README.md). TIGER's beam and an HNSW search
+  over the item vectors retrieve 200 candidates for the HSTU-style ranker and HSTU-SID. Its numbers sit next
+  to the full-catalog ones of R4b ([results/r4b/README.md](results/r4b/README.md)).
 - **Beauty preprocessing:** `src/sidrec/data/beauty.py` builds the leave-one-out sequences. They are checked
   against the S3-Rec authors' processed file.
 
