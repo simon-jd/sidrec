@@ -1,0 +1,531 @@
+{
+  "split": "valid",
+  "rows": 100000,
+  "candidates": "R4c's selected union for TIGER seed 0 (saved lists)",
+  "checkpoint": {
+    "data/runs/r4b/hstu-sid/seed0.pt": "58ae473f7ae2b813ea9e1b594689fcc85be853b5b6cccd0d2d89b7283c5a063c",
+    "data/runs/r4b/tiger/seed0.pt": "afec4188c7f1f35a86d7bcfc5b1ba5f30a79def2b315c325a581a3b164b5216e"
+  },
+  "index": {
+    "sha256": "cb214e2e922285e36457a57ef4fdbadcd1bd62d34aeea2a0563d4b38ee5abca5",
+    "efSearch": 512,
+    "omp_threads": 16
+  },
+  "features": {
+    "ranker_items": true,
+    "ranker_input_ts": true,
+    "ranker_query_ts": true,
+    "target": true,
+    "tiger_encoder": true,
+    "history_mask": true,
+    "ann_window": true,
+    "rows_checked": 4096
+  },
+  "reference": "fp32",
+  "keep_rule": {
+    "top10_overlap_min": 0.95,
+    "ndcg@10_change_max_relative": 0.01
+  },
+  "keeps": {
+    "fp32": true,
+    "bf16": true,
+    "graphs": true,
+    "cache-miss": true,
+    "cache-hit": true,
+    "batching-miss": true,
+    "batching-hit": true
+  },
+  "steps": {
+    "fp32": {
+      "config": {
+        "name": "fp32",
+        "dtype": "fp32",
+        "graphs": false,
+        "cache": null,
+        "batching": false
+      },
+      "batch": 1,
+      "top10_overlap": 1.0,
+      "top10_identical_rows": 1.0,
+      "ndcg@10_change": 0.0,
+      "ndcg@10_change_relative": 0.0,
+      "rows_target_rank_changed": 0,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02823,
+          "ndcg@10": 0.014972725796969696,
+          "recall@50": 0.06662,
+          "ndcg@50": 0.023316127731748466,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03353076041268628,
+          "ndcg@10": 0.017784748033236958,
+          "recall@50": 0.07878773404661826,
+          "ndcg@50": 0.027622655676853777,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011307268806842964,
+          "users": 16256
+        }
+      },
+      "seconds": 76.0
+    },
+    "bf16": {
+      "config": {
+        "name": "bf16",
+        "dtype": "bf16",
+        "graphs": false,
+        "cache": null,
+        "batching": false
+      },
+      "batch": 1,
+      "top10_overlap": 0.9937450000000001,
+      "top10_identical_rows": 0.69712,
+      "ndcg@10_change": -4.4563767880000105e-06,
+      "ndcg@10_change_relative": -0.00029763296599620684,
+      "rows_target_rank_changed": 2406,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02815,
+          "ndcg@10": 0.014968269420181696,
+          "recall@50": 0.06662,
+          "ndcg@50": 0.02333428188247406,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03343523118074131,
+          "ndcg@10": 0.017779426605089275,
+          "recall@50": 0.07878773404661826,
+          "ndcg@50": 0.02764427230599409,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011310438148521716,
+          "users": 16256
+        }
+      },
+      "seconds": 76.3
+    },
+    "graphs": {
+      "config": {
+        "name": "graphs",
+        "dtype": "bf16",
+        "graphs": true,
+        "cache": null,
+        "batching": false
+      },
+      "batch": 1,
+      "top10_overlap": 0.9937450000000001,
+      "top10_identical_rows": 0.69712,
+      "ndcg@10_change": -4.4563767880000105e-06,
+      "ndcg@10_change_relative": -0.00029763296599620684,
+      "rows_target_rank_changed": 2406,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02815,
+          "ndcg@10": 0.014968269420181696,
+          "recall@50": 0.06662,
+          "ndcg@50": 0.02333428188247406,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03343523118074131,
+          "ndcg@10": 0.017779426605089275,
+          "recall@50": 0.07878773404661826,
+          "ndcg@50": 0.02764427230599409,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011310438148521716,
+          "users": 16256
+        }
+      },
+      "seconds": 15.2
+    },
+    "cache-miss": {
+      "config": {
+        "name": "cache-miss",
+        "dtype": "bf16",
+        "graphs": true,
+        "cache": "miss",
+        "batching": false
+      },
+      "batch": 1,
+      "top10_overlap": 0.9937450000000001,
+      "top10_identical_rows": 0.69712,
+      "ndcg@10_change": -4.4563767880000105e-06,
+      "ndcg@10_change_relative": -0.00029763296599620684,
+      "rows_target_rank_changed": 2406,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02815,
+          "ndcg@10": 0.014968269420181696,
+          "recall@50": 0.06662,
+          "ndcg@50": 0.02333428188247406,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03343523118074131,
+          "ndcg@10": 0.017779426605089275,
+          "recall@50": 0.07878773404661826,
+          "ndcg@50": 0.02764427230599409,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011310438148521716,
+          "users": 16256
+        }
+      },
+      "seconds": 16.5
+    },
+    "cache-hit": {
+      "config": {
+        "name": "cache-hit",
+        "dtype": "bf16",
+        "graphs": true,
+        "cache": "hit",
+        "batching": false
+      },
+      "batch": 1,
+      "top10_overlap": 0.9938100000000002,
+      "top10_identical_rows": 0.69767,
+      "ndcg@10_change": -2.684415860577938e-06,
+      "ndcg@10_change_relative": -0.0001792870514680254,
+      "rows_target_rank_changed": 2438,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02818,
+          "ndcg@10": 0.014970041381109118,
+          "recall@50": 0.06656,
+          "ndcg@50": 0.023316929285051084,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.033471054642720675,
+          "ndcg@10": 0.017781542530919684,
+          "recall@50": 0.07871608712265954,
+          "ndcg@50": 0.027623446000598698,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011315862838934209,
+          "users": 16256
+        }
+      },
+      "seconds": 14.3
+    },
+    "batching-miss": {
+      "config": {
+        "name": "batching-miss",
+        "dtype": "bf16",
+        "graphs": true,
+        "cache": "miss",
+        "batching": true
+      },
+      "batch": 1024,
+      "top10_overlap": 0.993809,
+      "top10_identical_rows": 0.69767,
+      "ndcg@10_change": -2.3779596593134084e-06,
+      "ndcg@10_change_relative": -0.0001588194221652466,
+      "rows_target_rank_changed": 2437,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02818,
+          "ndcg@10": 0.014970347837310383,
+          "recall@50": 0.06657,
+          "ndcg@50": 0.023318998655596238,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.033471054642720675,
+          "ndcg@10": 0.01778190847498883,
+          "recall@50": 0.07872802827665265,
+          "ndcg@50": 0.027625917067833544,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011315862838934209,
+          "users": 16256
+        }
+      },
+      "seconds": 0.2
+    },
+    "batching-hit": {
+      "config": {
+        "name": "batching-hit",
+        "dtype": "bf16",
+        "graphs": true,
+        "cache": "hit",
+        "batching": true
+      },
+      "batch": 1024,
+      "top10_overlap": 0.993809,
+      "top10_identical_rows": 0.69768,
+      "ndcg@10_change": -2.3779596593134084e-06,
+      "ndcg@10_change_relative": -0.0001588194221652466,
+      "rows_target_rank_changed": 2437,
+      "keeps_quality": true,
+      "metrics": {
+        "all": {
+          "recall@10": 0.02818,
+          "ndcg@10": 0.014970347837310383,
+          "recall@50": 0.06657,
+          "ndcg@50": 0.023318998655596238,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.033471054642720675,
+          "ndcg@10": 0.01778190847498883,
+          "recall@50": 0.07872802827665265,
+          "ndcg@50": 0.027625917067833544,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.000486382898718859,
+          "recall@50": 0.003937007874015748,
+          "ndcg@50": 0.0011315862838934209,
+          "users": 16256
+        }
+      },
+      "seconds": 0.1
+    }
+  },
+  "fp32_against_r4c_record": {
+    "r4c": 0.01497468895668675,
+    "fp32": 0.014972725796969696,
+    "difference": -1.9631597170544773e-06
+  },
+  "serving_check": {
+    "rows": 2000,
+    "batch": 1,
+    "ann_equal_to_r4c": true,
+    "tiger_lists_identical_share": 0.0,
+    "tiger_lists_overlap": 0.9739099740982056,
+    "union_identical_share": 0.0,
+    "top10_overlap_with_ranker_alone": 0.9853000000000001
+  },
+  "wall_time_s": 228.9,
+  "peak_memory_gb": 2.91,
+  "background": {
+    "load_samples": 113,
+    "gpu_samples": 23,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 2.8,
+      "median": 3.64,
+      "max": 5.02
+    },
+    "load5": {
+      "min": 3.26,
+      "median": 3.53,
+      "max": 3.72
+    },
+    "load15": {
+      "min": 2.67,
+      "median": 2.83,
+      "max": 2.9
+    },
+    "running_tasks": {
+      "max": 19
+    },
+    "clocks.sm": {
+      "min": 2520.0,
+      "median": 2520.0,
+      "max": 2805.0
+    },
+    "clocks.mem": {
+      "min": 10251.0,
+      "median": 10251.0,
+      "max": 10501.0
+    },
+    "power.draw": {
+      "min": 63.48,
+      "median": 69.13,
+      "max": 148.97
+    },
+    "temperature.gpu": {
+      "min": 46.0,
+      "median": 49.0,
+      "max": 56.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 28.0,
+      "max": 78.0
+    },
+    "memory.used": {
+      "min": 420.0,
+      "median": 2404.0,
+      "max": 4028.0
+    },
+    "pstate": [
+      "P2",
+      "P3"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 1405171,
+        "cpu_pct": 76.5,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 13.7,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 1408694,
+        "cpu_pct": 7.8,
+        "mem_pct": 0.4,
+        "command": "qemu-system-x86"
+      },
+      {
+        "pid": 15528,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.2,
+        "command": "kube-apiserver"
+      },
+      {
+        "pid": 1409075,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.0,
+        "command": "top"
+      },
+      {
+        "pid": 14522,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 15247,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "kubelet"
+      },
+      {
+        "pid": 15507,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "etcd"
+      },
+      {
+        "pid": 17638,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "containerd-shim"
+      },
+      {
+        "pid": 17831,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "containerd-shim"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 1418900,
+        "cpu_pct": 59.6,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 1421934,
+        "cpu_pct": 28.8,
+        "mem_pct": 0.1,
+        "command": "terraform"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 15.4,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 1306,
+        "cpu_pct": 13.5,
+        "mem_pct": 0.0,
+        "command": "irq/211-iwlwifi:queue_1"
+      },
+      {
+        "pid": 1414203,
+        "cpu_pct": 7.7,
+        "mem_pct": 0.0,
+        "command": "kworker/u129:2-rb_allocator"
+      },
+      {
+        "pid": 11018,
+        "cpu_pct": 5.8,
+        "mem_pct": 0.1,
+        "command": "dockerd"
+      },
+      {
+        "pid": 15528,
+        "cpu_pct": 5.8,
+        "mem_pct": 0.2,
+        "command": "kube-apiserver"
+      },
+      {
+        "pid": 1412082,
+        "cpu_pct": 5.8,
+        "mem_pct": 0.1,
+        "command": "dotnet"
+      },
+      {
+        "pid": 7027,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 1419785,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.1,
+        "command": "k6"
+      }
+    ],
+    "sidecar_log": "data/logs/r5/quality_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "4aeea6f1b2ca646ee95ffb78f4867b2bc72078a5",
+    "dirty": false,
+    "src_tree": "2ae914dcc76f2bec682273800dcabb6d8da06a1a"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c and R5 clarifications"
+}

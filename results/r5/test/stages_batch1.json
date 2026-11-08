@@ -1,0 +1,386 @@
+{
+  "split": "test",
+  "requests": 2200,
+  "ranker": {
+    "name": "batching-miss",
+    "dtype": "bf16",
+    "graphs": true,
+    "cache": "miss",
+    "batching": true
+  },
+  "checkpoint": {
+    "data/runs/r4b/tiger/seed0.pt": "afec4188c7f1f35a86d7bcfc5b1ba5f30a79def2b315c325a581a3b164b5216e",
+    "data/runs/r4b/hstu-sid/seed0.pt": "58ae473f7ae2b813ea9e1b594689fcc85be853b5b6cccd0d2d89b7283c5a063c"
+  },
+  "index": {
+    "sha256": "cb214e2e922285e36457a57ef4fdbadcd1bd62d34aeea2a0563d4b38ee5abca5",
+    "efSearch": 512,
+    "omp_threads": 16
+  },
+  "batch1": {
+    "beam_w20": {
+      "p50_ms": 8.182374000170967,
+      "p90_ms": 8.696626499659033,
+      "p99_ms": 9.520018860785058,
+      "p999_ms": 22.152756506733446,
+      "mean_ms": 8.329529452563293,
+      "max_ms": 43.39004899884458,
+      "n": 2000,
+      "warm": 200
+    },
+    "beam_w50": {
+      "p50_ms": 8.19684949965449,
+      "p90_ms": 8.532091900269734,
+      "p99_ms": 9.575076010623887,
+      "p999_ms": 24.640278888080445,
+      "mean_ms": 8.274277926986542,
+      "max_ms": 33.16098600043915,
+      "n": 2000,
+      "warm": 200
+    },
+    "beam_w200": {
+      "p50_ms": 8.37754100211896,
+      "p90_ms": 8.63922120006464,
+      "p99_ms": 8.96312526325346,
+      "p999_ms": 9.348307459669732,
+      "mean_ms": 8.416444598460657,
+      "max_ms": 9.87203000113368,
+      "n": 2000,
+      "warm": 200
+    },
+    "hnsw": {
+      "p50_ms": 1.037571499182377,
+      "p90_ms": 1.3650026994582736,
+      "p99_ms": 1.6633959817045252,
+      "p999_ms": 2.0035252748130006,
+      "mean_ms": 1.0664184415163618,
+      "max_ms": 2.082889997836901,
+      "n": 2000,
+      "warm": 200
+    },
+    "union": {
+      "p50_ms": 0.09350199979962781,
+      "p90_ms": 0.09616780116630252,
+      "p99_ms": 0.1006211391359102,
+      "p999_ms": 0.12074649752321362,
+      "mean_ms": 0.0939228795505187,
+      "max_ms": 0.29567599995061755,
+      "n": 2000,
+      "warm": 200
+    },
+    "ranker": {
+      "p50_ms": 0.15575699944747612,
+      "p90_ms": 0.15844699773879256,
+      "p99_ms": 0.16260169162706006,
+      "p999_ms": 0.1697237015250719,
+      "mean_ms": 0.1562702509763767,
+      "max_ms": 0.18152600023313425,
+      "n": 2000,
+      "warm": 200
+    },
+    "cascade_w20": {
+      "p50_ms": 10.06276949919993,
+      "p90_ms": 10.781196601237752,
+      "p99_ms": 14.095978499717603,
+      "p999_ms": 32.134638213454295,
+      "mean_ms": 10.312788545521471,
+      "max_ms": 33.69306099921232,
+      "n": 2000,
+      "warm": 200,
+      "stages_ms": {
+        "beam_ms": {
+          "p50": 8.348688125610352,
+          "p99": 11.560245466232297
+        },
+        "hnsw_ms": {
+          "p50": 1.249305500095943,
+          "p99": 2.0707188601591042
+        },
+        "union_ms": {
+          "p50": 0.16100800037384033,
+          "p99": 0.26301983833312986
+        },
+        "ranker_ms": {
+          "p50": 0.17715199291706085,
+          "p99": 0.20585152253508565
+        },
+        "batch_ms": {
+          "p50": 10.043637999842758,
+          "p99": 14.059419299956062
+        }
+      }
+    },
+    "cascade_w50": {
+      "p50_ms": 10.168189999603783,
+      "p90_ms": 11.094381701695966,
+      "p99_ms": 13.027752089001297,
+      "p999_ms": 22.006787219721197,
+      "mean_ms": 10.38447679453202,
+      "max_ms": 56.12857099913526,
+      "n": 2000,
+      "warm": 200,
+      "stages_ms": {
+        "beam_ms": {
+          "p50": 8.42406415939331,
+          "p99": 10.816795949935912
+        },
+        "hnsw_ms": {
+          "p50": 1.2553365013445728,
+          "p99": 1.967861889861524
+        },
+        "union_ms": {
+          "p50": 0.16179199516773224,
+          "p99": 0.25397023648023603
+        },
+        "ranker_ms": {
+          "p50": 0.1780960038304329,
+          "p99": 0.20378240197896957
+        },
+        "batch_ms": {
+          "p50": 10.149498999453499,
+          "p99": 13.000780850779847
+        }
+      }
+    },
+    "cascade_w200": {
+      "p50_ms": 10.264857502988889,
+      "p90_ms": 10.966845800066949,
+      "p99_ms": 12.599354181256784,
+      "p999_ms": 23.65228208068578,
+      "mean_ms": 10.410993388491988,
+      "max_ms": 35.538250998797594,
+      "n": 2000,
+      "warm": 200,
+      "stages_ms": {
+        "beam_ms": {
+          "p50": 8.565055847167969,
+          "p99": 10.641761579513549
+        },
+        "hnsw_ms": {
+          "p50": 1.2334900002315408,
+          "p99": 1.904664619905816
+        },
+        "union_ms": {
+          "p50": 0.1587039977312088,
+          "p99": 0.2090576048195362
+        },
+        "ranker_ms": {
+          "p50": 0.1669120043516159,
+          "p99": 0.18534399569034576
+        },
+        "batch_ms": {
+          "p50": 10.245001498333295,
+          "p99": 12.579694919513711
+        }
+      }
+    }
+  },
+  "raw": {
+    "beam_w20": "data/runs/r5/raw/stages/beam_w20.npz",
+    "beam_w50": "data/runs/r5/raw/stages/beam_w50.npz",
+    "beam_w200": "data/runs/r5/raw/stages/beam_w200.npz",
+    "hnsw": "data/runs/r5/raw/stages/hnsw.npz",
+    "union": "data/runs/r5/raw/stages/union.npz",
+    "ranker": "data/runs/r5/raw/stages/ranker.npz",
+    "cascade_w20": "data/runs/r5/raw/stages/cascade_w20.npz",
+    "cascade_w50": "data/runs/r5/raw/stages/cascade_w50.npz",
+    "cascade_w200": "data/runs/r5/raw/stages/cascade_w200.npz"
+  },
+  "wall_time_s": 133.9,
+  "peak_memory_gb": 4.2,
+  "background": {
+    "load_samples": 66,
+    "gpu_samples": 14,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 5.37,
+      "median": 8.48,
+      "max": 17.25
+    },
+    "load5": {
+      "min": 7.75,
+      "median": 8.72,
+      "max": 9.85
+    },
+    "load15": {
+      "min": 5.63,
+      "median": 5.77,
+      "max": 5.89
+    },
+    "running_tasks": {
+      "max": 14
+    },
+    "clocks.sm": {
+      "min": 2520.0,
+      "median": 2730.0,
+      "max": 2790.0
+    },
+    "clocks.mem": {
+      "min": 10251.0,
+      "median": 10251.0,
+      "max": 10501.0
+    },
+    "power.draw": {
+      "min": 66.51,
+      "median": 97.265,
+      "max": 168.37
+    },
+    "temperature.gpu": {
+      "min": 48.0,
+      "median": 50.5,
+      "max": 54.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 41.0,
+      "max": 56.0
+    },
+    "memory.used": {
+      "min": 464.0,
+      "median": 3121.0,
+      "max": 5234.0
+    },
+    "pstate": [
+      "P2",
+      "P3"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 1534019,
+        "cpu_pct": 151.0,
+        "mem_pct": 0.1,
+        "command": "qemu-system-x86"
+      },
+      {
+        "pid": 1552501,
+        "cpu_pct": 143.1,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 1553927,
+        "cpu_pct": 68.6,
+        "mem_pct": 0.0,
+        "command": "airflow"
+      },
+      {
+        "pid": 1552068,
+        "cpu_pct": 15.7,
+        "mem_pct": 0.1,
+        "command": "dotnet"
+      },
+      {
+        "pid": 1553612,
+        "cpu_pct": 9.8,
+        "mem_pct": 0.1,
+        "command": "td-replay"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 7.8,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 7027,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 8280,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 18452,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "java"
+      },
+      {
+        "pid": 7349,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 1534019,
+        "cpu_pct": 151.0,
+        "mem_pct": 0.1,
+        "command": "qemu-system-x86"
+      },
+      {
+        "pid": 27387,
+        "cpu_pct": 33.3,
+        "mem_pct": 0.1,
+        "command": "localsearch-3"
+      },
+      {
+        "pid": 1563590,
+        "cpu_pct": 31.4,
+        "mem_pct": 0.1,
+        "command": "python3"
+      },
+      {
+        "pid": 1552501,
+        "cpu_pct": 15.7,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 11018,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "dockerd"
+      },
+      {
+        "pid": 1534014,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "python3"
+      },
+      {
+        "pid": 7027,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 7351,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      },
+      {
+        "pid": 12844,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.0,
+        "command": "python"
+      }
+    ],
+    "sidecar_log": "data/logs/r5/stages_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "4aeea6f1b2ca646ee95ffb78f4867b2bc72078a5",
+    "dirty": false,
+    "src_tree": "2ae914dcc76f2bec682273800dcabb6d8da06a1a"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c and R5 clarifications"
+}
