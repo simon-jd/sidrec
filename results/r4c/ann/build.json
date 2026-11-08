@@ -1,0 +1,24 @@
+{
+  "index": "IndexHNSWFlat, inner product",
+  "M": 32,
+  "efConstruction": 200,
+  "items": 368228,
+  "dim": 1024,
+  "vectors": {
+    "path": "data/processed/electronics/emb/vllm.npy",
+    "sha256": "fbb7496582c3a5dd66e63140a4cc280c2648e68d7c419a539ff51f32a1a9a8f9"
+  },
+  "path": "data/runs/r4c/hnsw.faiss",
+  "sha256": "cb214e2e922285e36457a57ef4fdbadcd1bd62d34aeea2a0563d4b38ee5abca5",
+  "bytes": 1608470546,
+  "build_seconds": 64.2,
+  "threads": 24,
+  "faiss": "1.15.1",
+  "note": "multi-threaded build, not bit-reproducible; every R4c result uses this saved index",
+  "git": {
+    "commit": "3281e2f48cd029bc766a3bddb62f564dde4af1f4",
+    "dirty": false,
+    "src_tree": "a235dff373e45e19fa8cf5b80f7015d144abc70f"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b and R4c clarifications"
+}
