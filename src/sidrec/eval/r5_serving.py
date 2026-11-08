@@ -321,6 +321,15 @@ def cmd_projection(_args) -> None:
     print(record["projected_gpu_hours"], record["worst_case_gpu_hours"], record["measured"])
 
 
+def shared_items(a: torch.Tensor, b: torch.Tensor, chunk: int = 8192) -> float:
+    """Mean over rows of how many items of ``a`` are in ``b`` (empty slots excluded), on the GPU."""
+    total = 0
+    for s in range(0, len(a), chunk):
+        x, y = a[s : s + chunk].cuda(), b[s : s + chunk].cuda()
+        total += int(((x[:, :, None] == y[:, None, :]).any(-1) & (x >= 0)).sum())
+    return total / len(a)
+
+
 def cmd_beam_valid(_args) -> None:
     """TIGER seed 0 at widths 20 and 50 over the validation sample; union recall@200 and HSTU-SID's NDCG@10 on
     the union at widths 20, 50 and 200 (R4c's saved lists)."""
@@ -367,7 +376,7 @@ def cmd_beam_valid(_args) -> None:
             widths[str(w)] = {
                 "tiger_alone_recall@w": cascade.recall_split(cascade.hits(lists[w], target), cold_c),
                 "union_recall@200": cascade.recall_split(cascade.hits(u, target), cold_c),
-                "tiger_items_in_union": float((u[:, :, None] == lists[w][:, None, :]).any(-1).sum(1).double().mean()),
+                "tiger_items_in_union": shared_items(u, lists[w]),
                 "hstu_sid": split_metrics(ranks.cpu(), cold_c),
                 "beam_seconds_chunk128": seconds.get(w),
                 "lists": str((RUNS / f"tiger_valid_w{w}.npz").relative_to(common.ROOT))

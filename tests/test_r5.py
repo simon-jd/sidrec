@@ -247,3 +247,22 @@ def test_the_sidecar_lines_are_summarized():
     assert s["load1"]["max"] == 7.1 and s["running_tasks"]["max"] == 9
     assert s["clocks.sm"]["median"] == 2520 and s["pstate"] == ["P2"]
     assert s["other_gpu_processes"] == ["other (100 MiB)"]
+
+
+def test_the_summary_reads_the_confirmed_runs():
+    from sidrec.eval import r5_summary
+
+    stage = {k: {"p50": 1.0, "p99": 2.0, "mean": 1.0, "share": s} for k, s in
+             (("beam_ms", 0.7), ("hnsw_ms", 0.2), ("union_ms", 0.01), ("ranker_ms", 0.05), ("batch_ms", 1.0))}
+    run = {"pass": True, "p50_ms": 9.0, "p99_ms": 30.0, "mean_batch": 2.0, "stages": stage,
+           "wait": {"p50_ms": 1.0, "p99_ms": 12.0}}
+    rec = {
+        "qps_at_slo": 95.0,
+        "confirmation": [{"rate": 100.0, "runs": [run | {"pass": False}] * 3}, {"rate": 95.0, "runs": [run] * 3}],
+        "at_slo": {"p50_ms": [9.0] * 3, "p99_ms": [30.0, 31.0, 29.0], "p50_ms_median": 9.0, "p99_ms_median": 30.0,
+                   "mean_batch": [2.0] * 3},
+    }
+    assert r5_summary.at_slo(rec)["confirmation_attempts"] == 2
+    assert r5_summary.at_slo({"qps_at_slo": None}) == {"qps_at_slo": None}
+    load = r5_summary.under_load(rec)
+    assert load["dominant"] == "beam_ms" and load["wait_p99_ms"] == 12.0
