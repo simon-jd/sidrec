@@ -498,3 +498,113 @@ open; R4b fixes them here, and every R4b run uses them. Nothing above changes.
 - Before the long runs, the total is projected from R4a's cost table. It is projected again after each final
   run, with the measured times.
 - R4b stops and reports options if the projection passes 60 GPU-hours.
+
+### 2026-11-07: R4c two-stage cascade, written before any R4c measurement
+R4c puts a retrieval stage in front of the R4b rankers: TIGER's beam and an approximate nearest-neighbour (ANN)
+search over the item vectors retrieve 200 candidates, and a ranker re-ranks them. Nothing is trained. Section 2
+fixed the cascade's counts (a width-50 beam, 150 ANN items, filled from the ANN list up to 200) but not the ANN
+retriever. This entry replaces those counts with a split chosen on validation from a small grid, in which
+section 2's counts are one point. Everything else in section 2 and the entries above stays.
+
+**Inputs, all read-only**
+- **Checkpoints:** the R4b final runs of TIGER, the HSTU-style model and HSTU-SID, seeds 0, 1 and 2, checked
+  against `results/r4b/SHA256SUMS` before use.
+- **Item vectors:** R3's vLLM Qwen3-Embedding-0.6B vectors (`data/processed/electronics/emb/vllm.npy`, checked
+  against `results/r3/SHA256SUMS`). They are the vectors behind the semantic IDs. Every one of the 368,228
+  catalog items has one, including the 38,783 items outside the train split, and all have unit length.
+- **Rows:** the protocol's 100,000-row validation sample for every choice below; all 1,199,539 eligible test
+  rows for the test pass. Section 2's optional 200,000-row test sample is not used.
+- **History mask:** every source and ranker removes the 50 most recent earlier items, as in R4a and R4b.
+
+**TIGER beam source**
+- **Beam:** width 200, constrained to the catalog's semantic IDs, with the history removed at the fourth level,
+  as in the R4a entry. It yields up to 200 items, ranked by the sum of their four tokens' log-probabilities.
+  Empty slots are skipped wherever the list is used.
+- **Why 200:** TIGER's recall@100 and @200 need that many items. The top 50 of a width-200 beam can differ from
+  R4b's width-50 beam, so R4b's TIGER numbers are not reused for this source. They stay as R4b reported them.
+- **Cold items inside the source,** chosen on validation with the union below, between two options:
+  - off: the plain beam;
+  - on: R4b's cold-start rule (paper section 4.3) over the 200-item list, at the paper's ε = 0.1. Unseen items
+    sharing (c1, c2, c3) with any of the 200 beam items are the candidates, ordered by their own full-ID score.
+    They are placed by R4b's rule, so when the beam itself returns no unseen item they take positions 10, 20,
+    ..., 200. ε itself is not tuned.
+
+**ANN source**
+- **Index:** FAISS `IndexHNSWFlat` over all 368,228 item vectors, inner product, M = 32, efConstruction = 200.
+  It is built once, saved under `data/runs/r4c/` and checksummed. The build is multi-threaded and therefore not
+  bit-reproducible; the saved index is the one every result uses.
+- **Search:** efSearch = 512 and k = 250. The history items are removed and the first 200 remaining items, in
+  the index's order, are the ANN list.
+- **Query:** q = sum over j < min(n, h) of γ^j v(x_j), normalized to unit length. Here x_0 is the most recent of
+  the h items in the row's 50-item input, x_1 the one before, and v the item vector.
+- **Grid for n and γ:** n in {1, 2, 3, 5, 10, 20, 50} and γ in {1.0, 0.8, 0.6, 0.4}, where γ = 1.0 is the plain
+  mean. With n = 1 the weights do not matter, so it counts once: 22 queries.
+- **Selection:** the highest ANN recall@200 over all rows of the validation sample. Ties go to the smaller n,
+  then the larger γ.
+- **Recall against exact search,** reported on the validation sample for the selected query:
+  - exact search is the same query scored against every item by an exact inner product (FAISS
+    `IndexFlatIP`), with the same history removal, top 200;
+  - the recall is |ANN list ∩ exact list| / 200, averaged over rows. The target recall@50, @100 and @200 of
+    both lists is reported too.
+- **Fallback:** if that recall is below 0.95, efSearch becomes 1024, then 2048, and the selection is repeated at
+  the new value. This happens before the union is selected.
+
+**Union of the two sources**
+- **Rule at a budget of K candidates,** with a TIGER share s and a backfill source b:
+  - take TIGER's first round(s K) items (halves round up) and ANN's first K - round(s K) items;
+  - remove duplicates;
+  - fill up to K with the next items of source b that are not yet in the set, then with the other source's.
+- **Grid,** at K = 200:
+  - TIGER items 200 s in {25, 50, 75, 100, 125, 150, 175};
+  - backfill from the ANN list or from TIGER's list;
+  - TIGER's cold-start rule off or on.
+  That is 28 points. Section 2's setting is (50, ANN, off).
+- **Selection:** the highest union recall@200 over all rows of the validation sample, averaged over the three
+  TIGER checkpoints. The ANN list is the same for all three. Exact ties go to the first point in this order:
+  rule off before on, then the smaller TIGER share, then ANN backfill before TIGER backfill.
+- **Budgets 50 and 100** use the selected s, b and rule. They are retrieval numbers only. The rankers always
+  get the K = 200 set.
+
+**Pairing**
+- TIGER seed s goes with ranker seed s, for the HSTU-style model and for HSTU-SID.
+- The ANN list does not depend on a seed.
+
+**Re-ranking**
+- **Scores:** each ranker reads its usual 50-item input and scores the union's candidates with its R4b scoring
+  table:
+  - HSTU-style: the L2-normalized item-ID table divided by the temperature;
+  - HSTU-SID: the summed embedding of every catalog item, normalized the same way.
+- **HSTU-style and items outside the train split:** they have no ID row. As in R4a and R4b, they rank below
+  every train candidate, and a target outside the train split is a miss. Its cold metrics are therefore 0 by
+  construction.
+- **HSTU-SID** scores every candidate, cold candidates included.
+- **Rank:** the target's rank among the candidates is 1 + the number of candidates scored higher + the number
+  scored equal with a lower catalog index. A target outside the 200 candidates is a miss.
+- **Metrics:** Recall@10, Recall@50 and NDCG@10 over all rows, warm rows and cold rows.
+- **Comparison:** against the same model's R4b full-catalog test numbers. Those are read from the R4b records
+  and not recomputed.
+
+**What the test split is used for**
+- For each seed, one test pass:
+  - TIGER's width-200 beam;
+  - the selected union, built from that beam and the ANN list;
+  - both rankers on that union.
+- **Reported on test:**
+  - recall@50, @100 and @200 of TIGER alone (the selected source), ANN alone and the union, over all, warm and
+    cold rows;
+  - if the rule is on, the plain beam's recall from the same pass as well;
+  - the re-ranked metrics above.
+- No other grid point is evaluated on test, and nothing is selected on test.
+
+**Checks and analysis on validation (nothing selected from them)**
+- Each ranker checkpoint's full-catalog NDCG@10 on the validation sample is recomputed and compared with the
+  best-epoch value in its R4b record.
+- The rankers also re-rank the selected union on validation.
+
+**Reporting and the GPU-hour stop**
+- Numbers are mean ± sample standard deviation over seeds 0, 1 and 2. Section 2's rule for calling a difference
+  applies.
+- One validation pass is timed before the test passes, and the total is projected from it.
+- R4c stops and reports if the projection passes 8 GPU-hours. A GPU-hour is an hour of wall time holding the
+  RTX 4090 lock. CPU-only steps (the index build and the ANN searches) are reported separately.
+- R4c changes no R4b record or checkpoint.
