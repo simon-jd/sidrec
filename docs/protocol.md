@@ -608,3 +608,152 @@ section 2's counts are one point. Everything else in section 2 and the entries a
 - R4c stops and reports if the projection passes 8 GPU-hours. A GPU-hour is an hour of wall time holding the
   RTX 4090 lock. CPU-only steps (the index build and the ANN searches) are reported separately.
 - R4c changes no R4b record or checkpoint.
+
+### 2026-11-07: R5 serving benchmark, written before any R5 measurement
+R5 measures how fast the R4c cascade serves on the RTX 4090 workstation. Nothing is trained and no model
+changes. The test split only supplies request histories for timing: no metric is computed on it and nothing is
+chosen from it. Every choice below that is not fixed here is made on validation rows.
+
+**What is served**
+- **Models:** TIGER seed 0 and HSTU-SID seed 0, the R4b final runs, checked against `results/r4b/SHA256SUMS`;
+  the R4c HNSW index, checked against `results/r4c/ann/build.json`.
+- **Cascade:** R4c's selection. TIGER's beam (R4c's beam code unchanged: constrained, history removed, no
+  cold-start rule, bf16 autocast) and the HNSW search (query: the newest item's vector; efSearch 512, k 250, history removed, 200 kept)
+  feed the union (TIGER's first 175 items, ANN's first 25, duplicates removed, filled from TIGER's list, then
+  from ANN's). HSTU-SID scores the 200 candidates.
+- **Request:** one user history: the user's hashed token, the 50 most recent items before the target with
+  their timestamps, and the request time, which is the target's timestamp (the time HSTU's bias reads). The
+  server derives every model input from it on the GPU: the ranker's 50-item window and query times, TIGER's
+  20-item encoder input, the 50-item history mask and the ANN query.
+- **Response:** the top 10 of the re-ranked candidates, as catalog indices in host memory.
+
+**Server**
+- In-process: one Python thread, one CUDA stream, no network layer and no serialization.
+- **One batch of the cascade:**
+  1. the requests are gathered into pinned host buffers and copied to the GPU;
+  2. TIGER's beam is launched;
+  3. while the GPU runs it, the HNSW search runs on the CPU, and its lists are copied to the GPU;
+  4. the union, then the ranker, run on the GPU;
+  5. the top 10 is copied to the host.
+- **CPU threads:** 16 OpenMP threads, shared by faiss and torch.
+- **TF32** is off throughout R5.
+- **Python's garbage collector** keeps its default settings.
+
+**SLO:** p99 latency at most 50 ms. Latency runs from a request's scheduled arrival to its top 10 being in host
+memory. The ladder applies the same SLO to the ranker alone, as if it had the whole budget, so its QPS are
+upper bounds for a ranker that shares the budget with retrieval.
+
+**Request samples**
+- **Test pool:** the first 50,000 test rows in the protocol's sha256 order, issued in that order from the
+  start in every run, cycling when a run needs more.
+- **Validation pool,** for the batch-size choice only: the first 50,000 validation rows in the same order. All
+  of them lie inside the protocol's 100,000-row validation sample.
+- **Candidates for the ranker alone:** each request carries its row's 200-item R4c ANN list
+  (`ann_test.npz` or `ann_valid.npz`). The ranker's cost does not depend on which items it scores.
+
+**Load generator**
+- Open-loop Poisson arrivals: exponential gaps drawn in advance from numpy's PCG64, seeded per run. Arrivals
+  never wait for the server.
+- Latency counts from the scheduled arrival, so queueing delay is included and coordinated omission is avoided.
+- An idle server waits for the next scheduled arrival.
+- A run is aborted and fails if a waiting request is more than 1 s old.
+
+**Batching**
+- Ladder steps 1 to 4 serve one request at a time, oldest first.
+- **Dynamic batching:** when the server is free and requests are waiting, it dispatches once B_max requests are
+  waiting or the oldest has waited W = 2 ms, whichever comes first. The batch is the oldest B_max waiting
+  requests.
+- The ranker's batches are padded to the next power of two for its CUDA graphs; TIGER runs at the exact batch
+  size.
+- **B_max,** per configuration, on the validation pool: the largest power of two up to 1,024 whose p99 batch
+  service time (50 back-to-back batches after 10 warm-up batches) is at most SLO/3 (16.7 ms). Reason: a
+  request can wait for the batch in service, the window and its own batch, 2 SLO/3 + W in all, which leaves
+  the rest of the budget for Poisson bursts. If even a batch of 1 exceeds SLO/3, B_max is 1.
+
+**QPS at the SLO**
+- **Saturation X:** back-to-back batches of B_max test requests for 5 s, completed requests per second.
+- **Bisection:** 7 steps on the rate, between 0 and 1.05 X.
+  - Each step is one open-loop run: 2 s of arrivals as warm-up, not recorded, then 20 s measured, with at
+    least 3,000 and at most 1,000,000 measured requests.
+  - A step passes if its p99 is at most 50 ms and it was not aborted.
+- **Confirmation:** three 30 s runs at the largest passing rate. The rate stands if all three pass. Otherwise it
+  is lowered by 5% and the three runs are repeated, at most 4 times.
+- **Reported:** the confirmed rate as the QPS at the SLO, each confirmation run's p50 and p99, and every
+  bisection step. If no rate passes, the configuration is reported as missing the SLO.
+
+**Warm-up and repetitions**
+- Each configuration loads its models, captures its CUDA graphs, then serves 200 requests or 20 batches before
+  any timed request.
+- **Batch-1 latency:** 2,000 requests served one after another, each synchronized, after 200 untimed ones.
+- **Under load:** the 2 s warm-up of each run, then the three confirmation runs above.
+
+**Ranker ladder** (HSTU-SID seed 0, ranker alone; each step keeps the steps before it)
+1. **fp32,** eager, batch 1, TF32 off. This is the reference.
+2. **bf16:** encoder weights and activations in bf16. The candidate score stays the fp32 dot product of the
+   state with the fp32 scoring table, R4b's table, computed once at load.
+3. **CUDA graphs:** the whole ranker step (inputs, encoder, scores, top 10) is captured once per batch size.
+   CUDA graphs are used instead of torch.compile.
+4. **User-history cache:**
+   - The cache holds, per layer, the keys and values of the 49 older items of the window. They do not depend
+     on the request time.
+   - The newest item's row reads the request time in its time bias, so its output, and from layer 2 on its
+     keys and values, depend on it. That row is always recomputed.
+   - **Hit:** read the cached keys and values and compute the newest row only.
+   - **Miss:** run the full 50-row encoder and write the cache.
+   - The cache is a GPU table; a host dictionary maps a request's key to its slot.
+   - Hits and misses are timed in separate runs: all hits, with the cache filled beforehand, and all misses.
+5. **Dynamic batching,** as above, with hits and with misses.
+
+For each step: batch-1 p50 and p99, the QPS at the SLO, the p50 and p99 at that rate, and candidates scored
+per second at that rate (200 times the QPS).
+
+**Ranking quality of each step**
+- **Sample:** the protocol's 100,000-row validation sample, with R4c's union for TIGER seed 0, built from the
+  saved lists.
+- Each step scores the candidates through its own serving path. Steps 1 to 4 run at batch 1; step 5 runs in
+  batches of its B_max. Hits read a cache that the miss path filled.
+- **Against step 1:**
+  - top-10 overlap: the mean of |top 10 ∩ fp32 top 10| / 10, with the top 10 by score and ties to the lower
+    catalog index;
+  - the change in NDCG@10, with the protocol's rank and tie-break.
+- **A step keeps quality** if its top-10 overlap is at least 0.95 and its NDCG@10 moves by at most 1% of step
+  1's. A step that fails is reported, and the ladder continues without it.
+- **Check:** step 1's NDCG@10 is compared with R4c's validation record for HSTU-SID seed 0, which was computed
+  with TF32 in batches of 1,024.
+
+**Stage latencies**
+- **At batch 1,** as above, for each of:
+  - TIGER's beam at widths 20, 50 and 200, from the encoder input on the GPU to the item lists;
+  - the HNSW query on the CPU: the query, the search and the history removal;
+  - the union on the GPU;
+  - the ranker in its final ladder configuration, with misses;
+  - the whole cascade at each width.
+- **Under load:** the cascade at widths 200, 50 and 20, each at its own QPS at the SLO, with B_max chosen per
+  width.
+  - The ranker runs in its final ladder configuration with misses: each request is a new history.
+  - Per batch, the time of each stage is recorded (CUDA events for the GPU stages, the host clock for the HNSW
+    search), with the batch size and the queueing delay.
+  - The dominant stage is the one with the largest share of batch time.
+- **With widths 20 and 50,** the union rule is unchanged: it takes all w TIGER items and fills the other
+  200 - w from ANN's list.
+
+**What a narrower beam costs**
+- A short validation pass runs TIGER seed 0 at widths 20 and 50 over the 100,000-row validation sample, with
+  R4c's beam code.
+- Reported for widths 20, 50 and 200: union recall@200 over all, warm and cold rows, and HSTU-SID seed 0's
+  NDCG@10 on that union (fp32, R4c's re-ranking code). Width 200 uses R4c's saved lists.
+- It is reported whether or not width 200 meets the SLO.
+
+**Serving-path check:** the cascade serves the first 2,000 validation rows at width 200.
+- Its ANN lists must equal R4c's saved lists.
+- Its TIGER lists are compared with R4c's saved lists: the share that are identical and the mean overlap. The
+  batch sizes differ from R4c's, so bf16 rounding can reorder near-ties.
+
+**Limits and background load**
+- **Hardware:** one consumer GPU. Its clocks are not locked, since there is no root access.
+- **Other services** run on the machine. A sidecar process records `/proc/loadavg` every 2 s and nvidia-smi
+  (clocks, power, temperature, utilization, memory and other GPU processes) every 10 s. The busiest CPU
+  processes are listed at the start and end of every command. All of this is reported with the results.
+
+**The GPU-hour stop:** a short timed pass comes first, and the total is projected from it. R5 stops and reports
+if the projection passes 6 GPU-hours. A GPU-hour is an hour of wall time holding the RTX 4090 lock.
