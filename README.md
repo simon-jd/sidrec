@@ -26,6 +26,9 @@ A cascade recommender on public Amazon review data, built the way recent industr
 - **Cascade results (R4c):** [results/r4c/README.md](results/r4c/README.md). TIGER's beam and an HNSW search
   over the item vectors retrieve 200 candidates for the HSTU-style ranker and HSTU-SID. Its numbers sit next
   to the full-catalog ones of R4b ([results/r4b/README.md](results/r4b/README.md)).
+- **Serving benchmark (R5):** [results/r5/README.md](results/r5/README.md). How fast the R4c cascade serves on
+  one RTX 4090 under open-loop load: HSTU-SID's optimization ladder, the latency of each stage and the QPS at a
+  50 ms p99 SLO, with what a narrower TIGER beam costs in recall.
 - **Beauty preprocessing:** `src/sidrec/data/beauty.py` builds the leave-one-out sequences. They are checked
   against the S3-Rec authors' processed file.
 
@@ -35,6 +38,7 @@ docs/                 data sources and licences, evaluation protocol, SHA256SUMS
 sql/electronics/      Snowflake SQL: setup, load, transform, checks, export
 scripts/              data download, Snowflake runner, warehouse credit estimate
 src/sidrec/data/      Beauty preprocessing, the polars reference, parity check, dev subset
+src/sidrec/serve/     R5 serving: requests, the served ranker, the cascade server, open-loop load
 results/r1/           pipeline checks, query log, parity result, credits, dataset statistics
 tests/                unit tests; the tests that need data skip themselves when data/ is missing
 ```
