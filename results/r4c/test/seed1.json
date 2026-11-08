@@ -1,0 +1,202 @@
+{
+  "split": "test",
+  "seed": 1,
+  "rows": 1199539,
+  "cold_rows": 535916,
+  "selection": {
+    "ann": {
+      "n": 1,
+      "gamma": 1.0,
+      "efSearch": 512
+    },
+    "union": {
+      "rule": "off",
+      "k_tiger": 175,
+      "backfill": "tiger"
+    }
+  },
+  "checkpoint": {
+    "data/runs/r4b/tiger/seed1.pt": "ca059a263155bc20b7d95722028ee939511f9b4b053610d6aeee0ec6f8d5660d",
+    "data/runs/r4b/hstu/seed1.pt": "79079b1469f5751df2faf47ad5c74dc0f0fcace074de4922a4d39e53ad14e7a7",
+    "data/runs/r4b/hstu-sid/seed1.pt": "990de474e8efa594436e77b95822f774dabb59d389e82e362dd423ff95956b68"
+  },
+  "beam": 200,
+  "eps": null,
+  "empty_slots": 0,
+  "retrieval": {
+    "tiger": {
+      "50": {
+        "all": 0.033332805352723004,
+        "warm": 0.060248062529478334,
+        "cold": 3.731928137991775e-06
+      },
+      "100": {
+        "all": 0.04785671828927613,
+        "warm": 0.08649941307037279,
+        "cold": 5.5978922069876626e-06
+      },
+      "200": {
+        "all": 0.06477321704421449,
+        "warm": 0.1170679738345416,
+        "cold": 1.6793676620962987e-05
+      }
+    },
+    "ann": {
+      "50": {
+        "all": 0.020393667900751873,
+        "warm": 0.01944929575979133,
+        "cold": 0.021563080781316475
+      },
+      "100": {
+        "all": 0.027538079212097315,
+        "warm": 0.026376421552598388,
+        "cold": 0.028976556027437136
+      },
+      "200": {
+        "all": 0.036906678315586236,
+        "warm": 0.035476467813803925,
+        "cold": 0.03867770322214675
+      }
+    },
+    "union": {
+      "50": {
+        "all": 0.037384361825668025,
+        "warm": 0.06101506427595186,
+        "cold": 0.008122541592339098
+      },
+      "100": {
+        "all": 0.05348804832523161,
+        "warm": 0.08765971040786712,
+        "cold": 0.011173392845147375
+      },
+      "200": {
+        "all": 0.07347322596430796,
+        "warm": 0.12015255649668562,
+        "cold": 0.015670366251427464
+      }
+    }
+  },
+  "union_stats": {
+    "candidates_per_row": 200.0,
+    "from_tiger_list_per_row": 176.9283549763701,
+    "outside_train_per_row": 7.330521975525598,
+    "rows_below_200": 0
+  },
+  "rerank": {
+    "hstu": {
+      "all": {
+        "recall@10": 0.015010766636182733,
+        "ndcg@10": 0.008280205879232762,
+        "recall@50": 0.03739103105443008,
+        "ndcg@50": 0.013125864163082384,
+        "users": 1199539
+      },
+      "warm": {
+        "recall@10": 0.02713287514145833,
+        "ndcg@10": 0.014966976551700269,
+        "recall@50": 0.0675865664692152,
+        "ndcg@50": 0.023725799094244295,
+        "users": 663623
+      },
+      "cold": {
+        "recall@10": 0.0,
+        "ndcg@10": 0.0,
+        "recall@50": 0.0,
+        "ndcg@50": 0.0,
+        "users": 535916
+      },
+      "seconds": 17.0
+    },
+    "hstu-sid": {
+      "all": {
+        "recall@10": 0.01603032498318104,
+        "ndcg@10": 0.00862365309704804,
+        "recall@50": 0.040879871350577184,
+        "ndcg@50": 0.013995377524317608,
+        "users": 1199539
+      },
+      "warm": {
+        "recall@10": 0.028574958975201282,
+        "ndcg@10": 0.015428538898478122,
+        "recall@50": 0.07127540787465173,
+        "ndcg@50": 0.02467092340716909,
+        "users": 663623
+      },
+      "cold": {
+        "recall@10": 0.0004963464423529061,
+        "ndcg@10": 0.00019718564654752266,
+        "recall@50": 0.0032411795878458565,
+        "ndcg@50": 0.0007758845712884968,
+        "users": 535916
+      },
+      "seconds": 4.9
+    }
+  },
+  "beam_seconds": 3395.3,
+  "wall_time_s": 3424.6,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-07T18:15:39-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2760 MHz, 10501 MHz, 3105 MHz, 69, 102.22 W, 450.00 W, 0 %, 303 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-07T19:12:44-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2760 MHz, 10251 MHz, 3105 MHz, 79, 385.64 W, 450.00 W, 95 %, 8908 MiB, 24564 MiB",
+      "apps": "3804228, .venv/bin/python, 8596 MiB"
+    },
+    "sampled": {
+      "samples": 341,
+      "interval_s": 10.0,
+      "pstates": [
+        "P0",
+        "P2"
+      ],
+      "clocks.sm": {
+        "min": 2760.0,
+        "median": 2760.0,
+        "max": 2760.0
+      },
+      "clocks.mem": {
+        "min": 10251.0,
+        "median": 10251.0,
+        "max": 10501.0
+      },
+      "temperature.gpu": {
+        "min": 69.0,
+        "median": 81.0,
+        "max": 83.0
+      },
+      "power.draw": {
+        "min": 102.16,
+        "median": 421.99,
+        "max": 427.31
+      },
+      "utilization.gpu": {
+        "min": 0.0,
+        "median": 100.0,
+        "max": 100.0
+      },
+      "memory.used": {
+        "min": 303.0,
+        "median": 11394.0,
+        "max": 11394.0
+      }
+    },
+    "peak_memory_gb": 8.51
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "a3d873baf39b9746f09c840af722fa9330fd13bb",
+    "dirty": false,
+    "src_tree": "cca682a684ec0b269246b55c5f4f77dbc05c2a5d"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b and R4c clarifications"
+}

@@ -1,0 +1,23 @@
+{
+  "split": "test",
+  "rows": 1199539,
+  "selected": {
+    "n": 1,
+    "gamma": 1.0,
+    "efSearch": 512
+  },
+  "index_sha256": "cb214e2e922285e36457a57ef4fdbadcd1bd62d34aeea2a0563d4b38ee5abca5",
+  "search_seconds": 473.0,
+  "threads": 24,
+  "lists": {
+    "path": "data/runs/r4c/ann_test.npz",
+    "sha256": "d9f33730b8036ddd5bb9b92a9b80d296137a46157a934f115574a545ef456cc1"
+  },
+  "note": "lists only; no target is read here",
+  "git": {
+    "commit": "a3d873baf39b9746f09c840af722fa9330fd13bb",
+    "dirty": false,
+    "src_tree": "cca682a684ec0b269246b55c5f4f77dbc05c2a5d"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b and R4c clarifications"
+}
