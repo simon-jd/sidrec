@@ -538,7 +538,7 @@ section 2's counts are one point. Everything else in section 2 and the entries a
 - **Query:** q = sum over j < min(n, h) of γ^j v(x_j), normalized to unit length. Here x_0 is the most recent of
   the h items in the row's 50-item input, x_1 the one before, and v the item vector.
 - **Grid for n and γ:** n in {1, 2, 3, 5, 10, 20, 50} and γ in {1.0, 0.8, 0.6, 0.4}, where γ = 1.0 is the plain
-  mean. With n = 1 the weights do not matter, so it counts once: 22 queries.
+  mean. With n = 1 the weights do not matter, so it counts once: 25 queries.
 - **Selection:** the highest ANN recall@200 over all rows of the validation sample. Ties go to the smaller n,
   then the larger γ.
 - **Recall against exact search,** reported on the validation sample for the selected query:
