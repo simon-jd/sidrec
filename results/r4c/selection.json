@@ -1,0 +1,335 @@
+{
+  "criterion": "union recall@200 over all rows of the validation sample, mean over TIGER seeds 0-2",
+  "ann": {
+    "n": 1,
+    "gamma": 1.0,
+    "efSearch": 512
+  },
+  "union": {
+    "rule": "off",
+    "k_tiger": 175,
+    "backfill": "tiger"
+  },
+  "union_grid": [
+    {
+      "rule": "off",
+      "k_tiger": 25,
+      "backfill": "ann",
+      "recall@200": [
+        0.06648,
+        0.06542,
+        0.06526
+      ],
+      "mean": 0.06572
+    },
+    {
+      "rule": "off",
+      "k_tiger": 25,
+      "backfill": "tiger",
+      "recall@200": [
+        0.06814,
+        0.06697,
+        0.06666
+      ],
+      "mean": 0.06725666666666667
+    },
+    {
+      "rule": "off",
+      "k_tiger": 50,
+      "backfill": "ann",
+      "recall@200": [
+        0.07983,
+        0.07945,
+        0.07887
+      ],
+      "mean": 0.07938333333333333
+    },
+    {
+      "rule": "off",
+      "k_tiger": 50,
+      "backfill": "tiger",
+      "recall@200": [
+        0.08141,
+        0.08094,
+        0.08035
+      ],
+      "mean": 0.0809
+    },
+    {
+      "rule": "off",
+      "k_tiger": 75,
+      "backfill": "ann",
+      "recall@200": [
+        0.09,
+        0.0888,
+        0.0882
+      ],
+      "mean": 0.08900000000000001
+    },
+    {
+      "rule": "off",
+      "k_tiger": 75,
+      "backfill": "tiger",
+      "recall@200": [
+        0.09108,
+        0.08994,
+        0.0894
+      ],
+      "mean": 0.09014
+    },
+    {
+      "rule": "off",
+      "k_tiger": 100,
+      "backfill": "ann",
+      "recall@200": [
+        0.09732,
+        0.09644,
+        0.09556
+      ],
+      "mean": 0.09644000000000001
+    },
+    {
+      "rule": "off",
+      "k_tiger": 100,
+      "backfill": "tiger",
+      "recall@200": [
+        0.09832,
+        0.09751,
+        0.09642
+      ],
+      "mean": 0.09741666666666667
+    },
+    {
+      "rule": "off",
+      "k_tiger": 125,
+      "backfill": "ann",
+      "recall@200": [
+        0.10353,
+        0.10255,
+        0.10152
+      ],
+      "mean": 0.10253333333333332
+    },
+    {
+      "rule": "off",
+      "k_tiger": 125,
+      "backfill": "tiger",
+      "recall@200": [
+        0.10417,
+        0.10357,
+        0.10211
+      ],
+      "mean": 0.10328333333333332
+    },
+    {
+      "rule": "off",
+      "k_tiger": 150,
+      "backfill": "ann",
+      "recall@200": [
+        0.10808,
+        0.10731,
+        0.10535
+      ],
+      "mean": 0.10691333333333335
+    },
+    {
+      "rule": "off",
+      "k_tiger": 150,
+      "backfill": "tiger",
+      "recall@200": [
+        0.10849,
+        0.1078,
+        0.1057
+      ],
+      "mean": 0.10733
+    },
+    {
+      "rule": "off",
+      "k_tiger": 175,
+      "backfill": "ann",
+      "recall@200": [
+        0.11051,
+        0.10998,
+        0.10778
+      ],
+      "mean": 0.10942333333333333
+    },
+    {
+      "rule": "off",
+      "k_tiger": 175,
+      "backfill": "tiger",
+      "recall@200": [
+        0.11049,
+        0.11003,
+        0.10783
+      ],
+      "mean": 0.10944999999999999
+    },
+    {
+      "rule": "on",
+      "k_tiger": 25,
+      "backfill": "ann",
+      "recall@200": [
+        0.06516,
+        0.06419,
+        0.06405
+      ],
+      "mean": 0.06446666666666666
+    },
+    {
+      "rule": "on",
+      "k_tiger": 25,
+      "backfill": "tiger",
+      "recall@200": [
+        0.06673,
+        0.06567,
+        0.06546
+      ],
+      "mean": 0.06595333333333335
+    },
+    {
+      "rule": "on",
+      "k_tiger": 50,
+      "backfill": "ann",
+      "recall@200": [
+        0.07767,
+        0.07703,
+        0.07627
+      ],
+      "mean": 0.07699
+    },
+    {
+      "rule": "on",
+      "k_tiger": 50,
+      "backfill": "tiger",
+      "recall@200": [
+        0.07912,
+        0.07858,
+        0.07785
+      ],
+      "mean": 0.07851666666666667
+    },
+    {
+      "rule": "on",
+      "k_tiger": 75,
+      "backfill": "ann",
+      "recall@200": [
+        0.08766,
+        0.08643,
+        0.08587
+      ],
+      "mean": 0.08665333333333335
+    },
+    {
+      "rule": "on",
+      "k_tiger": 75,
+      "backfill": "tiger",
+      "recall@200": [
+        0.08885,
+        0.08762,
+        0.08704
+      ],
+      "mean": 0.08783666666666667
+    },
+    {
+      "rule": "on",
+      "k_tiger": 100,
+      "backfill": "ann",
+      "recall@200": [
+        0.09474,
+        0.09332,
+        0.09293
+      ],
+      "mean": 0.09366333333333333
+    },
+    {
+      "rule": "on",
+      "k_tiger": 100,
+      "backfill": "tiger",
+      "recall@200": [
+        0.09572,
+        0.09472,
+        0.09389
+      ],
+      "mean": 0.09477666666666666
+    },
+    {
+      "rule": "on",
+      "k_tiger": 125,
+      "backfill": "ann",
+      "recall@200": [
+        0.10097,
+        0.09987,
+        0.09879
+      ],
+      "mean": 0.09987666666666667
+    },
+    {
+      "rule": "on",
+      "k_tiger": 125,
+      "backfill": "tiger",
+      "recall@200": [
+        0.1018,
+        0.10066,
+        0.09943
+      ],
+      "mean": 0.10063
+    },
+    {
+      "rule": "on",
+      "k_tiger": 150,
+      "backfill": "ann",
+      "recall@200": [
+        0.10502,
+        0.10399,
+        0.10276
+      ],
+      "mean": 0.10392333333333333
+    },
+    {
+      "rule": "on",
+      "k_tiger": 150,
+      "backfill": "tiger",
+      "recall@200": [
+        0.10555,
+        0.10449,
+        0.10326
+      ],
+      "mean": 0.10443333333333334
+    },
+    {
+      "rule": "on",
+      "k_tiger": 175,
+      "backfill": "ann",
+      "recall@200": [
+        0.10821,
+        0.10693,
+        0.10494
+      ],
+      "mean": 0.10669333333333335
+    },
+    {
+      "rule": "on",
+      "k_tiger": 175,
+      "backfill": "tiger",
+      "recall@200": [
+        0.10834,
+        0.10705,
+        0.10503
+      ],
+      "mean": 0.10680666666666667
+    }
+  ],
+  "section_2_setting": {
+    "rule": "off",
+    "k_tiger": 50,
+    "backfill": "ann",
+    "recall@200": [
+      0.07983,
+      0.07945,
+      0.07887
+    ],
+    "mean": 0.07938333333333333
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b and R4c clarifications"
+}

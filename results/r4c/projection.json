@@ -1,0 +1,27 @@
+{
+  "seeds": [
+    {
+      "seed": 0,
+      "valid_beam_s": 304.4,
+      "valid_rerank_s": 10.6,
+      "test_projected_s": 3627.9
+    },
+    {
+      "seed": 1,
+      "valid_beam_s": 302.6,
+      "valid_rerank_s": 9.1,
+      "test_projected_s": 3622.4
+    },
+    {
+      "seed": 2,
+      "valid_beam_s": 303.2,
+      "valid_rerank_s": 9.2,
+      "test_projected_s": 3626.4
+    }
+  ],
+  "validation_gpu_hours": 0.261,
+  "test_projected_gpu_hours": 3.021,
+  "total_projected_gpu_hours": 3.282,
+  "stop_at_gpu_hours": 8,
+  "note": "the rerank's full-catalog check is not run on test, so the test rerank is overestimated"
+}

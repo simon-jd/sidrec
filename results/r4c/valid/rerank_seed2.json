@@ -1,0 +1,196 @@
+{
+  "split": "valid",
+  "seed": 2,
+  "rows": 100000,
+  "union": {
+    "rule": "off",
+    "k_tiger": 175,
+    "backfill": "tiger"
+  },
+  "ann": {
+    "n": 1,
+    "gamma": 1.0,
+    "efSearch": 512
+  },
+  "union_stats": {
+    "candidates_per_row": 200.0,
+    "from_tiger_list_per_row": 177.2819,
+    "outside_train_per_row": 5.07442,
+    "rows_below_200": 0
+  },
+  "rankers": {
+    "hstu": {
+      "cascade": {
+        "all": {
+          "recall@10": 0.02716,
+          "ndcg@10": 0.01491976441287425,
+          "recall@50": 0.06257,
+          "ndcg@50": 0.022642173821500872,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.032432174245319065,
+          "ndcg@10": 0.017815920439523132,
+          "recall@50": 0.0747158005349637,
+          "ndcg@50": 0.02703736843415752,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0,
+          "ndcg@10": 0.0,
+          "recall@50": 0.0,
+          "ndcg@50": 0.0,
+          "users": 16256
+        }
+      },
+      "full_catalog": {
+        "all": {
+          "recall@10": 0.02703,
+          "ndcg@10": 0.014897475023354121,
+          "recall@50": 0.06326,
+          "ndcg@50": 0.022749775707129674,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.032276939243408485,
+          "ndcg@10": 0.017789304336255876,
+          "recall@50": 0.07553974016048912,
+          "ndcg@50": 0.027165857502781894,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0,
+          "ndcg@10": 0.0,
+          "recall@50": 0.0,
+          "ndcg@50": 0.0,
+          "users": 16256
+        }
+      },
+      "r4b_record_valid_ndcg@10": 0.014897475023354121,
+      "full_catalog_ndcg@10_minus_record": 0.0,
+      "rows_cascade_rank_above_full_rank": 0,
+      "seconds": 3.9
+    },
+    "hstu-sid": {
+      "cascade": {
+        "all": {
+          "recall@10": 0.02724,
+          "ndcg@10": 0.014794106518404007,
+          "recall@50": 0.06565,
+          "ndcg@50": 0.02313852002596506,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03240829193733282,
+          "ndcg@10": 0.0176015664371175,
+          "recall@50": 0.0776055598012992,
+          "ndcg@50": 0.027427630880359256,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0006151574803149606,
+          "ndcg@10": 0.0003312667403071245,
+          "recall@50": 0.00406003937007874,
+          "ndcg@50": 0.0010428446205524111,
+          "users": 16256
+        }
+      },
+      "full_catalog": {
+        "all": {
+          "recall@10": 0.02617,
+          "ndcg@10": 0.014429715416210733,
+          "recall@50": 0.0611,
+          "ndcg@50": 0.02204307642539096,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.031035059228123805,
+          "ndcg@10": 0.01713707296263688,
+          "recall@50": 0.07174245319067635,
+          "ndcg@50": 0.026018867784502603,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0011072834645669291,
+          "ndcg@10": 0.0004825604969248721,
+          "recall@50": 0.0062746062992125986,
+          "ndcg@50": 0.0015614898372115018,
+          "users": 16256
+        }
+      },
+      "r4b_record_valid_ndcg@10": 0.014429715416210735,
+      "full_catalog_ndcg@10_minus_record": -1.734723475976807e-18,
+      "rows_cascade_rank_above_full_rank": 0,
+      "seconds": 3.1
+    }
+  },
+  "checkpoint": {
+    "data/runs/r4b/hstu/seed2.pt": "9c75e64f355f6593223be400d949886f5bc791a9e89a09cccfcd56577f445f32",
+    "data/runs/r4b/hstu-sid/seed2.pt": "9bfaf71eed887ea771bda4d3fcd3ad4370c635d7ab6d8f45e355dead6c0150ad"
+  },
+  "wall_time_s": 9.2,
+  "gpu": {
+    "nvidia_smi_start": {
+      "time": "2026-11-07T17:09:32-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P0, 2775 MHz, 10501 MHz, 3105 MHz, 66, 96.73 W, 450.00 W, 0 %, 303 MiB, 24564 MiB",
+      "apps": ""
+    },
+    "nvidia_smi_end": {
+      "time": "2026-11-07T17:09:41-0800",
+      "fields": "name,driver_version,pstate,clocks.sm,clocks.mem,clocks.max.sm,temperature.gpu,power.draw,power.limit,utilization.gpu,memory.used,memory.total",
+      "state": "NVIDIA GeForce RTX 4090, 595.99.02, P2, 2775 MHz, 10251 MHz, 3105 MHz, 72, 295.61 W, 450.00 W, 99 %, 14322 MiB, 24564 MiB",
+      "apps": "3581601, .venv/bin/python, 14010 MiB"
+    },
+    "sampled": {
+      "samples": 1,
+      "interval_s": 10.0,
+      "pstates": [
+        "P0"
+      ],
+      "clocks.sm": {
+        "min": 2775.0,
+        "median": 2775.0,
+        "max": 2775.0
+      },
+      "clocks.mem": {
+        "min": 10251.0,
+        "median": 10251.0,
+        "max": 10251.0
+      },
+      "temperature.gpu": {
+        "min": 68.0,
+        "median": 68.0,
+        "max": 68.0
+      },
+      "power.draw": {
+        "min": 97.73,
+        "median": 97.73,
+        "max": 97.73
+      },
+      "utilization.gpu": {
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "memory.used": {
+        "min": 2408.0,
+        "median": 2408.0,
+        "max": 2408.0
+      }
+    },
+    "peak_memory_gb": 6.83
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "ed6f1e973fd89a169d612baa2901c9cbdae77a82",
+    "dirty": false,
+    "src_tree": "a235dff373e45e19fa8cf5b80f7015d144abc70f"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b and R4c clarifications"
+}
