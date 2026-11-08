@@ -173,3 +173,23 @@ def test_overlap_counts_shared_items_over_the_list_length(monkeypatch):
     a = np.array([[1, 2, 3, 4], [5, 6, -1, -1]])
     b = np.array([[4, 3, 9, 8], [6, 5, -1, -1]])
     assert r4c.overlap(a, b, chunk=1) == pytest.approx((2 + 2) / 8)
+
+
+def test_summary_pairs_each_seed_with_its_own_full_catalog_run():
+    from sidrec.eval.r4c_summary import paired_change, retrieval_table
+
+    def result(x: float, cold: float | None) -> dict:
+        part = {"recall@10": x, "recall@50": 2 * x, "ndcg@10": x / 2}
+        cold_part = None if cold is None else {"recall@10": cold, "recall@50": cold, "ndcg@10": cold}
+        return {"all": part, "warm": part, "cold": cold_part}
+
+    cascade = [result(0.12, 0.0), result(0.21, 0.0), result(0.33, 0.0)]
+    full = [result(0.10, 0.0), result(0.20, 0.0), result(0.30, 0.0)]
+    ch = paired_change(cascade, full)
+    assert ch["all"]["recall@10"]["values"] == pytest.approx([0.02, 0.01, 0.03])
+    assert ch["all"]["recall@10"]["std"] == pytest.approx(0.01)
+    assert ch["all"]["recall@10"]["relative"] == pytest.approx(0.02 / 0.2)
+    assert ch["cold"]["ndcg@10"]["relative"] is None  # zero base: no relative change
+    recalls = [{k: {"all": a, "warm": a, "cold": None} for k in ("50", "100", "200")} for a in (0.1, 0.2)]
+    tab = retrieval_table(recalls)
+    assert tab["100"]["all"]["mean"] == pytest.approx(0.15) and tab["200"]["cold"] is None
