@@ -54,15 +54,17 @@ The configurations are in `summary.json` and in each record:
 | SASRec | 0, by construction | 0, by construction | 0, by construction |
 | HSTU-style | 0, by construction | 0, by construction | 0, by construction |
 | HSTU-SID | 0.00078 ± 0.00009 | **0.00550 ± 0.00025** | 0.00030 ± 0.00003 |
-| TIGER | 0 | 0 | 0 |
+| TIGER | 0 | 0.0000012 ± 0.0000022 | 0 |
 | TIGER + cold-start, ε = 0.1 | 0.00057 ± 0.00010 | 0.00214 ± 0.00026 | 0.00016 ± 0.00003 |
 | HSTU-style without time bias (seed 0) | 0, by construction | 0, by construction | 0, by construction |
 
 - **"By construction":** the item-ID models rank only train items (protocol, section 2), so a cold target is
   always a miss.
-- **Plain TIGER's 0 is measured, not built in.** Its beam may return any catalog item, but in no seed did a cold
-  target reach its top 50. That is R4a's finding at full scale: the decoder puts almost no probability on IDs it
-  never saw as targets.
+- **Plain TIGER's near-zero is measured, not built in.** Its beam may return any catalog item.
+  - In seeds 0 and 2, no cold target reached its top 50. In seed 1, 2 of the 535,916 cold rows did, both
+    below the top 10.
+  - That is R4a's finding at full scale: the decoder puts almost no probability on IDs it never saw as
+    targets.
 - **Bold** marks the best value in a column where the gap to the next model is larger than both standard
   deviations, the protocol's rule for calling a difference.
 - **HSTU-SID leads overall** on all three metrics, by more than the standard deviations.
@@ -80,7 +82,8 @@ The configurations are in `summary.json` and in each record:
   - They fill at most a share ε = 0.1 of the list, at positions 10, 20, 30, 40 and 50.
   - It ran on the same test beam pass as plain TIGER, so test was used once per checkpoint.
 - **What it gives on test:**
-  - cold Recall@50 rises from 0 to 0.00214 ± 0.00026, and cold Recall@10 to 0.00057;
+  - cold Recall@50 rises from about 0 (2 hits in three seeds) to 0.00214 ± 0.00026, and cold Recall@10 to
+    0.00057;
   - warm Recall@50 falls by 3.8%, from 0.05617 to 0.05402;
   - overall Recall@50 falls by 0.8% and overall NDCG@10 by 2.5%.
 - **Why it stays small: few cold targets share a full three-code prefix with the beam.**
