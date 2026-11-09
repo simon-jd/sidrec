@@ -134,12 +134,15 @@ def ann_lists(index, vectors: torch.Tensor, items: torch.Tensor) -> np.ndarray:
 class Cascade:
     """The whole cascade: TIGER's beam on the GPU while the HNSW search runs on the CPU, then the union and
     HSTU-SID (CUDA graphs, misses). Per batch it returns the stage times in milliseconds: GPU stages from CUDA
-    events, the HNSW search from the host clock."""
+    events, the HNSW search from the host clock. ``beam`` (items, user tokens on the GPU -> lists) replaces R5's
+    beam, ``beam_lists``."""
 
     STAGES = ("beam_ms", "hnsw_ms", "union_ms", "ranker_ms", "batch_ms")
 
-    def __init__(self, tiger: Tiger, index, vectors, rank: RankerStep, pool: HostPool, width: int, max_batch: int):
+    def __init__(self, tiger: Tiger, index, vectors, rank: RankerStep, pool: HostPool, width: int, max_batch: int,
+                 beam=None):
         self.tiger, self.index, self.vectors, self.pool, self.width = tiger, index, vectors, pool, width
+        self.beam = beam or (lambda items, user_tok: beam_lists(tiger, items, user_tok, width))
         self.slots = SlotMap(max_batch)
         cap = bucket(max_batch)
         self.ann_buf = torch.empty((cap, CANDS), dtype=torch.long).pin_memory()
@@ -157,7 +160,7 @@ class Cascade:
         h = self.pool.gather(rows, ("items", "ts", "req_ts", "user_tok"))
         g = {k: v.to("cuda", non_blocking=True) for k, v in h.items()}
         ev[0].record()
-        lists = beam_lists(self.tiger, g["items"], g["user_tok"], self.width)
+        lists = self.beam(g["items"], g["user_tok"])
         ev[1].record()
         t1 = time.perf_counter()
         ann = ann_lists(self.index, self.vectors, h["items"])
