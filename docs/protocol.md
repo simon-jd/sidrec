@@ -826,3 +826,16 @@ confirmations.
 
 **The GPU-hour stop:** a short timed pass comes first, and the total is projected from it. R5b stops and reports
 if the projection passes 4 GPU-hours.
+
+### 2026-11-08: R5b near-ties at a beam cutoff, written after the fp32 equivalence run and before any timing
+The fp32 equivalence run found a few mismatches whose scores at the parting position differ by more than 1e-4:
+at most 0.062 at width 50 and 0.0087 at width 200. The reference's own lists show the same gaps between chunks
+of 128 and batch 1. A near-tie at an earlier step's beam cutoff keeps a different prefix in each beam, so the
+lists can part at a position where the final scores are far apart. The entry's rule does not see such ties.
+- Every mismatched row of the fp32 comparisons is traced through the four steps. For each row: the first step
+  at which the two beams keep different prefixes, and the score gap there between the prefixes one beam kept
+  and the other dropped.
+- If no step keeps different prefixes, the lists differ only in order, and the entry's rule applies.
+- A mismatch is a cutoff near-tie if that gap is at most 1e-4. Any other mismatch remains a defect, with the
+  consequence the entry states.
+- The equivalence record stays as it is. The trace is a separate record.
