@@ -1,0 +1,359 @@
+{
+  "split": "valid",
+  "rows": 100000,
+  "seed": 0,
+  "dtype": "bf16",
+  "chunk": 128,
+  "union": {
+    "k_tiger": 175,
+    "backfill": "tiger",
+    "budget": 200
+  },
+  "checkpoint": {
+    "data/runs/r4b/tiger/seed0.pt": "afec4188c7f1f35a86d7bcfc5b1ba5f30a79def2b315c325a581a3b164b5216e",
+    "data/runs/r4b/hstu-sid/seed0.pt": "58ae473f7ae2b813ea9e1b594689fcc85be853b5b6cccd0d2d89b7283c5a063c"
+  },
+  "widths": {
+    "20": {
+      "tiger_alone_recall@w": {
+        "all": 0.03203,
+        "warm": 0.03824751623996943,
+        "cold": 0.0
+      },
+      "union_recall@200": {
+        "all": 0.06062,
+        "warm": 0.06448223156285823,
+        "cold": 0.04072342519685039
+      },
+      "hstu_sid": {
+        "all": {
+          "recall@10": 0.02588,
+          "ndcg@10": 0.014268590858335787,
+          "recall@50": 0.04656,
+          "ndcg@50": 0.018892694164173277,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03054547191440581,
+          "ndcg@10": 0.016894833579520183,
+          "recall@50": 0.05200372564004586,
+          "ndcg@50": 0.021744753351208585,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0018454724409448819,
+          "ndcg@10": 0.0007393050289271951,
+          "recall@50": 0.018516240157480313,
+          "ndcg@50": 0.00420009791915085,
+          "users": 16256
+        }
+      },
+      "beam_seconds_chunk128": 5.4,
+      "lists_identical_to_r5_share": 0.02501,
+      "items_shared_with_r5": 0.9632854999999999,
+      "lists": "data/runs/r5b/tiger_valid_w20.npz",
+      "against_r5": {
+        "r5_union_recall@200": 0.06073,
+        "union_recall@200_change": -0.00010999999999999899,
+        "union_recall@200_change_relative": -0.0018112958998847191,
+        "r5_hstu_sid_ndcg@10": 0.014281733652380798,
+        "ndcg@10_change": -1.3142794045011008e-05,
+        "ndcg@10_change_relative": -0.000920252006157535,
+        "r5_lists": "data/runs/r5/tiger_valid_w20.npz"
+      }
+    },
+    "50": {
+      "tiger_alone_recall@w": {
+        "all": 0.0532,
+        "warm": 0.06352693924340848,
+        "cold": 0.0
+      },
+      "union_recall@200": {
+        "all": 0.07731,
+        "warm": 0.08522401604891097,
+        "cold": 0.03654035433070866
+      },
+      "hstu_sid": {
+        "all": {
+          "recall@10": 0.02722,
+          "ndcg@10": 0.014686832529155622,
+          "recall@50": 0.05781,
+          "ndcg@50": 0.021431466625354705,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03224111578142912,
+          "ndcg@10": 0.01742852672360516,
+          "recall@50": 0.0667032862055789,
+          "ndcg@50": 0.02506505814382563,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0013533464566929134,
+          "ndcg@10": 0.000562789799087801,
+          "recall@50": 0.011995570866141732,
+          "ndcg@50": 0.002712748113861822,
+          "users": 16256
+        }
+      },
+      "beam_seconds_chunk128": 9.9,
+      "lists_identical_to_r5_share": 0.0,
+      "items_shared_with_r5": 0.9695274,
+      "lists": "data/runs/r5b/tiger_valid_w50.npz",
+      "against_r5": {
+        "r5_union_recall@200": 0.07733,
+        "union_recall@200_change": -1.9999999999992246e-05,
+        "union_recall@200_change_relative": -0.00025863183757910573,
+        "r5_hstu_sid_ndcg@10": 0.014689790055864727,
+        "ndcg@10_change": -2.957526709104763e-06,
+        "ndcg@10_change_relative": -0.0002013321291766185,
+        "r5_lists": "data/runs/r5/tiger_valid_w50.npz"
+      }
+    },
+    "200": {
+      "tiger_alone_recall@w": {
+        "all": 0.10533,
+        "warm": 0.12577617500955293,
+        "cold": 0.0
+      },
+      "union_recall@200": {
+        "all": 0.11056,
+        "warm": 0.12845099350401223,
+        "cold": 0.01839320866141732
+      },
+      "hstu_sid": {
+        "all": {
+          "recall@10": 0.02829,
+          "ndcg@10": 0.015008524903050983,
+          "recall@50": 0.06679,
+          "ndcg@50": 0.023371041067874895,
+          "users": 100000
+        },
+        "warm": {
+          "recall@10": 0.03360240733664501,
+          "ndcg@10": 0.017827223156879898,
+          "recall@50": 0.0789668513565151,
+          "ndcg@50": 0.027684003337964086,
+          "users": 83744
+        },
+        "cold": {
+          "recall@10": 0.0009227362204724409,
+          "ndcg@10": 0.00048779000094417203,
+          "recall@50": 0.00406003937007874,
+          "ndcg@50": 0.0011524933103485013,
+          "users": 16256
+        }
+      },
+      "beam_seconds_chunk128": 35.0,
+      "lists_identical_to_r5_share": 0.0,
+      "items_shared_with_r5": 0.9777964,
+      "lists": "data/runs/r5b/tiger_valid_w200.npz",
+      "against_r5": {
+        "r5_union_recall@200": 0.11049,
+        "union_recall@200_change": 7.000000000000062e-05,
+        "union_recall@200_change_relative": 0.0006335414969680569,
+        "r5_hstu_sid_ndcg@10": 0.014972725796969696,
+        "ndcg@10_change": 3.5799106081287405e-05,
+        "ndcg@10_change_relative": 0.002390954497312221,
+        "r5_lists": "data/runs/r4c/tiger_valid_seed0.npz"
+      }
+    }
+  },
+  "wall_time_s": 60.0,
+  "peak_memory_gb": 3.46,
+  "background": {
+    "load_samples": 29,
+    "gpu_samples": 6,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 6.87,
+      "median": 7.35,
+      "max": 8.68
+    },
+    "load5": {
+      "min": 7.1,
+      "median": 7.2,
+      "max": 7.48
+    },
+    "load15": {
+      "min": 5.94,
+      "median": 5.99,
+      "max": 6.11
+    },
+    "running_tasks": {
+      "max": 22
+    },
+    "clocks.sm": {
+      "min": 2775.0,
+      "median": 2775.0,
+      "max": 2790.0
+    },
+    "clocks.mem": {
+      "min": 10251.0,
+      "median": 10251.0,
+      "max": 10501.0
+    },
+    "power.draw": {
+      "min": 75.29,
+      "median": 372.525,
+      "max": 394.04
+    },
+    "temperature.gpu": {
+      "min": 52.0,
+      "median": 65.0,
+      "max": 73.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 99.5,
+      "max": 100.0
+    },
+    "memory.used": {
+      "min": 464.0,
+      "median": 6067.0,
+      "max": 6078.0
+    },
+    "pstate": [
+      "P0",
+      "P2"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 267225,
+        "cpu_pct": 482.7,
+        "mem_pct": 0.3,
+        "command": "java"
+      },
+      {
+        "pid": 267146,
+        "cpu_pct": 265.4,
+        "mem_pct": 0.0,
+        "command": "kvload"
+      },
+      {
+        "pid": 266621,
+        "cpu_pct": 194.2,
+        "mem_pct": 0.0,
+        "command": "kv_server"
+      },
+      {
+        "pid": 266004,
+        "cpu_pct": 128.8,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 266806,
+        "cpu_pct": 100.0,
+        "mem_pct": 0.2,
+        "command": "dotnet"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 9.6,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 267326,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.0,
+        "command": "top"
+      },
+      {
+        "pid": 7349,
+        "cpu_pct": 1.9,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      },
+      {
+        "pid": 7351,
+        "cpu_pct": 1.9,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      },
+      {
+        "pid": 8280,
+        "cpu_pct": 1.9,
+        "mem_pct": 0.0,
+        "command": "grok-bot"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 270804,
+        "cpu_pct": 172.5,
+        "mem_pct": 0.0,
+        "command": "kv_server"
+      },
+      {
+        "pid": 271166,
+        "cpu_pct": 158.8,
+        "mem_pct": 0.0,
+        "command": "kvload"
+      },
+      {
+        "pid": 271196,
+        "cpu_pct": 100.0,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      },
+      {
+        "pid": 271265,
+        "cpu_pct": 25.5,
+        "mem_pct": 0.0,
+        "command": "python"
+      },
+      {
+        "pid": 266004,
+        "cpu_pct": 19.6,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 7.8,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 271197,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "top"
+      },
+      {
+        "pid": 7027,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 7788,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 11018,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.2,
+        "command": "dockerd"
+      }
+    ],
+    "sidecar_log": "data/logs/r5b/quality_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "f1c33ccbdec90f0fb343cb881a57c6fa26a22557",
+    "dirty": false,
+    "src_tree": "c1751c0b602c6be0b328facecd180ef03453cb2c"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c, R5 and R5b clarifications"
+}

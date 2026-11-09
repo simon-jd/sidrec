@@ -1,0 +1,2458 @@
+{
+  "split": "valid",
+  "rows": 2048,
+  "sample": "the equivalence sample: the first 2,048 rows of the validation pool",
+  "near_tie": 0.0001,
+  "beam": "the static step in fp32, run eagerly so its top-k can be traced; eager_lists_equal_graphs checks that its lists are the graphs'",
+  "checkpoint": {
+    "data/runs/r4b/tiger/seed0.pt": "afec4188c7f1f35a86d7bcfc5b1ba5f30a79def2b315c325a581a3b164b5216e"
+  },
+  "widths": {
+    "20": {
+      "chunk128": {
+        "eager_lists_equal_graphs": true,
+        "mismatched_rows": 0,
+        "order_near_tie": 0,
+        "cutoff_near_tie": 0,
+        "defect": 0,
+        "max_gap": null,
+        "rows": []
+      },
+      "chunk1": {
+        "eager_lists_equal_graphs": true,
+        "mismatched_rows": 0,
+        "order_near_tie": 0,
+        "cutoff_near_tie": 0,
+        "defect": 0,
+        "max_gap": null,
+        "rows": []
+      },
+      "reference_chunk128_vs_batch1": {
+        "mismatched_rows": 0,
+        "order_near_tie": 0,
+        "cutoff_near_tie": 0,
+        "defect": 0,
+        "max_gap": null,
+        "rows": []
+      }
+    },
+    "50": {
+      "chunk128": {
+        "eager_lists_equal_graphs": true,
+        "mismatched_rows": 7,
+        "order_near_tie": 6,
+        "cutoff_near_tie": 1,
+        "defect": 0,
+        "max_gap": 3.337860107421875e-06,
+        "rows": [
+          {
+            "row": 181,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 48
+          },
+          {
+            "row": 333,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 29
+          },
+          {
+            "row": 553,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 23
+          },
+          {
+            "row": 658,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 34
+          },
+          {
+            "row": 759,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 11
+          },
+          {
+            "row": 807,
+            "kind": "cutoff_near_tie",
+            "step": 2,
+            "swapped": 1,
+            "gap": 1.430511474609375e-06,
+            "reference_cutoff_gap": 4.291534423828125e-06
+          },
+          {
+            "row": 1872,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 16
+          }
+        ]
+      },
+      "chunk1": {
+        "eager_lists_equal_graphs": true,
+        "mismatched_rows": 12,
+        "order_near_tie": 11,
+        "cutoff_near_tie": 1,
+        "defect": 0,
+        "max_gap": 9.059906005859375e-06,
+        "rows": [
+          {
+            "row": 181,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 48
+          },
+          {
+            "row": 202,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 26
+          },
+          {
+            "row": 238,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 41
+          },
+          {
+            "row": 282,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 44
+          },
+          {
+            "row": 759,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 11
+          },
+          {
+            "row": 807,
+            "kind": "cutoff_near_tie",
+            "step": 2,
+            "swapped": 1,
+            "gap": 4.291534423828125e-06,
+            "reference_cutoff_gap": 0.0
+          },
+          {
+            "row": 998,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 42
+          },
+          {
+            "row": 1156,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 38
+          },
+          {
+            "row": 1651,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 37
+          },
+          {
+            "row": 1685,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.059906005859375e-06,
+            "position": 46
+          },
+          {
+            "row": 1719,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 39
+          },
+          {
+            "row": 1861,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 21
+          }
+        ]
+      },
+      "reference_chunk128_vs_batch1": {
+        "mismatched_rows": 10,
+        "order_near_tie": 9,
+        "cutoff_near_tie": 1,
+        "defect": 0,
+        "max_gap": 1.4781951904296875e-05,
+        "rows": [
+          {
+            "row": 333,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 29
+          },
+          {
+            "row": 658,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 34
+          },
+          {
+            "row": 759,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 11
+          },
+          {
+            "row": 807,
+            "kind": "cutoff_near_tie",
+            "step": 2,
+            "swapped": 1,
+            "gap": 3.337860107421875e-06,
+            "reference_cutoff_gap": 0.0
+          },
+          {
+            "row": 998,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.4781951904296875e-05,
+            "position": 42
+          },
+          {
+            "row": 1156,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 38
+          },
+          {
+            "row": 1685,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.049041748046875e-05,
+            "position": 46
+          },
+          {
+            "row": 1719,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 39
+          },
+          {
+            "row": 1861,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 21
+          },
+          {
+            "row": 1925,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 27
+          }
+        ]
+      }
+    },
+    "200": {
+      "chunk128": {
+        "eager_lists_equal_graphs": true,
+        "mismatched_rows": 95,
+        "order_near_tie": 93,
+        "cutoff_near_tie": 2,
+        "defect": 0,
+        "max_gap": 1.239776611328125e-05,
+        "rows": [
+          {
+            "row": 1,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 104
+          },
+          {
+            "row": 2,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 95
+          },
+          {
+            "row": 22,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 91
+          },
+          {
+            "row": 33,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 154
+          },
+          {
+            "row": 42,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 194
+          },
+          {
+            "row": 45,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 66
+          },
+          {
+            "row": 70,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 28
+          },
+          {
+            "row": 96,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 124
+          },
+          {
+            "row": 98,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.059906005859375e-06,
+            "position": 183
+          },
+          {
+            "row": 139,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 168
+          },
+          {
+            "row": 146,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 67
+          },
+          {
+            "row": 149,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 8.58306884765625e-06,
+            "position": 154
+          },
+          {
+            "row": 185,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 107
+          },
+          {
+            "row": 221,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 146
+          },
+          {
+            "row": 316,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 140
+          },
+          {
+            "row": 325,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 196
+          },
+          {
+            "row": 353,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 134
+          },
+          {
+            "row": 355,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 133
+          },
+          {
+            "row": 383,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 114
+          },
+          {
+            "row": 395,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 170
+          },
+          {
+            "row": 397,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 53
+          },
+          {
+            "row": 486,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 103
+          },
+          {
+            "row": 492,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.152557373046875e-06,
+            "position": 123
+          },
+          {
+            "row": 512,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 165
+          },
+          {
+            "row": 556,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 155
+          },
+          {
+            "row": 569,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 133
+          },
+          {
+            "row": 584,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 83
+          },
+          {
+            "row": 612,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 95
+          },
+          {
+            "row": 615,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 26
+          },
+          {
+            "row": 681,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 173
+          },
+          {
+            "row": 683,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 145
+          },
+          {
+            "row": 737,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 75
+          },
+          {
+            "row": 759,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 12
+          },
+          {
+            "row": 853,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 197
+          },
+          {
+            "row": 884,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 146
+          },
+          {
+            "row": 888,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 126
+          },
+          {
+            "row": 905,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 157
+          },
+          {
+            "row": 910,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 165
+          },
+          {
+            "row": 928,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 96
+          },
+          {
+            "row": 965,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 193
+          },
+          {
+            "row": 992,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 135
+          },
+          {
+            "row": 1002,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 142
+          },
+          {
+            "row": 1023,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 157
+          },
+          {
+            "row": 1032,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 71
+          },
+          {
+            "row": 1036,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 85
+          },
+          {
+            "row": 1060,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 130
+          },
+          {
+            "row": 1063,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 85
+          },
+          {
+            "row": 1171,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 155
+          },
+          {
+            "row": 1182,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 80
+          },
+          {
+            "row": 1187,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.152557373046875e-06,
+            "position": 132
+          },
+          {
+            "row": 1212,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 127
+          },
+          {
+            "row": 1216,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 114
+          },
+          {
+            "row": 1234,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 85
+          },
+          {
+            "row": 1262,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 180
+          },
+          {
+            "row": 1322,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 146
+          },
+          {
+            "row": 1328,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 152
+          },
+          {
+            "row": 1338,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 106
+          },
+          {
+            "row": 1351,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 194
+          },
+          {
+            "row": 1402,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 196
+          },
+          {
+            "row": 1464,
+            "kind": "cutoff_near_tie",
+            "step": 2,
+            "swapped": 1,
+            "gap": 9.5367431640625e-07,
+            "reference_cutoff_gap": 9.5367431640625e-07
+          },
+          {
+            "row": 1471,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 131
+          },
+          {
+            "row": 1473,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 90
+          },
+          {
+            "row": 1485,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 108
+          },
+          {
+            "row": 1487,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 161
+          },
+          {
+            "row": 1490,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 76
+          },
+          {
+            "row": 1492,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.152557373046875e-06,
+            "position": 164
+          },
+          {
+            "row": 1539,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 109
+          },
+          {
+            "row": 1572,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 132
+          },
+          {
+            "row": 1608,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 94
+          },
+          {
+            "row": 1619,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 177
+          },
+          {
+            "row": 1634,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 138
+          },
+          {
+            "row": 1650,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 144
+          },
+          {
+            "row": 1651,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 37
+          },
+          {
+            "row": 1655,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 141
+          },
+          {
+            "row": 1675,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 50
+          },
+          {
+            "row": 1690,
+            "kind": "cutoff_near_tie",
+            "step": 4,
+            "swapped": 1,
+            "gap": 9.5367431640625e-07,
+            "reference_cutoff_gap": 1.9073486328125e-06
+          },
+          {
+            "row": 1705,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 104
+          },
+          {
+            "row": 1707,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 72
+          },
+          {
+            "row": 1718,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 76
+          },
+          {
+            "row": 1719,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 67
+          },
+          {
+            "row": 1734,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 111
+          },
+          {
+            "row": 1739,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 194
+          },
+          {
+            "row": 1765,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 166
+          },
+          {
+            "row": 1777,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 157
+          },
+          {
+            "row": 1798,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.239776611328125e-05,
+            "position": 190
+          },
+          {
+            "row": 1865,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.62939453125e-06,
+            "position": 156
+          },
+          {
+            "row": 1868,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 83
+          },
+          {
+            "row": 1872,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 16
+          },
+          {
+            "row": 1900,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 99
+          },
+          {
+            "row": 1933,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 110
+          },
+          {
+            "row": 1945,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-06,
+            "position": 93
+          },
+          {
+            "row": 2000,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 154
+          },
+          {
+            "row": 2006,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 158
+          },
+          {
+            "row": 2014,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 98
+          },
+          {
+            "row": 2039,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 107
+          }
+        ]
+      },
+      "chunk1": {
+        "eager_lists_equal_graphs": true,
+        "mismatched_rows": 79,
+        "order_near_tie": 76,
+        "cutoff_near_tie": 3,
+        "defect": 0,
+        "max_gap": 8.106231689453125e-06,
+        "rows": [
+          {
+            "row": 2,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 95
+          },
+          {
+            "row": 22,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 111
+          },
+          {
+            "row": 48,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 121
+          },
+          {
+            "row": 73,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 141
+          },
+          {
+            "row": 81,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 87
+          },
+          {
+            "row": 88,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 170
+          },
+          {
+            "row": 116,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 196
+          },
+          {
+            "row": 134,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.198883056640625e-06,
+            "position": 32
+          },
+          {
+            "row": 176,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 131
+          },
+          {
+            "row": 185,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 107
+          },
+          {
+            "row": 197,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 8.106231689453125e-06,
+            "position": 185
+          },
+          {
+            "row": 237,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 162
+          },
+          {
+            "row": 244,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 70
+          },
+          {
+            "row": 270,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 117
+          },
+          {
+            "row": 337,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 40
+          },
+          {
+            "row": 353,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 134
+          },
+          {
+            "row": 383,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.62939453125e-06,
+            "position": 114
+          },
+          {
+            "row": 395,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 170
+          },
+          {
+            "row": 420,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 148
+          },
+          {
+            "row": 512,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 165
+          },
+          {
+            "row": 556,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 155
+          },
+          {
+            "row": 557,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 168
+          },
+          {
+            "row": 563,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 94
+          },
+          {
+            "row": 658,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 66
+          },
+          {
+            "row": 702,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 54
+          },
+          {
+            "row": 723,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 179
+          },
+          {
+            "row": 785,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 181
+          },
+          {
+            "row": 797,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 97
+          },
+          {
+            "row": 811,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 73
+          },
+          {
+            "row": 859,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 22
+          },
+          {
+            "row": 884,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 146
+          },
+          {
+            "row": 905,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 157
+          },
+          {
+            "row": 923,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 176
+          },
+          {
+            "row": 931,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 135
+          },
+          {
+            "row": 953,
+            "kind": "cutoff_near_tie",
+            "step": 3,
+            "swapped": 1,
+            "gap": 2.86102294921875e-06,
+            "reference_cutoff_gap": 9.5367431640625e-07
+          },
+          {
+            "row": 958,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 104
+          },
+          {
+            "row": 1000,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 169
+          },
+          {
+            "row": 1032,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 71
+          },
+          {
+            "row": 1036,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 155
+          },
+          {
+            "row": 1114,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 151
+          },
+          {
+            "row": 1177,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 109
+          },
+          {
+            "row": 1182,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 80
+          },
+          {
+            "row": 1199,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 175
+          },
+          {
+            "row": 1204,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 56
+          },
+          {
+            "row": 1212,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 127
+          },
+          {
+            "row": 1231,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 146
+          },
+          {
+            "row": 1235,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 33
+          },
+          {
+            "row": 1240,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 64
+          },
+          {
+            "row": 1343,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 104
+          },
+          {
+            "row": 1349,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 37
+          },
+          {
+            "row": 1369,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 137
+          },
+          {
+            "row": 1458,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 155
+          },
+          {
+            "row": 1464,
+            "kind": "cutoff_near_tie",
+            "step": 2,
+            "swapped": 1,
+            "gap": 3.814697265625e-06,
+            "reference_cutoff_gap": 9.5367431640625e-07
+          },
+          {
+            "row": 1471,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 131
+          },
+          {
+            "row": 1473,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 90
+          },
+          {
+            "row": 1478,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 153
+          },
+          {
+            "row": 1485,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 108
+          },
+          {
+            "row": 1490,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 76
+          },
+          {
+            "row": 1494,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 138
+          },
+          {
+            "row": 1601,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 36
+          },
+          {
+            "row": 1637,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 67
+          },
+          {
+            "row": 1650,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 144
+          },
+          {
+            "row": 1651,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 37
+          },
+          {
+            "row": 1675,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 50
+          },
+          {
+            "row": 1690,
+            "kind": "cutoff_near_tie",
+            "step": 4,
+            "swapped": 1,
+            "gap": 1.9073486328125e-06,
+            "reference_cutoff_gap": 1.049041748046875e-05
+          },
+          {
+            "row": 1705,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 104
+          },
+          {
+            "row": 1732,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 8.106231689453125e-06,
+            "position": 144
+          },
+          {
+            "row": 1739,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 194
+          },
+          {
+            "row": 1757,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 151
+          },
+          {
+            "row": 1798,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 190
+          },
+          {
+            "row": 1861,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 25
+          },
+          {
+            "row": 1872,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 16
+          },
+          {
+            "row": 1944,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 115
+          },
+          {
+            "row": 1947,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 135
+          },
+          {
+            "row": 2000,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 154
+          },
+          {
+            "row": 2006,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 158
+          },
+          {
+            "row": 2010,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 143
+          },
+          {
+            "row": 2014,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 98
+          },
+          {
+            "row": 2025,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 134
+          }
+        ]
+      },
+      "reference_chunk128_vs_batch1": {
+        "mismatched_rows": 104,
+        "order_near_tie": 102,
+        "cutoff_near_tie": 2,
+        "defect": 0,
+        "max_gap": 1.239776611328125e-05,
+        "rows": [
+          {
+            "row": 1,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 104
+          },
+          {
+            "row": 10,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 81
+          },
+          {
+            "row": 22,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 91
+          },
+          {
+            "row": 33,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 154
+          },
+          {
+            "row": 70,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 28
+          },
+          {
+            "row": 73,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 141
+          },
+          {
+            "row": 96,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.059906005859375e-06,
+            "position": 124
+          },
+          {
+            "row": 98,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 183
+          },
+          {
+            "row": 139,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 168
+          },
+          {
+            "row": 146,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.0013580322265625e-05,
+            "position": 67
+          },
+          {
+            "row": 181,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.239776611328125e-05,
+            "position": 60
+          },
+          {
+            "row": 197,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.049041748046875e-05,
+            "position": 185
+          },
+          {
+            "row": 221,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 146
+          },
+          {
+            "row": 270,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 117
+          },
+          {
+            "row": 284,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.62939453125e-06,
+            "position": 169
+          },
+          {
+            "row": 316,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 140
+          },
+          {
+            "row": 337,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 40
+          },
+          {
+            "row": 353,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.152557373046875e-06,
+            "position": 134
+          },
+          {
+            "row": 355,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 133
+          },
+          {
+            "row": 378,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 111
+          },
+          {
+            "row": 383,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 114
+          },
+          {
+            "row": 395,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 170
+          },
+          {
+            "row": 420,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 148
+          },
+          {
+            "row": 421,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 31
+          },
+          {
+            "row": 557,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 168
+          },
+          {
+            "row": 563,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 94
+          },
+          {
+            "row": 601,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 154
+          },
+          {
+            "row": 681,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 173
+          },
+          {
+            "row": 683,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 145
+          },
+          {
+            "row": 693,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 127
+          },
+          {
+            "row": 723,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 179
+          },
+          {
+            "row": 726,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 84
+          },
+          {
+            "row": 737,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 75
+          },
+          {
+            "row": 785,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 181
+          },
+          {
+            "row": 884,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 146
+          },
+          {
+            "row": 888,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 126
+          },
+          {
+            "row": 905,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 157
+          },
+          {
+            "row": 928,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 96
+          },
+          {
+            "row": 931,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 135
+          },
+          {
+            "row": 953,
+            "kind": "cutoff_near_tie",
+            "step": 3,
+            "swapped": 1,
+            "gap": 4.291534423828125e-06,
+            "reference_cutoff_gap": 9.5367431640625e-07
+          },
+          {
+            "row": 965,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 193
+          },
+          {
+            "row": 991,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 124
+          },
+          {
+            "row": 992,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 135
+          },
+          {
+            "row": 1000,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 169
+          },
+          {
+            "row": 1002,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.0013580322265625e-05,
+            "position": 190
+          },
+          {
+            "row": 1020,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 63
+          },
+          {
+            "row": 1023,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 157
+          },
+          {
+            "row": 1032,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 71
+          },
+          {
+            "row": 1060,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 130
+          },
+          {
+            "row": 1063,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.291534423828125e-06,
+            "position": 85
+          },
+          {
+            "row": 1107,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 196
+          },
+          {
+            "row": 1171,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.152557373046875e-06,
+            "position": 155
+          },
+          {
+            "row": 1182,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 80
+          },
+          {
+            "row": 1199,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 175
+          },
+          {
+            "row": 1216,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 114
+          },
+          {
+            "row": 1229,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 165
+          },
+          {
+            "row": 1234,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.67572021484375e-06,
+            "position": 85
+          },
+          {
+            "row": 1262,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 180
+          },
+          {
+            "row": 1285,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 186
+          },
+          {
+            "row": 1322,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 146
+          },
+          {
+            "row": 1349,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 37
+          },
+          {
+            "row": 1351,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 194
+          },
+          {
+            "row": 1380,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 137
+          },
+          {
+            "row": 1402,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 196
+          },
+          {
+            "row": 1441,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.62939453125e-06,
+            "position": 22
+          },
+          {
+            "row": 1443,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 141
+          },
+          {
+            "row": 1458,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 155
+          },
+          {
+            "row": 1464,
+            "kind": "cutoff_near_tie",
+            "step": 2,
+            "swapped": 1,
+            "gap": 3.814697265625e-06,
+            "reference_cutoff_gap": 9.5367431640625e-07
+          },
+          {
+            "row": 1471,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 131
+          },
+          {
+            "row": 1473,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 90
+          },
+          {
+            "row": 1478,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 153
+          },
+          {
+            "row": 1494,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.337860107421875e-06,
+            "position": 138
+          },
+          {
+            "row": 1496,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 186
+          },
+          {
+            "row": 1499,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 112
+          },
+          {
+            "row": 1532,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 7.152557373046875e-06,
+            "position": 130
+          },
+          {
+            "row": 1593,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 35
+          },
+          {
+            "row": 1601,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 36
+          },
+          {
+            "row": 1608,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.5367431640625e-07,
+            "position": 94
+          },
+          {
+            "row": 1634,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 138
+          },
+          {
+            "row": 1650,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 144
+          },
+          {
+            "row": 1651,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 37
+          },
+          {
+            "row": 1655,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 141
+          },
+          {
+            "row": 1661,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.245208740234375e-06,
+            "position": 133
+          },
+          {
+            "row": 1685,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 6.198883056640625e-06,
+            "position": 70
+          },
+          {
+            "row": 1705,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 104
+          },
+          {
+            "row": 1707,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.430511474609375e-06,
+            "position": 72
+          },
+          {
+            "row": 1709,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 25
+          },
+          {
+            "row": 1734,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 111
+          },
+          {
+            "row": 1760,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 136
+          },
+          {
+            "row": 1765,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 166
+          },
+          {
+            "row": 1777,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 0.0,
+            "position": 157
+          },
+          {
+            "row": 1796,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 9.059906005859375e-06,
+            "position": 56
+          },
+          {
+            "row": 1798,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 8.58306884765625e-06,
+            "position": 190
+          },
+          {
+            "row": 1861,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 25
+          },
+          {
+            "row": 1872,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 16
+          },
+          {
+            "row": 1933,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-06,
+            "position": 110
+          },
+          {
+            "row": 1968,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.384185791015625e-06,
+            "position": 63
+          },
+          {
+            "row": 1987,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 2.86102294921875e-06,
+            "position": 26
+          },
+          {
+            "row": 1992,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 82
+          },
+          {
+            "row": 2000,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 154
+          },
+          {
+            "row": 2010,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 1.9073486328125e-06,
+            "position": 143
+          },
+          {
+            "row": 2014,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 5.7220458984375e-06,
+            "position": 98
+          },
+          {
+            "row": 2025,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 3.814697265625e-06,
+            "position": 134
+          },
+          {
+            "row": 2039,
+            "kind": "order_near_tie",
+            "step": null,
+            "gap": 4.76837158203125e-07,
+            "position": 103
+          }
+        ]
+      }
+    }
+  },
+  "wall_time_s": 153.6,
+  "peak_memory_gb": 11.23,
+  "background": {
+    "load_samples": 76,
+    "gpu_samples": 16,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 5.28,
+      "median": 6.97,
+      "max": 9.55
+    },
+    "load5": {
+      "min": 6.69,
+      "median": 6.95,
+      "max": 7.66
+    },
+    "load15": {
+      "min": 6.05,
+      "median": 6.19,
+      "max": 6.49
+    },
+    "running_tasks": {
+      "max": 79
+    },
+    "clocks.sm": {
+      "min": 210.0,
+      "median": 2790.0,
+      "max": 2790.0
+    },
+    "clocks.mem": {
+      "min": 405.0,
+      "median": 10251.0,
+      "max": 10251.0
+    },
+    "power.draw": {
+      "min": 13.46,
+      "median": 147.27,
+      "max": 400.25
+    },
+    "temperature.gpu": {
+      "min": 41.0,
+      "median": 54.5,
+      "max": 66.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 56.0,
+      "max": 100.0
+    },
+    "memory.used": {
+      "min": 464.0,
+      "median": 6774.0,
+      "max": 20068.0
+    },
+    "pstate": [
+      "P2",
+      "P8"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 282284,
+        "cpu_pct": 115.7,
+        "mem_pct": 0.0,
+        "command": "kvload"
+      },
+      {
+        "pid": 281832,
+        "cpu_pct": 100.0,
+        "mem_pct": 0.0,
+        "command": "kv_server"
+      },
+      {
+        "pid": 281353,
+        "cpu_pct": 82.4,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 282384,
+        "cpu_pct": 43.1,
+        "mem_pct": 0.2,
+        "command": "dotnet"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 7351,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      },
+      {
+        "pid": 7330,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.0,
+        "command": "dbus-daemon"
+      },
+      {
+        "pid": 7348,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.2,
+        "command": "airflow api_ser"
+      },
+      {
+        "pid": 8293,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 14522,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 295475,
+        "cpu_pct": 241.2,
+        "mem_pct": 0.0,
+        "command": "kvload"
+      },
+      {
+        "pid": 294254,
+        "cpu_pct": 202.0,
+        "mem_pct": 0.0,
+        "command": "kv_server"
+      },
+      {
+        "pid": 293183,
+        "cpu_pct": 13.7,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 15649,
+        "cpu_pct": 3.9,
+        "mem_pct": 1.4,
+        "command": "sqlservr"
+      },
+      {
+        "pid": 7348,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.2,
+        "command": "airflow api_ser"
+      },
+      {
+        "pid": 8280,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.0,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 13015,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.0,
+        "command": "containerd-shim"
+      },
+      {
+        "pid": 15301,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.0,
+        "command": "containerd-shim"
+      },
+      {
+        "pid": 15567,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "kube-controller"
+      }
+    ],
+    "sidecar_log": "data/logs/r5b/cutoffs_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "81701eee40d84677b138d9c2785dbf5faaa63b3c",
+    "dirty": false,
+    "src_tree": "5ebff402cd03a6a5921ba2ff9413260fc15a8c62"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c, R5 and R5b clarifications"
+}

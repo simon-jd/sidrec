@@ -490,8 +490,8 @@ def classify(ref, got, chunks: tuple[int, int], sizes) -> dict:
 
 def cmd_cutoffs(_args) -> None:
     """fp32: every mismatched row of the equivalence comparisons, traced through the four steps (the
-    protocol's note "R5b near-ties at a beam cutoff"). The final beam is traced eagerly (step 4 without graphs) and its
-    lists checked against the graphs'."""
+    protocol's note "R5b near-ties at a beam cutoff"). The final beam is traced eagerly (step 4 without
+    graphs) and its lists checked against the graphs'."""
     r5.setup()
     t0, git = time.time(), resume.code_state()
     d = scale.load("full")

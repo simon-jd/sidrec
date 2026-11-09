@@ -1,0 +1,310 @@
+{
+  "measured": {
+    "load_s": 6.1,
+    "beam_ms": {
+      "reference": {
+        "20": {
+          "batch1": 7.7196417027153075,
+          "batch64": 21.176238005864434,
+          "build_s": 2.6226043701171875e-06
+        },
+        "50": {
+          "batch1": 7.8775217014481305,
+          "batch64": 45.27082633770382,
+          "build_s": 2.86102294921875e-06
+        },
+        "200": {
+          "batch1": 8.303565697860904,
+          "batch64": 175.84767366740076,
+          "build_s": 4.0531158447265625e-06
+        }
+      },
+      "cross-once": {
+        "20": {
+          "batch1": 7.44153730047401,
+          "batch64": 7.726808330820252,
+          "build_s": 0.0002155303955078125
+        },
+        "50": {
+          "batch1": 7.557474098575767,
+          "batch64": 11.957370001861515,
+          "build_s": 0.00018477439880371094
+        },
+        "200": {
+          "batch1": 7.698392900056206,
+          "batch64": 45.055760667310096,
+          "build_s": 0.0001780986785888672
+        }
+      },
+      "kv-cache": {
+        "20": {
+          "batch1": 7.743637198291253,
+          "batch64": 7.877280998703403,
+          "build_s": 0.0002117156982421875
+        },
+        "50": {
+          "batch1": 7.909035796183161,
+          "batch64": 9.318921666514749,
+          "build_s": 0.00015354156494140625
+        },
+        "200": {
+          "batch1": 7.926690799649805,
+          "batch64": 24.620242998935282,
+          "build_s": 0.0001862049102783203
+        }
+      },
+      "static": {
+        "20": {
+          "batch1": 19.687105601769872,
+          "batch64": 19.84024533885531,
+          "build_s": 0.0011942386627197266
+        },
+        "50": {
+          "batch1": 19.954759001848288,
+          "batch64": 20.17598033125978,
+          "build_s": 0.002310514450073242
+        },
+        "200": {
+          "batch1": 20.415624498855323,
+          "batch64": 29.173181998582248,
+          "build_s": 0.0022363662719726562
+        }
+      },
+      "graphs": {
+        "20": {
+          "batch1": 1.6931029997067526,
+          "batch64": 4.055562002273898,
+          "build_s": 0.6111948490142822
+        },
+        "50": {
+          "batch1": 1.7892780000693165,
+          "batch64": 6.588240328710526,
+          "build_s": 0.5230045318603516
+        },
+        "200": {
+          "batch1": 1.9721270000445656,
+          "batch64": 21.56170800056619,
+          "build_s": 0.3400123119354248
+        }
+      }
+    },
+    "cascade_w200_batch1_ms": 3.2042250790982507,
+    "eager_steps": [
+      "reference",
+      "cross-once",
+      "kv-cache",
+      "static"
+    ]
+  },
+  "plan_seconds": {
+    "profile": 135,
+    "equivalence": 324,
+    "quality": 347,
+    "ladder": 358,
+    "select": 219,
+    "stages": 170,
+    "e2e": 1143
+  },
+  "projected_gpu_hours": 0.75,
+  "worst_case_gpu_hours": 1.07,
+  "note": "select assumes every size of the sweep runs at the SLO/3 limit; worst case: every e2e confirmation lowered 4 times",
+  "stop_at": 4.0,
+  "stop": false,
+  "wall_time_s": 13.8,
+  "peak_memory_gb": 4.96,
+  "background": {
+    "load_samples": 7,
+    "gpu_samples": 2,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 8.35,
+      "median": 8.42,
+      "max": 8.47
+    },
+    "load5": {
+      "min": 7.55,
+      "median": 7.56,
+      "max": 7.57
+    },
+    "load15": {
+      "min": 5.66,
+      "median": 5.67,
+      "max": 5.68
+    },
+    "running_tasks": {
+      "max": 26
+    },
+    "clocks.sm": {
+      "min": 210.0,
+      "median": 1507.5,
+      "max": 2805.0
+    },
+    "clocks.mem": {
+      "min": 405.0,
+      "median": 5328.0,
+      "max": 10251.0
+    },
+    "power.draw": {
+      "min": 11.69,
+      "median": 47.165,
+      "max": 82.64
+    },
+    "temperature.gpu": {
+      "min": 35.0,
+      "median": 37.5,
+      "max": 40.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 11.5,
+      "max": 23.0
+    },
+    "memory.used": {
+      "min": 464.0,
+      "median": 1382.0,
+      "max": 2300.0
+    },
+    "pstate": [
+      "P2",
+      "P8"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 248823,
+        "cpu_pct": 631.4,
+        "mem_pct": 0.3,
+        "command": "java"
+      },
+      {
+        "pid": 249165,
+        "cpu_pct": 362.7,
+        "mem_pct": 0.0,
+        "command": "kvload"
+      },
+      {
+        "pid": 233825,
+        "cpu_pct": 303.9,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 248158,
+        "cpu_pct": 58.8,
+        "mem_pct": 0.0,
+        "command": "kv_server"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 7.8,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 7000,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.1,
+        "command": "tailscaled"
+      },
+      {
+        "pid": 8612,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 7320,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "Xvfb"
+      },
+      {
+        "pid": 7331,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.0,
+        "command": "tunnel-client"
+      },
+      {
+        "pid": 7788,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 249858,
+        "cpu_pct": 450.0,
+        "mem_pct": 0.0,
+        "command": "kvload"
+      },
+      {
+        "pid": 233825,
+        "cpu_pct": 130.8,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 45251,
+        "cpu_pct": 67.3,
+        "mem_pct": 0.4,
+        "command": "vicinae-file-in"
+      },
+      {
+        "pid": 249544,
+        "cpu_pct": 7.7,
+        "mem_pct": 0.0,
+        "command": "kv_server"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 14522,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 15528,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.2,
+        "command": "kube-apiserver"
+      },
+      {
+        "pid": 19153,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.0,
+        "command": "postgres"
+      },
+      {
+        "pid": 177338,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.0,
+        "command": "python3"
+      },
+      {
+        "pid": 249855,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.0,
+        "command": "top"
+      }
+    ],
+    "sidecar_log": "data/logs/r5b/projection_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "f1c33ccbdec90f0fb343cb881a57c6fa26a22557",
+    "dirty": false,
+    "src_tree": "c1751c0b602c6be0b328facecd180ef03453cb2c"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c, R5 and R5b clarifications"
+}
