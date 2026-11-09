@@ -2,9 +2,9 @@
 benchmark").
 
     python -m sidrec.eval.r5_serving projection        # short timed pass and the GPU-hour projection
-    python -m sidrec.eval.r5_serving beam-valid        # TIGER at widths 20 and 50 on validation: recall, NDCG@10
+    python -m sidrec.eval.r5_serving beam-valid        # TIGER at widths 20 and 50 on validation
     python -m sidrec.eval.r5_serving select            # B_max of each batched configuration (validation pool)
-    python -m sidrec.eval.r5_serving quality           # each ladder step's ranking on validation; serving check
+    python -m sidrec.eval.r5_serving quality           # each ladder step on validation; serving check
     python -m sidrec.eval.r5_serving ladder            # the ranker ladder (test pool)
     python -m sidrec.eval.r5_serving stages            # batch-1 stage latencies (test pool)
     python -m sidrec.eval.r5_serving e2e --width 200   # the cascade under load (test pool)
@@ -103,7 +103,7 @@ def keeps_from_quality() -> dict:
     return load_json(path)["keeps"] if path.exists() else {}
 
 
-# ---------------------------------------------------------------------------------------------------------- setup
+# ------------------------------------------------------------------------------------------------------ setup
 
 
 def setup() -> None:
@@ -163,7 +163,9 @@ def make_ranker(model, cfg: dict, fields: dict, max_batch: int, slots: int) -> R
     return server
 
 
-def make_cascade(tiger, index, vectors, model, cfg: dict, fields: dict, width: int, max_batch: int) -> Cascade:
+def make_cascade(
+    tiger, index, vectors, model, cfg: dict, fields: dict, width: int, max_batch: int
+) -> Cascade:
     dtype = DTYPES[cfg["dtype"]]
     pool = HostPool(fields, max_batch)
     cache = HistoryCache(pool.n, len(model.layers), model.d, dtype, "cuda")
@@ -194,7 +196,12 @@ def stage_summary(raw: dict) -> dict:
     for k in Cascade.STAGES:
         v = raw[k].astype(np.float64)
         q = np.quantile(v, (0.5, 0.99))
-        out[k] = {"p50": float(q[0]), "p99": float(q[1]), "mean": float(v.mean()), "share": float(v.sum() / total)}
+        out[k] = {
+            "p50": float(q[0]),
+            "p99": float(q[1]),
+            "mean": float(v.mean()),
+            "share": float(v.sum() / total),
+        }
     return out
 
 
@@ -216,24 +223,35 @@ def measure(server, max_batch: int, tag: str, batch1: bool = True) -> dict:
     out: dict = {"max_batch": max_batch, "window_s": WINDOW if max_batch > 1 else 0.0}
     if batch1:
         b1, b1_raw = loadgen.sequential_ms(lambda i: server(np.array([i])), BATCH1_N, BATCH1_WARM)
-        out["batch1"] = b1 | {"raw": save_raw(f"{tag}/batch1", {"latency_ms": (b1_raw * 1e3).astype(np.float32)})}
+        out["batch1"] = b1 | {
+            "raw": save_raw(f"{tag}/batch1", {"latency_ms": (b1_raw * 1e3).astype(np.float32)})
+        }
     out["saturation"] = loadgen.saturation(server, max_batch, SAT_S)
     window = WINDOW if max_batch > 1 else 0.0
 
     def run(rate: float, seconds: float, seed: int, name: str) -> dict:
         s, raw = loadgen.open_loop_run(server, rate, max_batch, window, SLO, WARM_S, seconds, seed)
         stages = stage_summary(raw)
-        print(f"{tag} {name} rate {rate:.1f} p99 {s.get('p99_ms', float('nan')):.2f} pass {s['pass']}", flush=True)
+        print(
+            f"{tag} {name} rate {rate:.1f} p99 {s.get('p99_ms', float('nan')):.2f} pass {s['pass']}",
+            flush=True,
+        )
         return s | ({"stages": stages} if stages else {}) | {"raw": save_raw(f"{tag}/{name}", raw)}
 
     lo, bis = loadgen.bisect_rate(
-        lambda rate, i: run(rate, BISECT_S, 1000 + i, f"bisect{i}"), 1.05 * out["saturation"]["qps"], BISECT_STEPS
+        lambda rate, i: run(rate, BISECT_S, 1000 + i, f"bisect{i}"),
+        1.05 * out["saturation"]["qps"],
+        BISECT_STEPS,
     )
     out["bisection"] = bis
     qps, conf = None, []
     if lo > 0:
         qps, conf = loadgen.confirm_rate(
-            lambda rate, a, j: run(rate, CONFIRM_S, 2000 + 10 * a + j, f"confirm{a}_{j}"), lo, REPS, LOWER, TRIES
+            lambda rate, a, j: run(rate, CONFIRM_S, 2000 + 10 * a + j, f"confirm{a}_{j}"),
+            lo,
+            REPS,
+            LOWER,
+            TRIES,
         )
     out["confirmation"] = conf
     out["qps_at_slo"] = qps
@@ -250,7 +268,7 @@ def measure(server, max_batch: int, tag: str, batch1: bool = True) -> dict:
     return out
 
 
-# ------------------------------------------------------------------------------------------------- the commands
+# ----------------------------------------------------------------------------------------------- the commands
 
 
 def cmd_projection(_args) -> None:
@@ -269,6 +287,7 @@ def cmd_projection(_args) -> None:
         g_items, g_user = req.items.cuda(), req.user_tok.cuda()
         beam1, beam128 = {}, {}
         for w in WIDTHS:
+
             def f(i, w=w):
                 beam_lists(tiger, g_items[i : i + 1], g_user[i : i + 1], w)
                 torch.cuda.synchronize()
@@ -293,10 +312,16 @@ def cmd_projection(_args) -> None:
     valid_rows = r4c.SAMPLE
     plan = {
         "beam-valid": load_s + sum(valid_rows / beam128[w] for w in (20, 50)) + 120,
-        "select": load_s + 2 * 11 * (SWEEP_N + SWEEP_WARM) * 0.005 + 3 * 8 * (SWEEP_N + SWEEP_WARM) * SLO / 3 + 60,
+        "select": load_s
+        + 2 * 11 * (SWEEP_N + SWEEP_WARM) * 0.005
+        + 3 * 8 * (SWEEP_N + SWEEP_WARM) * SLO / 3
+        + 60,
         "quality": load_s + 7 * valid_rows * eager_ms / 1e3 + 2 * 60 + CHECK_ROWS * e2e_ms / 1e3,
         "ladder": load_s + len(LADDER) * (run_s + b1_s(eager_ms) + 30),
-        "stages": load_s + sum(b1_s(beam1[w]) for w in WIDTHS) + b1_s(5.0) + sum(b1_s(e2e_ms) for _ in WIDTHS),
+        "stages": load_s
+        + sum(b1_s(beam1[w]) for w in WIDTHS)
+        + b1_s(5.0)
+        + sum(b1_s(e2e_ms) for _ in WIDTHS),
         "e2e": len(WIDTHS) * (load_s + run_s + 60),
     }
     expected = sum(plan.values()) / 3600 + (time.time() - t0) / 3600
@@ -390,9 +415,9 @@ def cmd_beam_valid(_args) -> None:
         "union": cfg | {"budget": r4c.LIST},
         "checkpoint": sums,
         "widths": widths,
-        "r4c_record_hstu_sid_ndcg@10": load_json(r4c.RESULTS / "valid" / f"rerank_seed{SEED}.json")["rankers"][
-            "hstu-sid"
-        ]["cascade"]["all"]["ndcg@10"],
+        "r4c_record_hstu_sid_ndcg@10": load_json(r4c.RESULTS / "valid" / f"rerank_seed{SEED}.json")[
+            "rankers"
+        ]["hstu-sid"]["cascade"]["all"]["ndcg@10"],
     } | gpu_record(t0, bg, git)
     common.write_json(RESULTS / "valid" / "beam_widths.json", record)
     print({w: (r["union_recall@200"]["all"], r["hstu_sid"]["all"]["ndcg@10"]) for w, r in widths.items()})
@@ -436,15 +461,20 @@ def cmd_select(_args) -> None:
             print(w, best, flush=True)
             del casc
             torch.cuda.empty_cache()
-    record = {
-        "split": "valid",
-        "pool": len(rows),
-        "limit_ms": SLO / 3 * 1e3,
-        "rule": "largest power of two up to 1024 whose p99 batch time over 50 batches (after 10) is at most SLO/3",
-        "keeps": keeps,
-        "checkpoint": sums | rsums,
-        "index": index_rec,
-    } | out | gpu_record(t0, bg, git)
+    record = (
+        {
+            "split": "valid",
+            "pool": len(rows),
+            "limit_ms": SLO / 3 * 1e3,
+            "rule": "largest power of two up to 1024 whose p99 batch time over 50 batches (after 10)"
+            " is at most SLO/3",
+            "keeps": keeps,
+            "checkpoint": sums | rsums,
+            "index": index_rec,
+        }
+        | out
+        | gpu_record(t0, bg, git)
+    )
     common.write_json(RESULTS / "valid" / "select.json", record)
 
 
@@ -462,8 +492,8 @@ def overlap10(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
 
 
 def check_features(d: dict, req, rows: np.ndarray, layout, codes) -> dict:
-    """The serving inputs equal R4c's: the ranker window and times, TIGER's encoder input and history mask, the
-    ANN window."""
+    """The serving inputs equal R4c's: the ranker window and times, TIGER's encoder input and history mask,
+    the ANN window."""
     from sidrec.serve.requests import history_mask, query_times, tiger_input
     from sidrec.train.scale_idrec import MAX_LEN
     from sidrec.train.scale_tiger import Inputs
@@ -483,7 +513,9 @@ def check_features(d: dict, req, rows: np.ndarray, layout, codes) -> dict:
         "ranker_input_ts": torch.equal(ts, b["input_ts"]),
         "ranker_query_ts": torch.equal(query_times(items, ts, req_ts), b["query_ts"]),
         "target": torch.equal(req.target[:n], b["target"]),
-        "tiger_encoder": torch.equal(tiger_input(items, req.user_tok[:n], inp.tokens), inp.encoder(ex, users)),
+        "tiger_encoder": torch.equal(
+            tiger_input(items, req.user_tok[:n], inp.tokens), inp.encoder(ex, users)
+        ),
         "history_mask": torch.equal(history_mask(items), inp.history(ex)),
         "ann_window": torch.equal(items, r4c.history_window(d, ex)),
     }
@@ -501,7 +533,8 @@ def score_all(server: RankerServer, n: int, batch: int) -> torch.Tensor:
 
 
 def cmd_quality(_args) -> None:
-    """Each ladder step's ranking on the validation sample against step 1 (fp32), and the serving-path check."""
+    """Each ladder step's ranking on the validation sample against step 1 (fp32), and the serving-path
+    check."""
     setup()
     t0, git = time.time(), resume.code_state()
     d = scale.load("full")
@@ -555,9 +588,9 @@ def cmd_quality(_args) -> None:
             print(name, ov, shift, flush=True)
             del server
             torch.cuda.empty_cache()
-        r4c_ndcg = load_json(r4c.RESULTS / "valid" / f"rerank_seed{SEED}.json")["rankers"]["hstu-sid"]["cascade"][
-            "all"
-        ]["ndcg@10"]
+        r4c_ndcg = load_json(r4c.RESULTS / "valid" / f"rerank_seed{SEED}.json")["rankers"]["hstu-sid"][
+            "cascade"
+        ]["all"]["ndcg@10"]
         # The serving-path check: the cascade on the first validation rows at width 200.
         tiger, _inp, tsums = load_tiger(d)
         sums |= tsums
@@ -581,10 +614,14 @@ def cmd_quality(_args) -> None:
             "batch": batch,
             "ann_equal_to_r4c": bool(torch.equal(al, ann[:n])),
             "tiger_lists_identical_share": float(same_t.double().mean()),
-            "tiger_lists_overlap": float(((tl[:, :, None] == saved_t[:, None, :]).any(-1) & (tl >= 0)).sum() / (n * 200)),
+            "tiger_lists_overlap": float(
+                ((tl[:, :, None] == saved_t[:, None, :]).any(-1) & (tl >= 0)).sum() / (n * 200)
+            ),
             "union_identical_share": float((cl == cands[:n].cpu()).all(1).double().mean()),
             "top10_overlap_with_ranker_alone": float(
-                overlap10(torch.as_tensor(np.concatenate(tops_c)), tops[final_ranker(keeps)["name"]][:n]).mean()
+                overlap10(
+                    torch.as_tensor(np.concatenate(tops_c)), tops[final_ranker(keeps)["name"]][:n]
+                ).mean()
             ),
         }
     record = {
@@ -598,8 +635,11 @@ def cmd_quality(_args) -> None:
         "keep_rule": {"top10_overlap_min": OVERLAP_MIN, "ndcg@10_change_max_relative": NDCG_SHIFT_MAX},
         "keeps": keeps,
         "steps": steps,
-        "fp32_against_r4c_record": {"r4c": r4c_ndcg, "fp32": ref["metrics"]["all"]["ndcg@10"],
-                                    "difference": ref["metrics"]["all"]["ndcg@10"] - r4c_ndcg},
+        "fp32_against_r4c_record": {
+            "r4c": r4c_ndcg,
+            "fp32": ref["metrics"]["all"]["ndcg@10"],
+            "difference": ref["metrics"]["all"]["ndcg@10"] - r4c_ndcg,
+        },
         "serving_check": check,
     } | gpu_record(t0, bg, git)
     common.write_json(RESULTS / "valid" / "quality.json", record)
@@ -679,7 +719,11 @@ def cmd_stages(_args) -> None:
         out["union"], raw["union"] = loadgen.sequential_ms(union, BATCH1_N, BATCH1_WARM)
         sub = {k: v[:n] for k, v in fields.items()} | {"cands": torch.cat(got_u).cpu()}
         server = make_ranker(model, final_ranker(keeps), sub, 1, n)
-        out["ranker"], raw["ranker"] = loadgen.sequential_ms(lambda i: server(np.array([i])), BATCH1_N, BATCH1_WARM)
+        out["ranker"], raw["ranker"] = loadgen.sequential_ms(
+            lambda i: server(np.array([i])),  # noqa: F821 (called before the del below)
+            BATCH1_N,
+            BATCH1_WARM,
+        )
         del server
         for w in WIDTHS:
             casc = make_cascade(tiger, index, vectors, model, final_ranker(keeps), fields, w, 1)
@@ -724,8 +768,14 @@ def cmd_e2e(args) -> None:
         index, vectors, index_rec = load_index()
         _rows, _req, fields = test_pool(d, tiger.layout.user_offset, cands=False)
         casc = make_cascade(tiger, index, vectors, model, final_ranker(keeps), fields, w, batch)
-        rec = {"width": w, "split": "test", "pool": POOL, "ranker": final_ranker(keeps), "checkpoint": sums,
-               "index": index_rec}
+        rec = {
+            "width": w,
+            "split": "test",
+            "pool": POOL,
+            "ranker": final_ranker(keeps),
+            "checkpoint": sums,
+            "index": index_rec,
+        }
         rec |= measure(casc, batch, f"e2e/w{w}", batch1=False)
     rec |= gpu_record(t0, bg, git)
     common.write_json(RESULTS / "test" / f"e2e_w{w}.json", rec)
@@ -744,7 +794,9 @@ COMMANDS = {
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("command", choices=sorted(COMMANDS))
     parser.add_argument("--width", type=int, default=200, choices=WIDTHS)
     parser.add_argument("--steps", nargs="*", choices=LADDER)

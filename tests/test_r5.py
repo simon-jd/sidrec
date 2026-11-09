@@ -81,11 +81,15 @@ def test_a_cache_hit_gives_the_miss_path_state_and_ignores_the_window_rows_it_do
     slots = torch.tensor([3, 0, 7, 1, 5])
     _, want = miss(**t, slots=slots)
     hit = miss.with_mode("hit")
-    _, got = hit(slots=slots, item=t["items"][:, -1], item_ts=t["ts"][:, -1], req_ts=t["req_ts"], cands=t["cands"])
+    _, got = hit(
+        slots=slots, item=t["items"][:, -1], item_ts=t["ts"][:, -1], req_ts=t["req_ts"], cands=t["cands"]
+    )
     torch.testing.assert_close(got, want, rtol=1e-5, atol=1e-5)
     # The cached rows do not depend on the request time: a later request reuses them.
     later = t["req_ts"] + 86_400 * 30
-    _, again = hit(slots=slots, item=t["items"][:, -1], item_ts=t["ts"][:, -1], req_ts=later, cands=t["cands"])
+    _, again = hit(
+        slots=slots, item=t["items"][:, -1], item_ts=t["ts"][:, -1], req_ts=later, cands=t["cands"]
+    )
     _, fresh = RankerStep(model)(items=t["items"], ts=t["ts"], req_ts=later, cands=t["cands"])
     torch.testing.assert_close(again, fresh, rtol=1e-5, atol=1e-5)
     assert not torch.allclose(again, got)
@@ -173,7 +177,9 @@ def test_an_overloaded_run_aborts():
     def step(req):
         clock.t += 0.5
 
-    res = loadgen.serve(step, np.linspace(0, 1, 50), max_batch=1, window=0.0, abort_age=1.0, clock=clock, wait=clock.wait)
+    res = loadgen.serve(
+        step, np.linspace(0, 1, 50), max_batch=1, window=0.0, abort_age=1.0, clock=clock, wait=clock.wait
+    )
     assert res["aborted"] and np.isnan(res["latency"]).any()
 
 
@@ -229,7 +235,11 @@ def test_top10_breaks_ties_by_the_lower_catalog_index():
 def test_a_failed_step_is_left_out_of_the_later_steps():
     plan = r5.ladder_plan({})
     assert plan["batching-hit"] == {
-        "name": "batching-hit", "dtype": "bf16", "graphs": True, "cache": "hit", "batching": True
+        "name": "batching-hit",
+        "dtype": "bf16",
+        "graphs": True,
+        "cache": "hit",
+        "batching": True,
     }
     plan = r5.ladder_plan({"bf16": False, "cache-hit": False})
     assert plan["bf16"]["dtype"] == "bf16" and plan["graphs"]["dtype"] == "fp32"
@@ -252,15 +262,37 @@ def test_the_sidecar_lines_are_summarized():
 def test_the_summary_reads_the_confirmed_runs():
     from sidrec.eval import r5_summary
 
-    stage = {k: {"p50": 1.0, "p99": 2.0, "mean": 1.0, "share": s} for k, s in
-             (("beam_ms", 0.7), ("hnsw_ms", 0.2), ("union_ms", 0.01), ("ranker_ms", 0.05), ("batch_ms", 1.0))}
-    run = {"pass": True, "p50_ms": 9.0, "p99_ms": 30.0, "mean_batch": 2.0, "stages": stage,
-           "wait": {"p50_ms": 1.0, "p99_ms": 12.0}}
+    stage = {
+        k: {"p50": 1.0, "p99": 2.0, "mean": 1.0, "share": s}
+        for k, s in (
+            ("beam_ms", 0.7),
+            ("hnsw_ms", 0.2),
+            ("union_ms", 0.01),
+            ("ranker_ms", 0.05),
+            ("batch_ms", 1.0),
+        )
+    }
+    run = {
+        "pass": True,
+        "p50_ms": 9.0,
+        "p99_ms": 30.0,
+        "mean_batch": 2.0,
+        "stages": stage,
+        "wait": {"p50_ms": 1.0, "p99_ms": 12.0},
+    }
     rec = {
         "qps_at_slo": 95.0,
-        "confirmation": [{"rate": 100.0, "runs": [run | {"pass": False}] * 3}, {"rate": 95.0, "runs": [run] * 3}],
-        "at_slo": {"p50_ms": [9.0] * 3, "p99_ms": [30.0, 31.0, 29.0], "p50_ms_median": 9.0, "p99_ms_median": 30.0,
-                   "mean_batch": [2.0] * 3},
+        "confirmation": [
+            {"rate": 100.0, "runs": [run | {"pass": False}] * 3},
+            {"rate": 95.0, "runs": [run] * 3},
+        ],
+        "at_slo": {
+            "p50_ms": [9.0] * 3,
+            "p99_ms": [30.0, 31.0, 29.0],
+            "p50_ms_median": 9.0,
+            "p99_ms_median": 30.0,
+            "mean_batch": [2.0] * 3,
+        },
     }
     assert r5_summary.at_slo(rec)["confirmation_attempts"] == 2
     assert r5_summary.at_slo({"qps_at_slo": None}) == {"qps_at_slo": None}

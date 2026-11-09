@@ -3,13 +3,13 @@
 ``RankerStep`` computes, for a batch of requests already on the device, the state ``HSTU.encode`` gives at the
 newest column and its scores over the request's candidates, in fp32 or bf16:
 
-- **no cache, or miss:** the full 50-row encoder. With the cache, it also writes, per layer, the keys and values
-  of the 49 older rows of the window into the request's slot, with their times and padding.
+- **no cache, or miss:** the full 50-row encoder. With the cache, it also writes, per layer, the keys and
+  values of the 49 older rows of the window into the request's slot, with their times and padding.
 - **hit:** the newest row only, attending to the cached keys and values.
 
-The older rows' keys and values do not depend on the request time: the attention is causal and each older row's
-time bias reads the time of the item after it. The newest row's bias reads the request time, so its output, and
-from layer 2 on its keys and values, change with it; that row is always recomputed.
+The older rows' keys and values do not depend on the request time: the attention is causal and each older
+row's time bias reads the time of the item after it. The newest row's bias reads the request time, so its
+output, and from layer 2 on its keys and values, change with it; that row is always recomputed.
 
 Scores are the fp32 dot product of the state with R4b's fp32 scoring table, computed once at load. ``Graphed``
 replays a step from CUDA graphs, one per power-of-two batch size.
@@ -169,8 +169,8 @@ class RankerStep:
 class Graphed:
     """CUDA graphs of a ``RankerStep``, one per power-of-two batch size up to ``max_batch``.
 
-    A batch is padded to the next size: padded rows copy its first row, and their cache slot is the dummy slot.
-    ``example`` holds one valid request on the device (inputs of ``step.spec()``)."""
+    A batch is padded to the next size: padded rows copy its first row, and their cache slot is the dummy
+    slot. ``example`` holds one valid request on the device (inputs of ``step.spec()``)."""
 
     def __init__(self, step: RankerStep, example: dict[str, torch.Tensor], max_batch: int, warmup: int = 3):
         self.step, self.static, self.graphs, self.outputs = step, {}, {}, {}

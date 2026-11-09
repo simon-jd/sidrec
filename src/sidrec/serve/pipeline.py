@@ -29,7 +29,9 @@ class HostPool:
         self.fields = {k: v.contiguous().pin_memory() for k, v in fields.items()}
         self.n = len(next(iter(self.fields.values())))
         cap = bucket(max_batch)
-        self.stage = {k: torch.empty((cap, *v.shape[1:]), dtype=v.dtype).pin_memory() for k, v in self.fields.items()}
+        self.stage = {
+            k: torch.empty((cap, *v.shape[1:]), dtype=v.dtype).pin_memory() for k, v in self.fields.items()
+        }
 
     def rows(self, requests: np.ndarray) -> np.ndarray:
         return requests % self.n
@@ -81,7 +83,9 @@ class RankerServer:
             if self.step.mode == "hit" and not fill:
                 t["slots"] = self.slots.lookup(rows)
             else:
-                t["slots"] = self.slots.assign(rows) if self.step.mode == "miss" else self.slots.buf[:1].fill_(0)
+                t["slots"] = (
+                    self.slots.assign(rows) if self.step.mode == "miss" else self.slots.buf[:1].fill_(0)
+                )
         return t
 
     def run(self, requests: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -134,19 +138,31 @@ def ann_lists(index, vectors: torch.Tensor, items: torch.Tensor) -> np.ndarray:
 class Cascade:
     """The whole cascade: TIGER's beam on the GPU while the HNSW search runs on the CPU, then the union and
     HSTU-SID (CUDA graphs, misses). Per batch it returns the stage times in milliseconds: GPU stages from CUDA
-    events, the HNSW search from the host clock. ``beam`` (items, user tokens on the GPU -> lists) replaces R5's
-    beam, ``beam_lists``."""
+    events, the HNSW search from the host clock. ``beam`` (items, user tokens on the GPU -> lists) replaces
+    R5's beam, ``beam_lists``."""
 
     STAGES = ("beam_ms", "hnsw_ms", "union_ms", "ranker_ms", "batch_ms")
 
-    def __init__(self, tiger: Tiger, index, vectors, rank: RankerStep, pool: HostPool, width: int, max_batch: int,
-                 beam=None):
+    def __init__(
+        self,
+        tiger: Tiger,
+        index,
+        vectors,
+        rank: RankerStep,
+        pool: HostPool,
+        width: int,
+        max_batch: int,
+        beam=None,
+    ):
         self.tiger, self.index, self.vectors, self.pool, self.width = tiger, index, vectors, pool, width
         self.beam = beam or (lambda items, user_tok: beam_lists(tiger, items, user_tok, width))
         self.slots = SlotMap(max_batch)
         cap = bucket(max_batch)
         self.ann_buf = torch.empty((cap, CANDS), dtype=torch.long).pin_memory()
-        example = {k: v[:1].cuda() for k, v in pool.gather(np.zeros(1, dtype=np.int64), ("items", "ts", "req_ts")).items()}
+        example = {
+            k: v[:1].cuda()
+            for k, v in pool.gather(np.zeros(1, dtype=np.int64), ("items", "ts", "req_ts")).items()
+        }
         example["cands"] = torch.arange(1, CANDS + 1, device="cuda")[None]
         example["slots"] = torch.zeros(1, dtype=torch.long, device="cuda")
         self.rank = Graphed(rank, example, max_batch)
@@ -171,7 +187,9 @@ class Cascade:
         ev[2].record()
         cands = cascade.union(lists, ann_g, K_TIGER, CANDS, BACKFILL)
         ev[3].record()
-        top, _ = self.rank(items=g["items"], ts=g["ts"], req_ts=g["req_ts"], cands=cands, slots=self.slots.assign(rows))
+        top, _ = self.rank(
+            items=g["items"], ts=g["ts"], req_ts=g["req_ts"], cands=cands, slots=self.slots.assign(rows)
+        )
         ev[4].record()
         out = top.cpu().numpy()
         t3 = time.perf_counter()
@@ -182,7 +200,9 @@ class Cascade:
             "ranker_ms": ev[3].elapsed_time(ev[4]),
             "batch_ms": (t3 - t0) * 1e3,
         }
-        extra = {"tiger": lists.cpu().numpy(), "ann": ann.copy(), "cands": cands.cpu().numpy()} if keep else {}
+        extra = (
+            {"tiger": lists.cpu().numpy(), "ann": ann.copy(), "cands": cands.cpu().numpy()} if keep else {}
+        )
         return out, times, extra
 
     def __call__(self, requests: np.ndarray) -> dict:

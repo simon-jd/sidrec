@@ -1,13 +1,13 @@
 """Open-loop load for an in-process server (R5).
 
-Arrival times are drawn in advance (Poisson: exponential gaps) and never wait for the server. One thread serves:
-when it is free and requests wait, it takes the oldest ones as a batch, either at once (``max_batch`` 1) or once
-``max_batch`` wait or the oldest has waited ``window``. A request's latency runs from its scheduled arrival to
-the end of its batch, so the time it spent queued is counted and a slow server cannot slow the arrivals
-(no coordinated omission).
+Arrival times are drawn in advance (Poisson: exponential gaps) and never wait for the server. One thread
+serves: when it is free and requests wait, it takes the oldest ones as a batch, either at once (``max_batch``
+1) or once ``max_batch`` wait or the oldest has waited ``window``. A request's latency runs from its scheduled
+arrival to the end of its batch, so the time it spent queued is counted and a slow server cannot slow the
+arrivals (no coordinated omission).
 
-``step(requests)`` serves request numbers ``requests`` (an int64 array) and returns once their responses are in
-host memory; it may return a dict of per-batch numbers, which are kept.
+``step(requests)`` serves request numbers ``requests`` (an int64 array) and returns once their responses are
+in host memory; it may return a dict of per-batch numbers, which are kept.
 """
 
 from __future__ import annotations
@@ -53,9 +53,9 @@ def serve(
 ) -> dict:
     """Serves requests 0..n-1 at ``arrivals`` (seconds from the start, ascending).
 
-    Returns per request ``latency`` and ``start`` (when its batch began), in seconds (nan if never served), and
-    per batch ``size``, ``begin``, ``end`` and ``info``. ``aborted`` is True if a waiting request grew older
-    than ``abort_age``; the rest are then not served."""
+    Returns per request ``latency`` and ``start`` (when its batch began), in seconds (nan if never served),
+    and per batch ``size``, ``begin``, ``end`` and ``info``. ``aborted`` is True if a waiting request grew
+    older than ``abort_age``; the rest are then not served."""
     wait = wait or (lambda t: wait_until(t, clock))
     n = len(arrivals)
     latency, started = np.full(n, np.nan), np.full(n, np.nan)
@@ -163,9 +163,7 @@ def open_loop_run(
             "throughput": float(m.sum() / span) if span > 0 else None,
             "batches": int(in_window.sum()),
             "mean_batch": float(res["size"][in_window].mean()) if in_window.any() else None,
-            "busy_share": float(
-                (res["end"] - res["begin"])[in_window].sum() / (res["end"][-1] - warm_s)
-            ),
+            "busy_share": float((res["end"] - res["begin"])[in_window].sum() / (res["end"][-1] - warm_s)),
             "histogram": histogram_ms(lat),
         }
     summary["pass"] = ok and summary["p99_ms"] <= slo * 1e3
@@ -226,7 +224,9 @@ def batch_times(step: Callable, size: int, n: int, warm: int, start: int = 0) ->
     return np.array(out)
 
 
-def choose_max_batch(times: Callable[[int], np.ndarray], limit: float, largest: int = 1024) -> tuple[int, list]:
+def choose_max_batch(
+    times: Callable[[int], np.ndarray], limit: float, largest: int = 1024
+) -> tuple[int, list]:
     """The largest power of two up to ``largest`` whose p99 batch time is at most ``limit`` (1 if none); the
     sweep stops at the first size above it. ``times(size)`` returns batch times in seconds."""
     best, sweep, size = 1, [], 1
@@ -252,8 +252,8 @@ def saturation(step: Callable, size: int, seconds: float) -> dict:
 
 
 def sequential_ms(fn: Callable[[int], None], n: int, warm: int) -> tuple[dict, np.ndarray]:
-    """Latency of ``n`` calls ``fn(i)`` one after another, after ``warm`` untimed ones; ``fn`` must return only
-    once its work is done."""
+    """Latency of ``n`` calls ``fn(i)`` one after another, after ``warm`` untimed ones; ``fn`` must return
+    only once its work is done."""
     for i in range(warm):
         fn(i)
     out = np.empty(n)

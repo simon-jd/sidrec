@@ -73,7 +73,9 @@ def under_load(rec: dict) -> dict:
     runs = rec["confirmation"][-1]["runs"]
     out = {}
     for k in (*STAGES, "batch_ms"):
-        out[k] = {m: float(np.median([r["stages"][k][m] for r in runs])) for m in ("p50", "p99", "mean", "share")}
+        out[k] = {
+            m: float(np.median([r["stages"][k][m] for r in runs])) for m in ("p50", "p99", "mean", "share")
+        }
     out["wait_p50_ms"] = float(np.median([r["wait"]["p50_ms"] for r in runs]))
     out["wait_p99_ms"] = float(np.median([r["wait"]["p99_ms"] for r in runs]))
     out["dominant"] = max(STAGES, key=lambda k: out[k]["share"])
@@ -106,7 +108,9 @@ def background(records: dict) -> dict:
             "gpu_util_median": bg.get("utilization.gpu", {}).get("median"),
             "temperature_max": bg.get("temperature.gpu", {}).get("max"),
             "other_gpu_processes": bg.get("other_gpu_processes"),
-            "top_cpu_at_start": [f"{p.get('command')} {p.get('cpu_pct')}%" for p in bg.get("top_at_start", [])[:5]],
+            "top_cpu_at_start": [
+                f"{p.get('command')} {p.get('cpu_pct')}%" for p in bg.get("top_at_start", [])[:5]
+            ],
         }
     return out
 
@@ -132,7 +136,8 @@ def main() -> None:
         records[f"e2e_w{w}"] = load(RESULTS / "test" / f"e2e_w{w}.json")
     quality = records["quality"]
     stages = {
-        k: {"p50_ms": v["p50_ms"], "p99_ms": v["p99_ms"]} for k, v in records["stages_batch1"]["batch1"].items()
+        k: {"p50_ms": v["p50_ms"], "p99_ms": v["p99_ms"]}
+        for k, v in records["stages_batch1"]["batch1"].items()
     }
     cascade = {}
     for w in WIDTHS:

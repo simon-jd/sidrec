@@ -7,6 +7,7 @@ second) are listed when the command starts and when it ends.
 
 from __future__ import annotations
 
+import contextlib
 import os
 import signal
 import subprocess
@@ -21,7 +22,8 @@ while true; do
   echo "L $(date +%s.%N) $(cat /proc/loadavg)"
   if [ $((i % 5)) -eq 0 ]; then
     echo "G $(date +%s.%N) $(nvidia-smi --query-gpu={GPU_FIELDS} --format=csv,noheader,nounits | head -1)"
-    echo "A $(date +%s.%N) $(nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader | tr '\\n' ';')"
+    echo "A $(date +%s.%N) $(nvidia-smi --query-compute-apps=pid,process_name,used_memory \
+--format=csv,noheader | tr '\\n' ';')"
   fi
   i=$((i + 1))
   sleep 2
@@ -47,8 +49,14 @@ def top_processes(n: int = 10) -> list[dict]:
         parts = ln.split()
         if len(parts) < 12 or not parts[0].isdigit():
             continue
-        rows.append({"pid": int(parts[0]), "cpu_pct": float(parts[8]), "mem_pct": float(parts[9]),
-                     "command": " ".join(parts[11:])})
+        rows.append(
+            {
+                "pid": int(parts[0]),
+                "cpu_pct": float(parts[8]),
+                "mem_pct": float(parts[9]),
+                "command": " ".join(parts[11:]),
+            }
+        )
     return rows[:n]
 
 
@@ -76,7 +84,11 @@ def parse(lines: list[str], own_pid: int) -> dict:
     if load:
         a = np.array([x[:3] for x in load])
         for i, name in enumerate(("load1", "load5", "load15")):
-            out[name] = {"min": float(a[:, i].min()), "median": float(np.median(a[:, i])), "max": float(a[:, i].max())}
+            out[name] = {
+                "min": float(a[:, i].min()),
+                "median": float(np.median(a[:, i])),
+                "max": float(a[:, i].max()),
+            }
         out["running_tasks"] = {"max": max(int(x[3].split("/")[0]) for x in load)}
     names = GPU_FIELDS.split(",")
     for i, name in enumerate(names):
@@ -85,10 +97,8 @@ def parse(lines: list[str], own_pid: int) -> dict:
             continue
         vals = []
         for g in gpu:
-            try:
+            with contextlib.suppress(ValueError):
                 vals.append(float(g[i]))
-            except ValueError:
-                pass
         if vals:
             v = np.array(vals)
             out[name] = {"min": float(v.min()), "median": float(np.median(v)), "max": float(v.max())}

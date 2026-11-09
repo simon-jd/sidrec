@@ -2,8 +2,8 @@
 
 A request is one evaluation row seen from the serving side: the user's hashed token, the 50 most recent items
 before the target with their timestamps in seconds, and the request time, which is the target's timestamp.
-Items are catalog indices, left-padded with 0, newest in the last column. The target and its cold flag are kept
-for the quality checks only; the server never reads them.
+Items are catalog indices, left-padded with 0, newest in the last column. The target and its cold flag are
+kept for the quality checks only; the server never reads them.
 """
 
 from __future__ import annotations
@@ -66,7 +66,8 @@ def build_requests(d: dict, split: str, rows: np.ndarray, user_offset: int) -> R
 
 
 def query_times(items: torch.Tensor, ts: torch.Tensor, req_ts: torch.Tensor) -> torch.Tensor:
-    """HSTU's query times: each column's is the time of the item after it, the newest column's the request time."""
+    """HSTU's query times: each column's is the time of the item after it, the newest column's the request
+    time."""
     q = torch.cat([ts[:, 1:], req_ts[:, None]], dim=1)
     return q.masked_fill(items <= 0, 0)
 
