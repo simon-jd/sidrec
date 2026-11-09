@@ -1,0 +1,282 @@
+{
+  "step": "graphs",
+  "split": "test",
+  "pool": 50000,
+  "dtype": "bf16",
+  "checkpoint": {
+    "data/runs/r4b/tiger/seed0.pt": "afec4188c7f1f35a86d7bcfc5b1ba5f30a79def2b315c325a581a3b164b5216e"
+  },
+  "widths": {
+    "20": {
+      "batch1": {
+        "p50_ms": 1.6693930083420128,
+        "p90_ms": 1.683014101581648,
+        "p99_ms": 1.697956755233463,
+        "p999_ms": 1.7501628583559068,
+        "mean_ms": 1.6709262720687548,
+        "max_ms": 1.7611710063647479,
+        "n": 2000,
+        "warm": 200,
+        "raw": "data/runs/r5b/raw/ladder/graphs_w20_batch1.npz"
+      },
+      "batch64": {
+        "p50_ms": 4.055947494634893,
+        "p90_ms": 4.0747301041847095,
+        "p99_ms": 4.095081259729341,
+        "p999_ms": 4.104949518456124,
+        "mean_ms": 4.058852000744082,
+        "max_ms": 4.106045991647989,
+        "batches": 50,
+        "requests_per_s": 15768.005334579164
+      }
+    },
+    "50": {
+      "batch1": {
+        "p50_ms": 1.7528559983475134,
+        "p90_ms": 1.7682570003671572,
+        "p99_ms": 1.7838671428035013,
+        "p999_ms": 1.8011796469654653,
+        "mean_ms": 1.7541859966440825,
+        "max_ms": 1.8499859870644286,
+        "n": 2000,
+        "warm": 200,
+        "raw": "data/runs/r5b/raw/ladder/graphs_w50_batch1.npz"
+      },
+      "batch64": {
+        "p50_ms": 6.589203003386501,
+        "p90_ms": 6.596435408573598,
+        "p99_ms": 6.601706925866893,
+        "p999_ms": 6.602408995255246,
+        "mean_ms": 6.588310860388447,
+        "max_ms": 6.602487002965063,
+        "batches": 50,
+        "requests_per_s": 9714.174293868484
+      }
+    },
+    "200": {
+      "batch1": {
+        "p50_ms": 1.9884659996023402,
+        "p90_ms": 1.994883497536648,
+        "p99_ms": 2.005279163713567,
+        "p999_ms": 2.0417441635217983,
+        "mean_ms": 1.989651210991724,
+        "max_ms": 2.0768370013684034,
+        "n": 2000,
+        "warm": 200,
+        "raw": "data/runs/r5b/raw/ladder/graphs_w200_batch1.npz"
+      },
+      "batch64": {
+        "p50_ms": 21.68597700801911,
+        "p90_ms": 21.70925240498036,
+        "p99_ms": 21.73692628450226,
+        "p999_ms": 21.737115032912698,
+        "mean_ms": 21.6892995609669,
+        "max_ms": 21.737136004958302,
+        "batches": 50,
+        "requests_per_s": 2950.7638003754373
+      }
+    }
+  },
+  "options": {
+    "cross_once": true,
+    "kv_cache": true,
+    "static": true,
+    "graphs": true
+  },
+  "wall_time_s": 18.0,
+  "peak_memory_gb": 4.83,
+  "background": {
+    "load_samples": 9,
+    "gpu_samples": 2,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 4.51,
+      "median": 5.15,
+      "max": 5.54
+    },
+    "load5": {
+      "min": 6.56,
+      "median": 6.75,
+      "max": 6.88
+    },
+    "load15": {
+      "min": 6.41,
+      "median": 6.47,
+      "max": 6.51
+    },
+    "running_tasks": {
+      "max": 10
+    },
+    "clocks.sm": {
+      "min": 2790.0,
+      "median": 2790.0,
+      "max": 2790.0
+    },
+    "clocks.mem": {
+      "min": 10251.0,
+      "median": 10251.0,
+      "max": 10251.0
+    },
+    "power.draw": {
+      "min": 104.39,
+      "median": 111.36,
+      "max": 118.33
+    },
+    "temperature.gpu": {
+      "min": 49.0,
+      "median": 50.0,
+      "max": 51.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 49.5,
+      "max": 99.0
+    },
+    "memory.used": {
+      "min": 2336.0,
+      "median": 2648.0,
+      "max": 2960.0
+    },
+    "pstate": [
+      "P2"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 300554,
+        "cpu_pct": 54.7,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 14522,
+        "cpu_pct": 15.1,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 13.2,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 7000,
+        "cpu_pct": 9.4,
+        "mem_pct": 0.1,
+        "command": "tailscaled"
+      },
+      {
+        "pid": 15247,
+        "cpu_pct": 7.5,
+        "mem_pct": 0.1,
+        "command": "kubelet"
+      },
+      {
+        "pid": 12807,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.7,
+        "command": "java"
+      },
+      {
+        "pid": 14114,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.2,
+        "command": "airflow"
+      },
+      {
+        "pid": 15507,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.1,
+        "command": "etcd"
+      },
+      {
+        "pid": 17935,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.0,
+        "command": "containerd-shim"
+      },
+      {
+        "pid": 17976,
+        "cpu_pct": 3.8,
+        "mem_pct": 0.0,
+        "command": "containerd-shim"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 300554,
+        "cpu_pct": 41.2,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 17.6,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 12938,
+        "cpu_pct": 11.8,
+        "mem_pct": 0.2,
+        "command": "minio"
+      },
+      {
+        "pid": 14114,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "airflow"
+      },
+      {
+        "pid": 15247,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "kubelet"
+      },
+      {
+        "pid": 15507,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "etcd"
+      },
+      {
+        "pid": 15528,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "kube-apiserver"
+      },
+      {
+        "pid": 27255,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.3,
+        "command": "jetbrains-toolb"
+      },
+      {
+        "pid": 29460,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "bitwarden-app"
+      },
+      {
+        "pid": 288910,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "postgres"
+      }
+    ],
+    "sidecar_log": "data/logs/r5b/ladder_graphs_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "843596a10df55dd17f3ee7d11e9a25ee55dd62a1",
+    "dirty": false,
+    "src_tree": "6eaeb5ac7b1a371ce5e312b60718f722293fc7e5"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c, R5 and R5b clarifications"
+}

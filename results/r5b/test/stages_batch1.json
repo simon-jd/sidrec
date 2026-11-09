@@ -1,0 +1,387 @@
+{
+  "split": "test",
+  "requests": 2200,
+  "beam": "graphs (bf16)",
+  "ranker": {
+    "name": "batching-miss",
+    "dtype": "bf16",
+    "graphs": true,
+    "cache": "miss",
+    "batching": true
+  },
+  "checkpoint": {
+    "data/runs/r4b/tiger/seed0.pt": "afec4188c7f1f35a86d7bcfc5b1ba5f30a79def2b315c325a581a3b164b5216e",
+    "data/runs/r4b/hstu-sid/seed0.pt": "58ae473f7ae2b813ea9e1b594689fcc85be853b5b6cccd0d2d89b7283c5a063c"
+  },
+  "index": {
+    "sha256": "cb214e2e922285e36457a57ef4fdbadcd1bd62d34aeea2a0563d4b38ee5abca5",
+    "efSearch": 512,
+    "omp_threads": 16
+  },
+  "batch1": {
+    "beam_w20": {
+      "p50_ms": 1.677321495662909,
+      "p90_ms": 1.6902046932955272,
+      "p99_ms": 1.7171205738850404,
+      "p999_ms": 1.7478011259954656,
+      "mean_ms": 1.678943376042298,
+      "max_ms": 1.7946489970199764,
+      "n": 2000,
+      "warm": 200
+    },
+    "beam_w50": {
+      "p50_ms": 1.7576945028849877,
+      "p90_ms": 1.7734634966473095,
+      "p99_ms": 1.7914268757158425,
+      "p999_ms": 1.8544241119961953,
+      "mean_ms": 1.759232354546839,
+      "max_ms": 1.8563179910415784,
+      "n": 2000,
+      "warm": 200
+    },
+    "beam_w200": {
+      "p50_ms": 1.9916794990422204,
+      "p90_ms": 1.995004597119987,
+      "p99_ms": 2.0003588713007048,
+      "p999_ms": 2.053158883660216,
+      "mean_ms": 1.99301567634393,
+      "max_ms": 3.706552990479395,
+      "n": 2000,
+      "warm": 200
+    },
+    "hnsw": {
+      "p50_ms": 1.0312399972463027,
+      "p90_ms": 1.3484380062436685,
+      "p99_ms": 1.6127196339948568,
+      "p999_ms": 1.7574843603360926,
+      "mean_ms": 1.0554160380343092,
+      "max_ms": 1.8290870066266507,
+      "n": 2000,
+      "warm": 200
+    },
+    "union": {
+      "p50_ms": 0.09161500202026218,
+      "p90_ms": 0.09662610682426022,
+      "p99_ms": 0.13914715964347124,
+      "p999_ms": 0.1845325457688861,
+      "mean_ms": 0.09395961590053048,
+      "max_ms": 0.5401819944381714,
+      "n": 2000,
+      "warm": 200
+    },
+    "ranker": {
+      "p50_ms": 0.15568399976473302,
+      "p90_ms": 0.158814899623394,
+      "p99_ms": 0.17302099193329923,
+      "p999_ms": 0.1886376493639545,
+      "mean_ms": 0.15680470218649134,
+      "max_ms": 0.19903399515897036,
+      "n": 2000,
+      "warm": 200
+    },
+    "cascade_w20": {
+      "p50_ms": 1.937914996233303,
+      "p90_ms": 1.9569784926716238,
+      "p99_ms": 2.252688571315957,
+      "p999_ms": 2.438053258898434,
+      "mean_ms": 1.9495901479240274,
+      "max_ms": 2.6953219930874184,
+      "n": 2000,
+      "warm": 200,
+      "stages_ms": {
+        "beam_ms": {
+          "p50": 1.6783360242843628,
+          "p99": 1.700705258846283
+        },
+        "hnsw_ms": {
+          "p50": 1.1123584990855306,
+          "p99": 1.7681450850795954
+        },
+        "union_ms": {
+          "p50": 0.06278400123119354,
+          "p99": 0.160337278842926
+        },
+        "ranker_ms": {
+          "p50": 0.12595200538635254,
+          "p99": 0.16179999515414237
+        },
+        "batch_ms": {
+          "p50": 1.9234584979130886,
+          "p99": 2.2356175450840965
+        }
+      }
+    },
+    "cascade_w50": {
+      "p50_ms": 2.0196259938529693,
+      "p90_ms": 2.0427856958121993,
+      "p99_ms": 2.2381321601278614,
+      "p999_ms": 2.6062098545226013,
+      "mean_ms": 2.0274357745292946,
+      "max_ms": 2.719946001889184,
+      "n": 2000,
+      "warm": 200,
+      "stages_ms": {
+        "beam_ms": {
+          "p50": 1.7582080364227295,
+          "p99": 1.7886101949214934
+        },
+        "hnsw_ms": {
+          "p50": 1.1140915084979497,
+          "p99": 1.7398860680987127
+        },
+        "union_ms": {
+          "p50": 0.06278400123119354,
+          "p99": 0.1556851132214069
+        },
+        "ranker_ms": {
+          "p50": 0.12595200538635254,
+          "p99": 0.16156928092241288
+        },
+        "batch_ms": {
+          "p50": 2.0047524958499707,
+          "p99": 2.2190264458185993
+        }
+      }
+    },
+    "cascade_w200": {
+      "p50_ms": 2.258611493743956,
+      "p90_ms": 3.7713676952989803,
+      "p99_ms": 5.591256769985193,
+      "p999_ms": 6.557794135602303,
+      "mean_ms": 2.549499042397656,
+      "max_ms": 6.792372005293146,
+      "n": 2000,
+      "warm": 200,
+      "stages_ms": {
+        "beam_ms": {
+          "p50": 1.9927040338516235,
+          "p99": 2.0336639881134033
+        },
+        "hnsw_ms": {
+          "p50": 1.2149390022386797,
+          "p99": 4.270460221887332
+        },
+        "union_ms": {
+          "p50": 0.06483200192451477,
+          "p99": 0.5150739079713822
+        },
+        "ranker_ms": {
+          "p50": 0.12697599828243256,
+          "p99": 0.2662400007247925
+        },
+        "batch_ms": {
+          "p50": 2.2422875044867396,
+          "p99": 5.545367291488219
+        }
+      }
+    }
+  },
+  "raw": {
+    "beam_w20": "data/runs/r5b/raw/stages/beam_w20.npz",
+    "beam_w50": "data/runs/r5b/raw/stages/beam_w50.npz",
+    "beam_w200": "data/runs/r5b/raw/stages/beam_w200.npz",
+    "hnsw": "data/runs/r5b/raw/stages/hnsw.npz",
+    "union": "data/runs/r5b/raw/stages/union.npz",
+    "ranker": "data/runs/r5b/raw/stages/ranker.npz",
+    "cascade_w20": "data/runs/r5b/raw/stages/cascade_w20.npz",
+    "cascade_w50": "data/runs/r5b/raw/stages/cascade_w50.npz",
+    "cascade_w200": "data/runs/r5b/raw/stages/cascade_w200.npz"
+  },
+  "wall_time_s": 36.5,
+  "peak_memory_gb": 4.48,
+  "background": {
+    "load_samples": 18,
+    "gpu_samples": 4,
+    "other_gpu_processes": [],
+    "load1": {
+      "min": 5.88,
+      "median": 6.609999999999999,
+      "max": 7.13
+    },
+    "load5": {
+      "min": 6.71,
+      "median": 6.895,
+      "max": 7.0
+    },
+    "load15": {
+      "min": 6.48,
+      "median": 6.529999999999999,
+      "max": 6.56
+    },
+    "running_tasks": {
+      "max": 12
+    },
+    "clocks.sm": {
+      "min": 2520.0,
+      "median": 2790.0,
+      "max": 2790.0
+    },
+    "clocks.mem": {
+      "min": 10251.0,
+      "median": 10251.0,
+      "max": 10501.0
+    },
+    "power.draw": {
+      "min": 66.05,
+      "median": 89.16499999999999,
+      "max": 131.75
+    },
+    "temperature.gpu": {
+      "min": 49.0,
+      "median": 50.5,
+      "max": 52.0
+    },
+    "utilization.gpu": {
+      "min": 0.0,
+      "median": 84.0,
+      "max": 99.0
+    },
+    "memory.used": {
+      "min": 427.0,
+      "median": 2481.0,
+      "max": 5531.0
+    },
+    "pstate": [
+      "P0",
+      "P2"
+    ],
+    "cpus": 32,
+    "top_at_start": [
+      {
+        "pid": 300554,
+        "cpu_pct": 203.9,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 316145,
+        "cpu_pct": 52.9,
+        "mem_pct": 0.1,
+        "command": "python"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 13.7,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 14522,
+        "cpu_pct": 11.8,
+        "mem_pct": 0.1,
+        "command": "containerd"
+      },
+      {
+        "pid": 13011,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.0,
+        "command": "postgres"
+      },
+      {
+        "pid": 15528,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.2,
+        "command": "kube-apiserver"
+      },
+      {
+        "pid": 11018,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "dockerd"
+      },
+      {
+        "pid": 15247,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "kubelet"
+      },
+      {
+        "pid": 19253,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.8,
+        "command": "java"
+      },
+      {
+        "pid": 7351,
+        "cpu_pct": 2.0,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      }
+    ],
+    "top_at_end": [
+      {
+        "pid": 316145,
+        "cpu_pct": 78.4,
+        "mem_pct": 0.1,
+        "command": "python"
+      },
+      {
+        "pid": 12938,
+        "cpu_pct": 39.2,
+        "mem_pct": 0.3,
+        "command": "minio"
+      },
+      {
+        "pid": 300554,
+        "cpu_pct": 27.5,
+        "mem_pct": 5.0,
+        "command": "td-legacy-vm"
+      },
+      {
+        "pid": 14114,
+        "cpu_pct": 5.9,
+        "mem_pct": 0.2,
+        "command": "airflow"
+      },
+      {
+        "pid": 7351,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "airflow"
+      },
+      {
+        "pid": 8349,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "grok-bot"
+      },
+      {
+        "pid": 15247,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "kubelet"
+      },
+      {
+        "pid": 15528,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.2,
+        "command": "kube-apiserver"
+      },
+      {
+        "pid": 15541,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.1,
+        "command": "kube-scheduler"
+      },
+      {
+        "pid": 288910,
+        "cpu_pct": 3.9,
+        "mem_pct": 0.0,
+        "command": "postgres"
+      }
+    ],
+    "sidecar_log": "data/logs/r5b/stages_background.log"
+  },
+  "environment": {
+    "torch": "2.15.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4090",
+    "host": "rtx4090-workstation"
+  },
+  "git": {
+    "commit": "843596a10df55dd17f3ee7d11e9a25ee55dd62a1",
+    "dirty": false,
+    "src_tree": "6eaeb5ac7b1a371ce5e312b60718f722293fc7e5"
+  },
+  "protocol": "2026-11-05 with the R2, R3, R4a, R4b, R4c, R5 and R5b clarifications"
+}
