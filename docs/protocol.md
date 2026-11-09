@@ -757,3 +757,72 @@ per second at that rate (200 times the QPS).
 
 **The GPU-hour stop:** a short timed pass comes first, and the total is projected from it. R5 stops and reports
 if the projection passes 6 GPU-hours. A GPU-hour is an hour of wall time holding the RTX 4090 lock.
+
+### 2026-11-08: R5b fast TIGER beam, written before any R5b measurement
+R5 found TIGER's beam to be most of the cascade's time: 8.2 to 8.4 ms at batch 1 at every width, with no KV cache
+and hundreds of kernel launches per request. R5b makes the beam faster without changing what it returns, then
+re-measures the cascade. Nothing is trained and no model changes. Test rows only supply request histories for
+timing. **Everything not named here follows the R5 entry above, unchanged.**
+
+**Profile:** torch.profiler on R5's beam (R4c's beam code, bf16 autocast), on the first 64 requests of the test
+pool, at widths 20, 50 and 200, at batch 1, at R5's B_max of each width and at batch 64. Per call: kernel time
+and count, launch calls, host syncs, and the kernel time inside the encoder, inside the decoder (with its
+self-attention, cross-attention, the cross-attention keys and values, and feed-forward) and in the rest of the
+search. The final beam is profiled at the same settings. Wall time is the median of 20 synchronized calls
+without the profiler.
+
+**Beam ladder** (each step keeps the steps before it)
+1. **Reference:** R5's beam.
+2. **Cross-attention once:** each decoder layer's cross-attention keys and values are computed once per request
+   from the encoder output, not once per beam at every step. The beams of a request are the query rows of one
+   attention.
+3. **KV cache:** each step runs the decoder on the newest token only and attends to the cached self-attention
+   keys and values of the earlier tokens. The cache follows the beams when they are reordered. The first step
+   runs once per request, since every beam starts from the same token.
+4. **Static tensors:** what does not depend on the request is computed at load: the encoder's position bias, each
+   decoder step's position bias, and the weights in bf16. The model runs with explicit dtypes instead of
+   autocast, with the same casts. Nothing in the loop waits for the host.
+5. **CUDA graphs:** the whole serving call, from the request's items to the lists, is captured as one CUDA graph
+   per width and power-of-two batch size. A batch is padded with copies of its first request, so TIGER now runs
+   at the padded size (R5: the exact size). CUDA graphs are used instead of torch.compile.
+
+The search itself is R4c's: the same trie tables, history removal, scores, candidate tensor and top-k.
+
+**Ladder measurements:** the beam alone, bf16, test pool, per step and width:
+- batch-1 latency, as in R5: 2,000 requests one after another, each synchronized, after 200 untimed;
+- 50 back-to-back batches of 64 requests after 10 untimed: p50 and p99 batch time and requests per second.
+
+**Equivalence in fp32** (TF32 off): the first 2,048 rows of the validation pool, at widths 20, 50 and 200.
+- Steps 2 to 5 run in fp32 against the reference in fp32, both in chunks of 128. Step 5 also runs at batch 1
+  against the reference at batch 1.
+- **The bar:** the same item lists in the same order. Reported per step and width: the share of identical lists
+  and, for each mismatch, where the lists part, with both beams' items and scores there. Also the largest
+  score difference where the items agree, and, for scale, how much the reference's own lists change between
+  chunks of 128 and batch 1.
+- A mismatch is a near-tie if the reference's two scores at the parting position differ by at most 1e-4.
+  Any other mismatch is a defect: the beam is fixed and this check repeated before any timing.
+- Step 5 in bf16 is also compared with R5's bf16 beam at batch 1. This is reported, not a bar.
+
+**Quality at the serving dtype** (bf16): step 5 runs over the protocol's 100,000-row validation sample in chunks
+of 128, as R4c and R5 ran, at widths 200, 50 and 20.
+- Reported: union recall@200 over all, warm and cold rows, and HSTU-SID seed 0's NDCG@10 on that union (fp32,
+  R4c's re-ranking code), each against R5's number. Width 200 compares with R4c's saved lists, widths 50 and
+  20 with R5's lists. Also the share of lists identical to those.
+- No threshold: the changes are reported as they are.
+
+**Re-measurement:** the cascade with step 5 in bf16 and R5's final ranker (bf16, CUDA graphs, misses), by R5's
+protocol: the same SLO, request pools, load generator, dynamic batching, B_max rule, saturation, bisection and
+confirmations.
+- **B_max:** chosen again per width on the validation pool by R5's rule. Each batch size's CUDA graph is
+  captured during its first warm-up batch, which is not timed.
+- **Batch 1:** R5's stage latencies (the beam at each width, the HNSW query, the union, the ranker, the whole
+  cascade at each width).
+- **Under load:** the cascade at widths 200, 50 and 20, with per-batch stage times.
+- **Before:** R5's committed records, which R5b reads and does not rerun or change. The ladder's step 1
+  re-measures R5's beam alone in R5b's sessions.
+
+**Background load:** R5's sidecar runs for every command. Known before the runs: a QEMU VM (`td-legacy-vm`, about
+40% of a core), a kube-apiserver and desktop apps. They belong to others and are not stopped.
+
+**The GPU-hour stop:** a short timed pass comes first, and the total is projected from it. R5b stops and reports
+if the projection passes 4 GPU-hours.
