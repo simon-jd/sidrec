@@ -85,7 +85,7 @@ The configurations are in `summary.json` and in each record:
   - cold Recall@50 rises from about 0 (2 hits in three seeds) to 0.00214 ± 0.00026, and cold Recall@10 to
     0.00057;
   - warm Recall@50 falls by 3.8%, from 0.05617 to 0.05402;
-  - overall Recall@50 falls by 0.8% and overall NDCG@10 by 2.5%.
+  - overall Recall@50 falls by 0.8% and overall NDCG@10 by 2.4%.
 - **Why it stays small: few cold targets share a full three-code prefix with the beam.**
   - In seeds 0, 1 and 2, 10,215, 9,819 and 9,920 of the 535,916 cold rows (about 1.9%) had a target whose
     (c1, c2, c3) matched one of the 50 beam items.
@@ -110,7 +110,7 @@ checkpoint gives every ε. Records: `tiger_eps/seedS.json`.
 | 0.5 | 0.01517 | 0.00871 | 0.04249 | 0.04694 | 0.01960 |
 | 1 | 0.00162 | 0.00071 | 0.03288 | 0.03208 | 0.03701 |
 
-- **The trade is close to one for one.** Each step up in ε moves Recall@50 from warm rows to cold rows, and
+- **Each cold hit costs 2.5 to 4.2 warm hits.** Each step up in ε moves Recall@50 from warm rows to cold rows, and
   overall Recall@50 falls at every step.
 - **Below ε = 0.1 the top 10 is untouched,** because floor(10 ε) is 0. That is why Recall@10 and NDCG@10 are
   the same for ε = 0 to 0.05.

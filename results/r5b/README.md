@@ -224,7 +224,7 @@ other processes belong to others.
   - select: 0.005;
   - stages: 0.010;
   - the cascade under load: 0.154 at width 200, 0.127 at width 50 and 0.100 at width 20.
-- **Development:** about 0.04 GPU-hours more, also in the log: smoke tests, test-suite runs under the lock and one
+- **Development:** 0.028 GPU-hours more, also in the log: smoke tests, test-suite runs under the lock and one
   CPU-profiling pass.
 - **Projection,** before the runs (`projection.json`): 0.75 GPU-hours expected, 1.07 at worst. The 4-hour stop
   was not reached.

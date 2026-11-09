@@ -100,11 +100,11 @@ The union is the cascade's candidate set.
 - **TIGER loses to SASRec on warm items.** Its warm NDCG@10 is 0.01240 against 0.01308 (-5.2%). Its warm
   Recall@50 is 0.05617 against 0.06006.
   - Plain TIGER almost never returns an item it never saw as a target: 2 cold hits at K = 50 in three seeds.
-- **The cold-start rule trades warm hits for cold ones almost one for one.** That is TIGER's ε rule, which
+- **The cold-start rule gives up more warm hits than it gains cold ones.** That is TIGER's ε rule, which
   fills a share ε of the list with unseen items that share a beam item's semantic-ID prefix.
   - On test at ε = 0.1 it gives up about 1,430 warm hits at K = 50 to gain about 1,150 cold ones.
   - Overall Recall@50 falls 0.8% and NDCG@10 falls 2.4%.
-  - On validation, every ε above 0 lowers overall Recall@50.
+  - On validation each cold hit costs 2.5 to 4.2 warm hits, and every ε above 0 lowers overall Recall@50.
 - **HSTU-SID's tuned configuration differs from the HSTU-style model's.** HSTU-SID uses width 64, 2 layers and
   learning rate 3e-3. The HSTU-style model uses width 256, 4 layers and learning rate 1e-4.
   - So HSTU-SID's lead mixes the prefix embeddings with what each model's tuning chose.

@@ -96,7 +96,7 @@ cost does not depend on which items it scores.
 | Ranker (CUDA graphs, bf16, miss) | 0.156 | 0.163 |
 | Whole cascade, width 20 | 10.06 | 14.10 |
 | Whole cascade, width 50 | 10.17 | 13.03 |
-| Whole cascade, width 200 | 10.27 | 12.60 |
+| Whole cascade, width 200 | 10.26 | 12.60 |
 
 - **Inside the whole cascade at width 200,** the stages take, at p50 / p99:
   - beam: 8.57 / 10.64 ms;
@@ -110,7 +110,7 @@ cost does not depend on which items it scores.
 | Width | B_max | Saturation QPS | QPS at SLO | p50 / p99 ms (3 runs: p99) | Mean batch | Beam: share, p50 / p99 per batch | HNSW share | Queue wait p50 / p99 |
 |---|---|---|---|---|---|---|---|---|
 | 200 | 1 | 101 | **19.1** | 11.3 / 43.9 (31.3, 43.9, 44.8) | 1.0 | 83%, 8.8 / 24.3 ms | 12% | 0.0 / 24.4 ms |
-| 50 | 1 | 103 | 45.5 | 13.2 / 47.9 (47.9, 43.1, 48.4) | 1.0 | 83%, 8.0 / 23.5 ms | 12% | 0.1 / 36.8 ms |
+| 50 | 1 | 102 | 45.5 | 13.2 / 47.9 (47.9, 43.1, 48.4) | 1.0 | 83%, 8.0 / 23.5 ms | 12% | 0.1 / 36.8 ms |
 | 20 | 4 | 358 | 209.2 | 16.6 / 34.1 (34.1, 32.8, 34.9) | 2.4 | 78%, 8.2 / 12.9 ms | 17% | 5.7 / 20.6 ms |
 
 - **The beam dominates at every width.** The union and the ranker take about 1.5% of batch time each.
