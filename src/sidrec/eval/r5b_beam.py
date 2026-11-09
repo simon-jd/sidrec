@@ -4,6 +4,7 @@ TIGER beam").
     python -m sidrec.eval.r5b_beam projection        # short timed pass and the GPU-hour projection
     python -m sidrec.eval.r5b_beam profile           # torch.profiler on the reference beam and the final one
     python -m sidrec.eval.r5b_beam equivalence       # fp32: each step's lists against the reference (valid)
+    python -m sidrec.eval.r5b_beam cutoffs           # fp32: each mismatch traced through the four steps
     python -m sidrec.eval.r5b_beam quality           # bf16: union recall@200 and HSTU-SID NDCG@10 (valid)
     python -m sidrec.eval.r5b_beam ladder            # the beam alone at each step and width (test pool)
     python -m sidrec.eval.r5b_beam select            # B_max of the cascade at each width (validation pool)
@@ -396,6 +397,142 @@ def cmd_equivalence(_args) -> None:
         "widths": out,
     } | gpu_record(t0, bg, git)
     common.write_json(RESULTS / "valid" / "equivalence.json", record)
+
+
+@contextlib.contextmanager
+def traced_topk(log: list):
+    """Records every top-k of the search (the candidates [B, beam * size] of a step): the kept values and
+    indices, and the best value left out. The search's own top-k is unchanged."""
+    orig = torch.Tensor.topk
+
+    def topk(self, k, dim=-1, largest=True, sorted=True):  # noqa: A002
+        out = orig(self, k, dim=dim, largest=largest, sorted=sorted)
+        if self.dim() == 2 and dim == 1 and k < self.shape[1]:
+            nxt = orig(self, k + 1, dim=1).values[:, k]
+            log.append((out.values.float().cpu(), out.indices.cpu(), nxt.float().cpu()))
+        return out
+
+    torch.Tensor.topk = topk
+    try:
+        yield
+    finally:
+        torch.Tensor.topk = orig
+
+
+def kept_prefixes(log: list, row: int, sizes) -> list[dict]:
+    """Per step, the live prefixes a beam kept for one row of its batch, with their scores."""
+    out, prev = [], None
+    for (values, indices, nxt), size in zip(log, sizes, strict=True):
+        v, i = values[row], indices[row]
+        src, code = (i // size).tolist(), (i % size).tolist()
+        pref = [(c,) if prev is None else prev[s] + (c,) for s, c in zip(src, code, strict=True)]
+        live = torch.isfinite(v)
+        out.append(
+            {
+                "prefixes": pref,
+                "scores": {p: float(x) for p, x, ok in zip(pref, v, live, strict=True) if ok},
+                "cutoff_gap": float(v[-1] - nxt[row]),
+            }
+        )
+        prev = pref
+    return out
+
+
+def first_split(ref: list[dict], got: list[dict]) -> dict:
+    """The first step at which two beams keep different prefixes, and the gap there between the weakest prefix
+    only the reference kept and the strongest only the other beam kept."""
+    for step, (a, b) in enumerate(zip(ref, got, strict=True)):
+        only_ref, only_got = set(a["scores"]) - set(b["scores"]), set(b["scores"]) - set(a["scores"])
+        if only_ref or only_got:
+            lo = min((a["scores"][p] for p in only_ref), default=float("inf"))
+            hi = max((b["scores"][p] for p in only_got), default=float("-inf"))
+            return {
+                "step": step + 1,
+                "swapped": max(len(only_ref), len(only_got)),
+                "gap": abs(lo - hi),
+                "reference_cutoff_gap": a["cutoff_gap"],
+            }
+    return {"step": None}
+
+
+def traced_run(beam, items, user, chunk: int) -> tuple[torch.Tensor, torch.Tensor, list]:
+    """Lists, scores and the per-chunk top-k logs of an eager beam."""
+    lists, scores, logs = [], [], []
+    for s in range(0, len(items), chunk):
+        log = []
+        with traced_topk(log):
+            a, b = beam(items[s : s + chunk].cuda(), user[s : s + chunk].cuda())
+        lists.append(a.cpu())
+        scores.append(b.float().cpu())
+        logs.append(log)
+    return torch.cat(lists), torch.cat(scores), logs
+
+
+def classify(ref, got, chunks: tuple[int, int], sizes) -> dict:
+    """Each mismatched row of two traced runs (run in chunks of ``chunks``): an order-only near-tie, a cutoff
+    near-tie, or a defect."""
+    (rl, rs, rlog), (gl, gs, glog) = ref, got
+    bad = torch.nonzero(~(rl == gl).all(1)).flatten().tolist()
+    rows, counts = [], {"order_near_tie": 0, "cutoff_near_tie": 0, "defect": 0}
+    for r in bad:
+        (c, j), (cg, jg) = divmod(r, chunks[0]), divmod(r, chunks[1])
+        split = first_split(kept_prefixes(rlog[c], j, sizes), kept_prefixes(glog[cg], jg, sizes))
+        if split["step"] is None:
+            p = int(torch.nonzero(rl[r] != gl[r])[0])
+            split |= {"gap": float((rs[r, p] - gs[r, p]).abs()), "position": p}
+        tie = "order_near_tie" if split["step"] is None else "cutoff_near_tie"
+        kind = tie if split["gap"] <= NEAR_TIE else "defect"
+        counts[kind] += 1
+        rows.append({"row": r, "kind": kind} | split)
+    gaps = [x["gap"] for x in rows]
+    return {"mismatched_rows": len(bad)} | counts | {"max_gap": max(gaps) if gaps else None, "rows": rows}
+
+
+def cmd_cutoffs(_args) -> None:
+    """fp32: every mismatched row of the equivalence comparisons, traced through the four steps (the
+    protocol's note "R5b near-ties at a beam cutoff"). The final beam is traced eagerly (step 4 without graphs) and its
+    lists checked against the graphs'."""
+    r5.setup()
+    t0, git = time.time(), resume.code_state()
+    d = scale.load("full")
+    with Background(LOGS / "cutoffs_background.log") as bg:
+        tiger, _inp, sums = r5.load_tiger(d)
+        sizes = tiger.layout.level_sizes
+        rows = r5.pool_rows(d, "valid")[:EQUIV_ROWS]
+        req = build_requests(d, "valid", rows, tiger.layout.user_offset)
+        items, user = req.items, req.user_tok
+        ex = example_request(items, user)
+        out = {}
+        for w in WIDTHS:
+            ref, eager = reference(tiger, w, torch.float32), make_beam(tiger, w, "static", torch.float32)
+            graphs = make_beam(tiger, w, "graphs", torch.float32, EQUIV_CHUNK, ex)
+            res = {}
+            for chunk in (EQUIV_CHUNK, 1):
+                r = traced_run(ref, items, user, chunk)
+                g = traced_run(eager, items, user, chunk)
+                same = torch.equal(g[0], run_chunks(graphs, items, user, chunk)[0])
+                res[f"chunk{chunk}"] = {"eager_lists_equal_graphs": same} | classify(
+                    r, g, (chunk, chunk), sizes
+                )
+                res[f"chunk{chunk}"]["reference"] = r
+            ref1, ref128 = res["chunk1"].pop("reference"), res[f"chunk{EQUIV_CHUNK}"].pop("reference")
+            res["reference_chunk128_vs_batch1"] = classify(ref1, ref128, (1, EQUIV_CHUNK), sizes)
+            out[str(w)] = res
+            del graphs
+            torch.cuda.empty_cache()
+            keys = ("mismatched_rows", "order_near_tie", "cutoff_near_tie", "defect", "max_gap")
+            print(w, {k: {m: v[m] for m in keys} for k, v in res.items()}, flush=True)
+    record = {
+        "split": "valid",
+        "rows": EQUIV_ROWS,
+        "sample": "the equivalence sample: the first 2,048 rows of the validation pool",
+        "near_tie": NEAR_TIE,
+        "beam": "the static step in fp32, run eagerly so its top-k can be traced; eager_lists_equal_graphs "
+        "checks that its lists are the graphs'",
+        "checkpoint": sums,
+        "widths": out,
+    } | gpu_record(t0, bg, git)
+    common.write_json(RESULTS / "valid" / "equivalence_cutoffs.json", record)
 
 
 # -------------------------------------------------------------------------------------------- quality (bf16)
@@ -847,6 +984,7 @@ COMMANDS = {
     "projection": cmd_projection,
     "profile": cmd_profile,
     "equivalence": cmd_equivalence,
+    "cutoffs": cmd_cutoffs,
     "quality": cmd_quality,
     "ladder": cmd_ladder,
     "select": cmd_select,

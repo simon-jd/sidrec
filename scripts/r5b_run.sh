@@ -2,7 +2,7 @@
 # R5b. Every step uses the GPU and holds the RTX 4090 lock for its whole run. Logs go to
 # data/logs/r5b/; each step's lock-held wall time is appended to data/logs/r5b/gpu_time.jsonl.
 #
-#   scripts/r5b_run.sh projection | profile | equivalence | quality | ladder | select | stages
+#   scripts/r5b_run.sh projection | profile | equivalence | cutoffs | quality | ladder | select | stages
 #   scripts/r5b_run.sh e2e 200 50 20
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -25,7 +25,7 @@ locked() {  # locked NAME ARGS...: one step under the lock, timed from the momen
 cmd=${1:-}
 shift || true
 case $cmd in
-  projection | profile | equivalence | quality | ladder | select | stages)
+  projection | profile | equivalence | cutoffs | quality | ladder | select | stages)
     locked "$cmd" "$cmd"
     ;;
   e2e)
@@ -34,7 +34,7 @@ case $cmd in
     done
     ;;
   *)
-    echo "usage: $0 projection | profile | equivalence | quality | ladder | select | stages | e2e width ..." >&2
+    echo "usage: $0 projection | profile | equivalence | cutoffs | quality | ladder | select | stages | e2e width ..." >&2
     exit 2
     ;;
 esac
