@@ -1,6 +1,6 @@
 """Estimate the warehouse credits used by this repository's Snowflake queries.
 
-    ~/.cache/portfolio-snowflake/.venv-mljobs/bin/python scripts/warehouse_credits.py
+    SIDREC_SF_HOME=/path/to/sf-module python scripts/warehouse_credits.py   # as scripts/snowflake_pipeline.py
 
 PORTFOLIO_XS is shared with other jobs that use the same service user, so the hourly
 WAREHOUSE_METERING_HISTORY rows are not ours alone. This script records three things:
@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "results" / "r1" / "warehouse_credits.json"
-SF_HOME = Path(os.environ.get("SIDREC_SF_HOME", "~/.cache/portfolio-snowflake")).expanduser()
+SF_HOME = os.environ.get("SIDREC_SF_HOME")  # the directory of the `sf` module, if not importable
 WAREHOUSE = "PORTFOLIO_XS"
 CREDITS_PER_HOUR = 1.0  # XSMALL
 AUTO_SUSPEND_S = 60
@@ -48,7 +48,8 @@ def union_seconds(intervals: list[tuple[datetime, datetime]]) -> float:
 
 
 def main() -> None:
-    sys.path.insert(0, str(SF_HOME))
+    if SF_HOME:
+        sys.path.insert(0, str(Path(SF_HOME).expanduser()))
     import sf
 
     s = sf.session()

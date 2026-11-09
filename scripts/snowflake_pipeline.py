@@ -1,9 +1,10 @@
 """Run the Electronics SQL pipeline on Snowflake and fetch its Parquet export.
 
-It runs with the interpreter of the shared portfolio Snowflake environment, which provides
-snowflake-snowpark-python and `sf.session()` (warehouse PORTFOLIO_XS, database PORTFOLIO_LAB, schema GPU):
+It needs an interpreter with snowflake-snowpark-python and an `sf` module whose `session()` returns a session
+on the account (warehouse PORTFOLIO_XS, database PORTFOLIO_LAB, schema GPU). SIDREC_SF_HOME names the
+directory that holds `sf`, if it is not already importable:
 
-    ~/.cache/portfolio-snowflake/.venv-mljobs/bin/python scripts/snowflake_pipeline.py all
+    SIDREC_SF_HOME=/path/to/sf-module python scripts/snowflake_pipeline.py all
 
 Steps, in order: setup put load transform checks export get history. `all` runs every step.
 Every statement is tagged with the query tag `sidrec-r1` and logged to results/r1/snowflake_queries.jsonl.
@@ -24,7 +25,7 @@ SQL_DIR = ROOT / "sql" / "electronics"
 RAW_DIR = ROOT / "data" / "raw" / "amazon2023" / "Electronics"
 EXPORT_DIR = ROOT / "data" / "snowflake" / "electronics"
 RESULTS = ROOT / "results" / "r1"
-SF_HOME = Path(os.environ.get("SIDREC_SF_HOME", "~/.cache/portfolio-snowflake")).expanduser()
+SF_HOME = os.environ.get("SIDREC_SF_HOME")  # the directory of the `sf` module, if not importable
 QUERY_TAG = "sidrec-r1"
 STAGE = "@REC_STAGE"
 RAW_FILES = [
@@ -60,8 +61,9 @@ def now() -> str:
 
 class Runner:
     def __init__(self) -> None:
-        sys.path.insert(0, str(SF_HOME))
-        import sf  # the shared portfolio settings module; reads the key itself
+        if SF_HOME:
+            sys.path.insert(0, str(Path(SF_HOME).expanduser()))
+        import sf  # the settings module; it reads the key itself
 
         self.session = sf.session()
         self.session.sql(f"ALTER SESSION SET QUERY_TAG = '{QUERY_TAG}'").collect()
